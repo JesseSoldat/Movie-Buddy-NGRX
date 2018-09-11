@@ -14,4 +14,6 @@ export class FormGroupComponent {
   placeholder: string;
   @Input()
   info: string;
+  @Input()
+  errMsg: string;
 }

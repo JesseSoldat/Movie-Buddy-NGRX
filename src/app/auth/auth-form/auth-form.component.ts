@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
-import { map, filter } from "rxjs/operators";
+// import { map, filter } from "rxjs/operators";
 
 import { User } from "../../models/user.model";
 
@@ -24,13 +24,17 @@ export class AuthFormComponent implements OnInit {
   formSubmitted = new EventEmitter<User>();
 
   authForm: FormGroup;
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
 
   constructor() {
     this.authForm = new FormGroup({
       username: new FormControl("", [
         Validators.required,
         Validators.minLength(3),
-        Validators.max(10)
+        Validators.maxLength(10)
       ]),
       email: new FormControl("", [Validators.required, Validators.email]),
       password: new FormControl("", [
@@ -48,36 +52,80 @@ export class AuthFormComponent implements OnInit {
 
   ngOnInit() {
     this.onChanges();
-    // { updateOn: "submit" }
   }
 
   onChanges(): void {
     // this.authForm.valueChanges.subscribe(val => {
-    //   console.log("change", val);
+    //   console.log(val);
+    //   console.log(this.authForm);
     // });
-
-    this.authForm.valueChanges
-      .pipe(map(values => values.username))
-      .subscribe(username => {
-        console.log(username);
-      });
+    // this.authForm.valueChanges
+    //   .pipe(map(values => values.username))
+    //   .subscribe(username => {
+    //     console.log(username);
+    //   });
   }
 
-  get username() {
-    return this.authForm.get("username");
+  parseErrors(control) {
+    const errObj = this.authForm.get(control).errors;
+    this.createErrorMsg(control, errObj);
   }
 
-  get email() {
-    return this.authForm.get("email");
+  userNameValidation(err) {
+    if (err === null) {
+      this.username = "";
+    } else if (err && err["required"]) {
+      this.username = "This field is required!";
+    } else if (err && err["minlength"]) {
+      this.username = "This field has to be at least 3 characters long!";
+    } else if (err && err["maxlength"]) {
+      this.username = "This field can not be over 10 characters!";
+    } else {
+      this.username = "";
+    }
   }
 
-  get password() {
-    return this.authForm.get("password");
+  createErrorMsg(control, err) {
+    console.log(err);
+
+    switch (control) {
+      case "username":
+        this.userNameValidation(err);
+        break;
+
+      case "email":
+        break;
+
+      case "password":
+        break;
+
+      case "comfirmPassword":
+        break;
+
+      default:
+        break;
+    }
   }
 
-  get comfirmPassword() {
-    return this.authForm.get("comfirmPassword");
+  blurEvent(control: string) {
+    this.parseErrors(control);
   }
+
+  // get username() {
+  //   return this.authForm.get("username");
+  // }
+
+  // get email() {
+  //   return this.authForm.get("email");
+  // }
+
+  // get password() {
+  //   return this.authForm.get("password");
+  // }
+
+  // get comfirmPassword() {
+  //   return this.authForm.get("comfirmPassword");
+  // }
 
   onSubmit() {
     const auth: Auth = this.authForm.value;

@@ -10,6 +10,8 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFireDatabaseModule } from "@angular/fire/database";
 import { AngularFireStorageModule } from "@angular/fire/storage";
 import { FormGroupComponent } from "./inputs/form-group/form-group.component";
+// Directive
+import { OnBlurDirective } from "./inputs/onBlur";
 
 @NgModule({
   imports: [
@@ -26,8 +28,14 @@ import { FormGroupComponent } from "./inputs/form-group/form-group.component";
     ReactiveFormsModule,
     SearchBoxComponent,
     CardComponent,
-    FormGroupComponent
+    FormGroupComponent,
+    OnBlurDirective
   ],
-  declarations: [SearchBoxComponent, CardComponent, FormGroupComponent]
+  declarations: [
+    SearchBoxComponent,
+    CardComponent,
+    FormGroupComponent,
+    OnBlurDirective
+  ]
 })
 export class SharedModule {}
