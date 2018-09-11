@@ -1,1 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
+.spacer80 {
+  height: 80px;
+}
+.spacer70 {
+  height: 70px;
+}
+.spacer60 {
+  height: 60px;
+}
+.spacer50 {
+  height: 50px;
+}

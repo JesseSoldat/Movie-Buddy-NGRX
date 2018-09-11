@@ -17,18 +17,28 @@ import { AppRoutingModule } from "../app-routing.module";
 // Components
 import { NavbarComponent } from "./navbar/navbar.component";
 
+// ENV
+import { environment } from "../../environments/environment";
+// Firebase
+import { AngularFireModule } from "@angular/fire";
+import { WelcomeComponent } from "./welcome/welcome.component";
+import { MessageComponent } from "./message/message.component";
+
 @NgModule({
   imports: [
     CommonModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
+    // Firebase
+    AngularFireModule.initializeApp(environment.firebase),
     // ngrx
     StoreModule.forRoot(reducers, { metaReducers }),
     StoreRouterConnectingModule.forRoot({ stateKey: "router" }),
     EffectsModule.forRoot([])
   ],
+  exports: [AppRoutingModule, NavbarComponent, MessageComponent],
   providers: [{ provide: RouterStateSerializer, useClass: CustomSerializer }],
-  declarations: [NavbarComponent]
+  declarations: [NavbarComponent, WelcomeComponent, MessageComponent]
 })
 export class CoreModule {}

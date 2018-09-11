@@ -1,3 +1,30 @@
-<p>
-  navbar works!
-</p>
+<nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+
+  <a class="navbar-brand" [routerLink]="homePage" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Movie
+    Buddy</a>
+
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile" aria-controls="navbarCollapse"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+
+  <div class="collapse navbar-collapse" id="mobile">
+    <!-- left hand links -->
+    <ul class="navbar-nav mr-auto">
+      <!-- <li class="nav-item">
+          <a class="nav-link" href="#"> <i class="fas fa-phone"></i></a>
+        </li> -->
+
+    </ul>
+    <!-- right hand links -->
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link" [routerLink]="homePage">Dashboard</a>
+      </li>
+
+    </ul>
+
+  </div>
+</nav>
