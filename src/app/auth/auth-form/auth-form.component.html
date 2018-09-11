@@ -1,3 +1,52 @@
-<p>
-  auth-form works!
-</p>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 col-md-10 mx-auto">
+      <h2>{{formType}}</h2>
+
+      <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+
+        <app-form-group formControlName="username" type="text" label="Username" placeholder="Enter a username" info="Pick a good one. You can NOT change this later!"
+          errMsg="Please enter a username!" ngDefaultControl>
+        </app-form-group>
+
+        <span *ngIf="username.invalid && username.dirty">
+          Please enter a username of 3 - 10 characters long!
+        </span>
+
+        <app-form-group formControlName="email" type="email" label="Email address" placeholder="Enter an email" info="We'll never share your email with anyone else."
+          ngDefaultControl>
+        </app-form-group>
+
+        <span *ngIf="email.invalid && email.touched">
+          Please enter an valid email!
+        </span>
+
+
+        <app-form-group formControlName="password" type="password" label="Password" placeholder="Enter a Password"
+          ngDefaultControl>
+        </app-form-group>
+
+
+        <span *ngIf="password.invalid && password.touched">
+          Please enter a password 5 - 15 characters long!
+        </span>
+
+        <app-form-group formControlName="comfirmPassword" type="password" label="Comfirm Password" placeholder="Comfirm Password"
+          info="Make sure your password is correct!" ngDefaultControl>
+        </app-form-group>
+
+        <span *ngIf="password.invalid && password.touched">
+          Please retype your password and make sure it matches!
+        </span>
+
+        <p>
+          Form Status: {{ authForm.status }}
+        </p>
+
+        <!-- <button type="submit" class="btn btn-primary" [disabled]="!authForm.valid">Submit</button> -->
+        <button type="submit" class="btn btn-primary">Submit</button>
+
+      </form>
+    </div>
+  </div>
+</div>

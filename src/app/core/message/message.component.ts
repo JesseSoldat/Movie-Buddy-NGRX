@@ -3,7 +3,7 @@ import { Component, OnInit } from "@angular/core";
 const colorEnum = {
   green: "alert-success",
   blue: "alert-info",
-  red: "lert-danger"
+  red: "alert-danger"
 };
 
 @Component({
@@ -12,15 +12,13 @@ const colorEnum = {
   styleUrls: ["./message.component.css"]
 })
 export class MessageComponent implements OnInit {
-  showMsg = true;
+  showMsg = false;
   AlertType = colorEnum.blue;
   constructor() {}
 
   ngOnInit() {}
 
   close() {
-    console.log("clicked close");
-
     this.showMsg = false;
   }
 }

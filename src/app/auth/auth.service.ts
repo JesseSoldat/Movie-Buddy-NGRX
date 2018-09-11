@@ -25,6 +25,8 @@ export class AuthService {
     };
 
     const pathName = username.split(" ").join("");
+    console.log(pathName);
+
     const ref = `moviedb/users/${user.uid}/${pathName}`;
     this.user = this.afDb.object(ref);
   }
