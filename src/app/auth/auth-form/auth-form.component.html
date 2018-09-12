@@ -1,33 +1,31 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-12 col-md-10 mx-auto">
-      <h2>{{formType}}</h2>
 
       <form [formGroup]="authForm" (ngSubmit)="onSubmit()" novalidate>
 
         <app-form-group formControlName="username" type="text" label="Username" placeholder="Enter a username" info="Pick a good one. You can NOT change this later!"
-          [errMsg]="username" ngDefaultControl (onBlur)="blurEvent('username')">
+          [errMsg]="usernameErr" ngDefaultControl (onBlur)="blurEvent('username')">
         </app-form-group>
-
 
         <app-form-group formControlName="email" type="email" label="Email address" placeholder="Enter an email" info="We'll never share your email with anyone else."
-          [errMsg]="email" ngDefaultControl (onBlur)="blurEvent('email')">
+          [errMsg]="emailErr" ngDefaultControl (onBlur)="blurEvent('email')">
         </app-form-group>
 
 
-        <app-form-group formControlName="password" type="password" label="Password" placeholder="Enter a Password"
-          [errMsg]="password" ngDefaultControl (onBlur)="blurEvent('password')">
-        </app-form-group>
+        <div formGroupName="passwordFormGroup">
 
+          <app-form-group formControlName="password" type="password" label="Password" placeholder="Enter a Password"
+            [errMsg]="passwordErr" ngDefaultControl (onBlur)="blurEvent('password')">
+          </app-form-group>
 
-        <app-form-group formControlName="comfirmPassword" type="password" label="Comfirm Password" placeholder="Comfirm Password"
-          info="Make sure your password is correct!" [errMsg]="confirmPassword" ngDefaultControl (onBlur)="blurEvent('comfirmPassword')">
-        </app-form-group>
+          <app-form-group formControlName="comfirmPassword" type="password" label="Comfirm Password" placeholder="Comfirm Password"
+            info="Make sure your password is correct!" [errMsg]="confirmPasswordErr" ngDefaultControl (onBlur)="blurEvent('comfirmPassword')">
+          </app-form-group>
 
+        </div>
 
-
-        <button type="submit" class="btn btn-primary" [disabled]="!authForm.valid">Submit</button>
-        <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="!authForm.valid">Submit</button>
 
       </form>
     </div>

@@ -11,6 +11,7 @@ import { RegisterComponent } from "./register/register.component";
 import { AuthFormComponent } from "./auth-form/auth-form.component";
 // Services
 import { AuthService } from "./auth.service";
+// Validator
 
 @NgModule({
   imports: [CommonModule, SharedModule, AuthRoutingModule],

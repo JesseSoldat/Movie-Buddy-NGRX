@@ -12,6 +12,7 @@ import { AngularFireStorageModule } from "@angular/fire/storage";
 import { FormGroupComponent } from "./inputs/form-group/form-group.component";
 // Directive
 import { OnBlurDirective } from "./inputs/onBlur";
+import { HeadingComponent } from "./heading/heading.component";
 
 @NgModule({
   imports: [
@@ -29,13 +30,15 @@ import { OnBlurDirective } from "./inputs/onBlur";
     SearchBoxComponent,
     CardComponent,
     FormGroupComponent,
+    HeadingComponent,
     OnBlurDirective
   ],
   declarations: [
     SearchBoxComponent,
     CardComponent,
     FormGroupComponent,
-    OnBlurDirective
+    OnBlurDirective,
+    HeadingComponent
   ]
 })
 export class SharedModule {}

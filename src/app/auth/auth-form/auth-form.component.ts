@@ -1,8 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  Validators
+} from "@angular/forms";
 
 // import { map, filter } from "rxjs/operators";
-
+import { comfirmPasswordValidator } from "./comfirmPassword.validator";
 import { User } from "../../models/user.model";
 
 interface Auth {
@@ -24,29 +29,36 @@ export class AuthFormComponent implements OnInit {
   formSubmitted = new EventEmitter<User>();
 
   authForm: FormGroup;
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
+  // Errors
+  usernameErr: string;
+  emailErr: string;
+  passwordErr: string;
+  confirmPasswordErr: string;
 
-  constructor() {
-    this.authForm = new FormGroup({
+  constructor(private formBuilder: FormBuilder) {
+    this.authForm = this.formBuilder.group({
       username: new FormControl("", [
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(10)
       ]),
       email: new FormControl("", [Validators.required, Validators.email]),
-      password: new FormControl("", [
-        Validators.required,
-        Validators.minLength(5),
-        Validators.max(15)
-      ]),
-      comfirmPassword: new FormControl("", [
-        Validators.required,
-        Validators.minLength(5),
-        Validators.max(15)
-      ])
+      passwordFormGroup: this.formBuilder.group(
+        {
+          password: [
+            "",
+            [
+              Validators.required,
+              Validators.minLength(5),
+              Validators.maxLength(15)
+            ]
+          ],
+          comfirmPassword: ["", [Validators.required]]
+        },
+        {
+          validator: comfirmPasswordValidator
+        }
+      )
     });
   }
 
@@ -66,40 +78,56 @@ export class AuthFormComponent implements OnInit {
     //   });
   }
 
-  parseErrors(control) {
-    const errObj = this.authForm.get(control).errors;
-    this.createErrorMsg(control, errObj);
+  getErrMsg(key, length) {
+    const errMsgs = {
+      required: "This field is required!",
+      minlength: `This field has to be at least ${length} characters long!`,
+      maxlength: `This field can not be over ${length} characters!`,
+      email: "Please enter a valid email!",
+      nomatch: "The passwords do not match!"
+    };
+    return errMsgs[key];
   }
 
-  userNameValidation(err) {
-    if (err === null) {
-      this.username = "";
-    } else if (err && err["required"]) {
-      this.username = "This field is required!";
-    } else if (err && err["minlength"]) {
-      this.username = "This field has to be at least 3 characters long!";
-    } else if (err && err["maxlength"]) {
-      this.username = "This field can not be over 10 characters!";
-    } else {
-      this.username = "";
-    }
+  fieldValidation(err) {
+    console.log(err);
+    const errKeys = ["required", "nomatch", "minlength", "maxlength", "email"];
+    let msg = "";
+
+    errKeys.forEach(key => {
+      if (err && err[key]) {
+        if (key === "minlength") {
+          const min = err[key].requiredLength;
+          msg = this.getErrMsg(key, min);
+          return;
+        } else if (key === "maxlength") {
+          const max = err[key].requiredLength;
+          msg = this.getErrMsg(key, max);
+          return;
+        }
+        msg = this.getErrMsg(key, null);
+      }
+    });
+
+    return msg;
   }
 
   createErrorMsg(control, err) {
-    console.log(err);
-
     switch (control) {
       case "username":
-        this.userNameValidation(err);
+        this.usernameErr = this.fieldValidation(err);
         break;
 
       case "email":
+        this.emailErr = this.fieldValidation(err);
         break;
 
       case "password":
+        this.passwordErr = this.fieldValidation(err);
         break;
 
       case "comfirmPassword":
+        this.confirmPasswordErr = this.fieldValidation(err);
         break;
 
       default:
@@ -107,8 +135,27 @@ export class AuthFormComponent implements OnInit {
     }
   }
 
+  getFormGroupControl(control, group) {
+    const passwordGroup = this.authForm.get(group);
+    let errObj;
+    // Control Group Error
+    if (control === "comfirmPassword" && passwordGroup.errors) {
+      errObj = passwordGroup.errors;
+      this.createErrorMsg(control, errObj);
+      return;
+    }
+    // Single Control Error
+    errObj = passwordGroup.get(control).errors;
+    this.createErrorMsg(control, errObj);
+  }
+
   blurEvent(control: string) {
-    this.parseErrors(control);
+    let errObj;
+    if (control === "password" || control === "comfirmPassword") {
+      return this.getFormGroupControl(control, "passwordFormGroup");
+    }
+    errObj = this.authForm.get(control).errors;
+    this.createErrorMsg(control, errObj);
   }
 
   // get username() {
