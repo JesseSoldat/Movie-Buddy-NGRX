@@ -11,7 +11,7 @@ import { AngularFireDatabaseModule } from "@angular/fire/database";
 import { AngularFireStorageModule } from "@angular/fire/storage";
 import { FormGroupComponent } from "./inputs/form-group/form-group.component";
 // Directive
-import { OnBlurDirective } from "./inputs/onBlur";
+import { OnBlurDirective } from "./inputs/blur.directive";
 import { HeadingComponent } from "./heading/heading.component";
 
 @NgModule({

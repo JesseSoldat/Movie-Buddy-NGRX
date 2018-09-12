@@ -5,22 +5,22 @@
       <form [formGroup]="authForm" (ngSubmit)="onSubmit()" novalidate>
 
         <app-form-group formControlName="username" type="text" label="Username" placeholder="Enter a username" info="Pick a good one. You can NOT change this later!"
-          [errMsg]="usernameErr" ngDefaultControl (onBlur)="blurEvent('username')">
+          [errMsg]="usernameErr" ngDefaultControl (appBlurEvent)="blurEvent('username')">
         </app-form-group>
 
         <app-form-group formControlName="email" type="email" label="Email address" placeholder="Enter an email" info="We'll never share your email with anyone else."
-          [errMsg]="emailErr" ngDefaultControl (onBlur)="blurEvent('email')">
+          [errMsg]="emailErr" ngDefaultControl (appBlurEvent)="blurEvent('email')">
         </app-form-group>
 
 
         <div formGroupName="passwordFormGroup">
 
           <app-form-group formControlName="password" type="password" label="Password" placeholder="Enter a Password"
-            [errMsg]="passwordErr" ngDefaultControl (onBlur)="blurEvent('password')">
+            [errMsg]="passwordErr" ngDefaultControl (appBlurEvent)="blurEvent('password')">
           </app-form-group>
 
-          <app-form-group formControlName="comfirmPassword" type="password" label="Comfirm Password" placeholder="Comfirm Password"
-            info="Make sure your password is correct!" [errMsg]="confirmPasswordErr" ngDefaultControl (onBlur)="blurEvent('comfirmPassword')">
+          <app-form-group formControlName="confirmPassword" type="password" label="Confirm Password" placeholder="Confirm Password"
+            info="Make sure your password is correct!" [errMsg]="confirmPasswordErr" ngDefaultControl (appBlurEvent)="blurEvent('confirmPassword')">
           </app-form-group>
 
         </div>

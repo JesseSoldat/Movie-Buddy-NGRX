@@ -7,14 +7,14 @@ import {
 } from "@angular/forms";
 
 // import { map, filter } from "rxjs/operators";
-import { comfirmPasswordValidator } from "./comfirmPassword.validator";
+import { confirmPasswordValidator } from "./confirmPassword.validator";
 import { User } from "../../models/user.model";
 
 interface Auth {
   username?: string;
   email: string;
   password: string;
-  comfirmPassword: string;
+  confirm: string;
 }
 
 @Component({
@@ -53,10 +53,10 @@ export class AuthFormComponent implements OnInit {
               Validators.maxLength(15)
             ]
           ],
-          comfirmPassword: ["", [Validators.required]]
+          confirmPassword: ["", [Validators.required]]
         },
         {
-          validator: comfirmPasswordValidator
+          validator: confirmPasswordValidator
         }
       )
     });
@@ -126,7 +126,7 @@ export class AuthFormComponent implements OnInit {
         this.passwordErr = this.fieldValidation(err);
         break;
 
-      case "comfirmPassword":
+      case "confirmPassword":
         this.confirmPasswordErr = this.fieldValidation(err);
         break;
 
@@ -135,11 +135,11 @@ export class AuthFormComponent implements OnInit {
     }
   }
 
-  getFormGroupControl(control, group) {
+  processFormGroupErrors(control, controlType, group) {
     const passwordGroup = this.authForm.get(group);
     let errObj;
     // Control Group Error
-    if (control === "comfirmPassword" && passwordGroup.errors) {
+    if (control === controlType && passwordGroup.errors) {
       errObj = passwordGroup.errors;
       this.createErrorMsg(control, errObj);
       return;
@@ -151,8 +151,12 @@ export class AuthFormComponent implements OnInit {
 
   blurEvent(control: string) {
     let errObj;
-    if (control === "password" || control === "comfirmPassword") {
-      return this.getFormGroupControl(control, "passwordFormGroup");
+    if (control === "password" || control === "confirmPassword") {
+      return this.processFormGroupErrors(
+        control,
+        "confirmPassword",
+        "passwordFormGroup"
+      );
     }
     errObj = this.authForm.get(control).errors;
     this.createErrorMsg(control, errObj);
@@ -162,22 +166,8 @@ export class AuthFormComponent implements OnInit {
   //   return this.authForm.get("username");
   // }
 
-  // get email() {
-  //   return this.authForm.get("email");
-  // }
-
-  // get password() {
-  //   return this.authForm.get("password");
-  // }
-
-  // get comfirmPassword() {
-  //   return this.authForm.get("comfirmPassword");
-  // }
-
   onSubmit() {
     const auth: Auth = this.authForm.value;
-    console.log(auth);
-
     // this.formSubmitted.emit(auth);
   }
 }

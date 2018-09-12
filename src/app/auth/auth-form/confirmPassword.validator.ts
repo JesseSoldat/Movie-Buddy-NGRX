@@ -1,15 +1,15 @@
 import { AbstractControl } from "@angular/forms";
 
-export const comfirmPasswordValidator = (
+export const confirmPasswordValidator = (
   control: AbstractControl
 ): { [key: string]: boolean } => {
   const password = control.get("password").value;
-  const comfirmPassword = control.get("comfirmPassword").value;
+  const confirmPassword = control.get("confirmPassword").value;
 
-  if (!password || !comfirmPassword) {
+  if (!password || !confirmPassword) {
     return null;
   }
-  if (password !== comfirmPassword) {
+  if (password !== confirmPassword) {
     return { nomatch: true };
   }
 
