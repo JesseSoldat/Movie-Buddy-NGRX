@@ -9,4 +9,6 @@ export const reducers: ActionReducerMap<AppState> = {
   router: routerReducer
 };
 
-export const metaReducers: MetaReducer<AppState>[] = environment.production ? [] : [storeFreeze];
+export const metaReducers: MetaReducer<AppState>[] = environment.production
+  ? []
+  : [storeFreeze];

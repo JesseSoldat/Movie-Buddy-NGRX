@@ -1,5 +1,10 @@
 import { Injectable } from "@angular/core";
 
+// ngrx
+import { Store } from "@ngrx/store";
+import { AppState } from "../reducers";
+import { Register } from "./auth.actions";
+
 // Firebase
 import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFireDatabase, AngularFireObject } from "@angular/fire/database";
@@ -13,22 +18,27 @@ export class AuthService {
 
   constructor(
     private afAuth: AngularFireAuth,
-    private afDb: AngularFireDatabase
+    private afDb: AngularFireDatabase,
+    private store: Store<AppState>
   ) {}
 
   async saveUserToDb(credentials, username: string) {
     console.log(credentials);
     const user: User = {
       username,
-      uid: credentials.uid,
-      email: credentials.email
+      uid: credentials.user.uid,
+      email: credentials.user.email
     };
 
-    const pathName = username.split(" ").join("");
-    console.log(pathName);
+    const pathName = username
+      .split(" ")
+      .join("")
+      .toLowerCase();
 
     const ref = `moviedb/users/${user.uid}/${pathName}`;
-    this.user = this.afDb.object(ref);
+    this.afDb.object(ref).set({ user });
+
+    this.store.dispatch(new Register({ user }));
   }
 
   async emailRegister(username: string, email: string, password: string) {

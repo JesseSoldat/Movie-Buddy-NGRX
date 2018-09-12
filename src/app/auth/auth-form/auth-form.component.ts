@@ -14,7 +14,6 @@ interface Auth {
   username?: string;
   email: string;
   password: string;
-  confirm: string;
 }
 
 @Component({
@@ -27,7 +26,6 @@ export class AuthFormComponent implements OnInit {
   formType: string;
   @Output()
   formSubmitted = new EventEmitter<User>();
-
   authForm: FormGroup;
   // Errors
   usernameErr: string;
@@ -37,23 +35,26 @@ export class AuthFormComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder) {
     this.authForm = this.formBuilder.group({
-      username: new FormControl("", [
+      username: new FormControl("Jesse", [
         Validators.required,
         Validators.minLength(3),
-        Validators.maxLength(10)
+        Validators.maxLength(15)
       ]),
-      email: new FormControl("", [Validators.required, Validators.email]),
+      email: new FormControl("jesse@gmail.com", [
+        Validators.required,
+        Validators.email
+      ]),
       passwordFormGroup: this.formBuilder.group(
         {
           password: [
-            "",
+            "123456",
             [
               Validators.required,
-              Validators.minLength(5),
+              Validators.minLength(6),
               Validators.maxLength(15)
             ]
           ],
-          confirmPassword: ["", [Validators.required]]
+          confirmPassword: ["123456", [Validators.required]]
         },
         {
           validator: confirmPasswordValidator
@@ -90,7 +91,10 @@ export class AuthFormComponent implements OnInit {
   }
 
   fieldValidation(err) {
-    console.log(err);
+    if (err !== null) {
+      console.log(err);
+    }
+
     const errKeys = ["required", "nomatch", "minlength", "maxlength", "email"];
     let msg = "";
 
@@ -167,7 +171,13 @@ export class AuthFormComponent implements OnInit {
   // }
 
   onSubmit() {
-    const auth: Auth = this.authForm.value;
-    // this.formSubmitted.emit(auth);
+    const formValues = this.authForm.value;
+    const auth: Auth = {
+      username: formValues.username,
+      email: formValues.email,
+      password: formValues.passwordFormGroup.password
+    };
+
+    this.formSubmitted.emit(auth);
   }
 }

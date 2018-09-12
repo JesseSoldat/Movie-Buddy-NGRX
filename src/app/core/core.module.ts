@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { HttpClientModule } from "@angular/common/http";
 // NGRX
 import { StoreModule } from "@ngrx/store";
+import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import {
   RouterStateSerializer,
   StoreRouterConnectingModule
@@ -34,6 +35,7 @@ import { MessageComponent } from "./message/message.component";
     AngularFireModule.initializeApp(environment.firebase),
     // ngrx
     StoreModule.forRoot(reducers, { metaReducers }),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
     StoreRouterConnectingModule.forRoot({ stateKey: "router" }),
     EffectsModule.forRoot([])
   ],
