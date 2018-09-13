@@ -2,15 +2,16 @@ import { Injectable } from "@angular/core";
 
 // ngrx
 import { Store } from "@ngrx/store";
-import { AppState } from "../reducers";
-import { Register, Login } from "./auth.actions";
+import { AppState } from "../../reducers";
+import { Register, Login, Logout } from "../../auth/auth.actions";
+import { ShowMsg } from "../../shared/shared.actions";
 
 // Firebase
 import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFireDatabase, AngularFireObject } from "@angular/fire/database";
 
 // Models
-import { User } from "../models/user.model";
+import { User } from "../../models/user.model";
 
 @Injectable()
 export class AuthService {
@@ -72,7 +73,17 @@ export class AuthService {
 
       this.store.dispatch(new Login({ user }));
     } catch (err) {
-      console.log("Login", err);
+      const msg = { msg: err.message, color: "red" };
+      this.store.dispatch(new ShowMsg({ msg }));
+    }
+  }
+
+  async logout() {
+    try {
+      await this.afAuth.auth.signOut();
+      this.store.dispatch(new Logout());
+    } catch (err) {
+      console.log("Logout", err);
     }
   }
 }

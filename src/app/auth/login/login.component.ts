@@ -1,9 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
-import { User } from "../../models/user.model";
-import { Auth } from "../../models/auth.model";
-import { AuthService } from "../auth.service";
+import { AuthService } from "../../core/services/auth.service";
 // helpers
 import { fieldValidation } from "../helpers/fieldValidation";
 
@@ -13,6 +11,7 @@ import { fieldValidation } from "../helpers/fieldValidation";
   styleUrls: ["./login.component.css"]
 })
 export class LoginComponent implements OnInit {
+  showOverlay: false;
   authForm: FormGroup;
   // Errors
   emailErr: string;

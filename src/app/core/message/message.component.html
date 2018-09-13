@@ -1,7 +1,7 @@
-<div class="row" *ngIf="showMsg">
+<div class="row" *ngIf="showMsg$ | async">
   <div class="col-xs-12 col-sm-10 col-md-8 mx-auto">
-    <div id="msgComponent" [ngClass]=AlertType class="alert alert-dismissible fade show" role="alert">
-      <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+    <div id="msgComponent" [ngClass]="(msg$ | async)?.color" class="alert alert-dismissible fade show" role="alert">
+      <strong>Holy guacamole!</strong> {{(msg$ | async)?.msg}}
       <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="close()">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -9,6 +9,6 @@
   </div>
 </div>
 
-<div class="row" *ngIf="!showMsg">
+<div class="row" *ngIf="hideMsg$ | async">
   <div class="col-12 spacer70"></div>
 </div>

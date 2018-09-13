@@ -14,16 +14,19 @@ import { CustomSerializer } from "../reducers/customSerialize";
 import { EffectsModule } from "@ngrx/effects";
 // Routing
 import { AppRoutingModule } from "../app-routing.module";
-
-// Components
-import { NavbarComponent } from "./navbar/navbar.component";
-
 // ENV
 import { environment } from "../../environments/environment";
 // Firebase
 import { AngularFireModule } from "@angular/fire";
+import { AngularFireAuthModule } from "@angular/fire/auth";
+import { AngularFireDatabaseModule } from "@angular/fire/database";
+// Components
+import { NavbarComponent } from "./navbar/navbar.component";
 import { WelcomeComponent } from "./welcome/welcome.component";
 import { MessageComponent } from "./message/message.component";
+
+// Services
+import { AuthService } from "./services/auth.service";
 
 @NgModule({
   imports: [
@@ -33,6 +36,8 @@ import { MessageComponent } from "./message/message.component";
     HttpClientModule,
     // Firebase
     AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
+    AngularFireDatabaseModule,
     // ngrx
     StoreModule.forRoot(reducers, { metaReducers }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
@@ -40,7 +45,10 @@ import { MessageComponent } from "./message/message.component";
     EffectsModule.forRoot([])
   ],
   exports: [AppRoutingModule, NavbarComponent, MessageComponent],
-  providers: [{ provide: RouterStateSerializer, useClass: CustomSerializer }],
+  providers: [
+    { provide: RouterStateSerializer, useClass: CustomSerializer },
+    AuthService
+  ],
   declarations: [NavbarComponent, WelcomeComponent, MessageComponent]
 })
 export class CoreModule {}

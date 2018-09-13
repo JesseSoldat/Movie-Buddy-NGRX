@@ -1,9 +1,19 @@
 import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
+import { Msg } from "../../models/msg.model";
+// NGRX
+import { AppState } from "../../reducers";
+import { Store, select } from "@ngrx/store";
+import { ShowMsg } from "../../shared/shared.actions";
+import {
+  selectMsg,
+  selectShowMsg,
+  selectHideMsg
+} from "../../shared/shared.selectors";
 
-const colorEnum = {
-  green: "alert-success",
-  blue: "alert-info",
-  red: "alert-danger"
+const emptyMsg = {
+  msg: "",
+  color: ""
 };
 
 @Component({
@@ -12,13 +22,18 @@ const colorEnum = {
   styleUrls: ["./message.component.css"]
 })
 export class MessageComponent implements OnInit {
-  showMsg = false;
-  AlertType = colorEnum.blue;
-  constructor() {}
+  showMsg$: Observable<boolean>;
+  hideMsg$: Observable<boolean>;
+  msg$: Observable<Msg>;
+  constructor(private store: Store<AppState>) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.showMsg$ = this.store.pipe(select(selectShowMsg));
+    this.hideMsg$ = this.store.pipe(select(selectHideMsg));
+    this.msg$ = this.store.pipe(select(selectMsg));
+  }
 
   close() {
-    this.showMsg = false;
+    this.store.dispatch(new ShowMsg({ msg: emptyMsg }));
   }
 }

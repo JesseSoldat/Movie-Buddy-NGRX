@@ -1,36 +1,38 @@
 <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
 
-  <a class="navbar-brand" [routerLink]="homePage" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Movie
+  <a *ngIf="($isLoggedIn | async)" class="navbar-brand" routerLink="/dashboard" routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }">Movie
     Buddy</a>
 
+  <a *ngIf="$isLoggedOut | async" class="navbar-brand" routerLink="/" routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }">Movie
+    Buddy</a>
 
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mobile" aria-controls="navbarCollapse"
     aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
-
   <div class="collapse navbar-collapse" id="mobile">
     <!-- left hand links -->
-    <ul class="navbar-nav mr-auto">
-      <!-- <li class="nav-item">
-          <a class="nav-link" href="#"> <i class="fas fa-phone"></i></a>
-        </li> -->
-
-    </ul>
+    <ul class="navbar-nav mr-auto"></ul>
     <!-- right hand links -->
-    <ul class="navbar-nav ml-auto">
-      <li *ngIf="isAuth" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-        <a class="nav-link" [routerLink]="homePage">Dashboard</a>
+    <ul class="navbar-nav ml-auto" *ngIf="$isLoggedIn | async">
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="nav-link" routerLink="/dashboard">Dashboard</a>
       </li>
-      <li *ngIf="!isAuth" class="nav-item" routerLinkActive="active">
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="logout()">
+        <a class="nav-link">Logout</a>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav ml-auto" *ngIf="$isLoggedOut | async">
+      <li class="nav-item" routerLinkActive="active">
         <a class="nav-link" routerLink="auth/register">Register</a>
       </li>
-      <li *ngIf="!isAuth" class="nav-item" routerLinkActive="active">
+      <li class="nav-item" routerLinkActive="active">
         <a class="nav-link" routerLink="auth/login">Login</a>
       </li>
-
     </ul>
-
   </div>
 </nav>

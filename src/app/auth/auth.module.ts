@@ -13,8 +13,6 @@ import { AuthRoutingModule } from "./auth-routing.module";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { AuthFormComponent } from "./auth-form/auth-form.component";
-// Services
-import { AuthService } from "./auth.service";
 
 @NgModule({
   imports: [
@@ -25,6 +23,6 @@ import { AuthService } from "./auth.service";
     EffectsModule.forFeature([AuthEffects])
   ],
   declarations: [LoginComponent, RegisterComponent, AuthFormComponent],
-  providers: [AuthService]
+  providers: []
 })
 export class AuthModule {}

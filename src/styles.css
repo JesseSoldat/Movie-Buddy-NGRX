@@ -1,3 +1,13 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", sans-serif;
+}
+
+.appWrapper {
+  position: relative;
+}
+
 .spacer80 {
   height: 80px;
 }
