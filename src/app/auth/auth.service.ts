@@ -22,12 +22,6 @@ export class AuthService {
     private store: Store<AppState>
   ) {}
 
-  // firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
-  //   return user.updateProfile({'displayName: document.getElementById("name").value});
-  // }).catch(function(error) {
-  //   console.log(error);
-  // });
-
   async saveUserToDb(credentials, username: string) {
     const user: User = {
       username,
@@ -52,6 +46,11 @@ export class AuthService {
         email,
         password
       );
+      await credentials.user.updateProfile({
+        displayName: username,
+        photoURL: ""
+      });
+
       this.saveUserToDb(credentials, username);
     } catch (err) {
       console.log("Register", err);
@@ -64,9 +63,9 @@ export class AuthService {
         email,
         password
       );
-      console.log(credentials);
 
       const user = {
+        username: credentials.user.displayName,
         uid: credentials.user.uid,
         email: credentials.user.email
       };
