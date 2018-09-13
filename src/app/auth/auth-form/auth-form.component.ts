@@ -6,15 +6,11 @@ import {
   Validators
 } from "@angular/forms";
 
-// import { map, filter } from "rxjs/operators";
 import { confirmPasswordValidator } from "./confirmPassword.validator";
 import { User } from "../../models/user.model";
-
-interface Auth {
-  username?: string;
-  email: string;
-  password: string;
-}
+import { Auth } from "../../models/auth.model";
+// helpers
+import { fieldValidation } from "../helpers/fieldValidation";
 
 @Component({
   selector: "app-auth-form",
@@ -35,26 +31,23 @@ export class AuthFormComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder) {
     this.authForm = this.formBuilder.group({
-      username: new FormControl("Jesse", [
+      username: new FormControl("", [
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(15)
       ]),
-      email: new FormControl("jesse@gmail.com", [
-        Validators.required,
-        Validators.email
-      ]),
+      email: new FormControl("", [Validators.required, Validators.email]),
       passwordFormGroup: this.formBuilder.group(
         {
           password: [
-            "123456",
+            "",
             [
               Validators.required,
               Validators.minLength(6),
               Validators.maxLength(15)
             ]
           ],
-          confirmPassword: ["123456", [Validators.required]]
+          confirmPassword: ["", [Validators.required]]
         },
         {
           validator: confirmPasswordValidator
@@ -64,74 +57,25 @@ export class AuthFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.onChanges();
-  }
-
-  onChanges(): void {
-    // this.authForm.valueChanges.subscribe(val => {
-    //   console.log(val);
-    //   console.log(this.authForm);
-    // });
-    // this.authForm.valueChanges
-    //   .pipe(map(values => values.username))
-    //   .subscribe(username => {
-    //     console.log(username);
-    //   });
-  }
-
-  getErrMsg(key, length) {
-    const errMsgs = {
-      required: "This field is required!",
-      minlength: `This field has to be at least ${length} characters long!`,
-      maxlength: `This field can not be over ${length} characters!`,
-      email: "Please enter a valid email!",
-      nomatch: "The passwords do not match!"
-    };
-    return errMsgs[key];
-  }
-
-  fieldValidation(err) {
-    if (err !== null) {
-      console.log(err);
-    }
-
-    const errKeys = ["required", "nomatch", "minlength", "maxlength", "email"];
-    let msg = "";
-
-    errKeys.forEach(key => {
-      if (err && err[key]) {
-        if (key === "minlength") {
-          const min = err[key].requiredLength;
-          msg = this.getErrMsg(key, min);
-          return;
-        } else if (key === "maxlength") {
-          const max = err[key].requiredLength;
-          msg = this.getErrMsg(key, max);
-          return;
-        }
-        msg = this.getErrMsg(key, null);
-      }
-    });
-
-    return msg;
+    // this.authForm.valueChanges.subscribe(val => {});
   }
 
   createErrorMsg(control, err) {
     switch (control) {
       case "username":
-        this.usernameErr = this.fieldValidation(err);
+        this.usernameErr = fieldValidation(err);
         break;
 
       case "email":
-        this.emailErr = this.fieldValidation(err);
+        this.emailErr = fieldValidation(err);
         break;
 
       case "password":
-        this.passwordErr = this.fieldValidation(err);
+        this.passwordErr = fieldValidation(err);
         break;
 
       case "confirmPassword":
-        this.confirmPasswordErr = this.fieldValidation(err);
+        this.confirmPasswordErr = fieldValidation(err);
         break;
 
       default:

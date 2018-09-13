@@ -1,3 +1,22 @@
-<p>
-  login works!
-</p>
+<app-heading heading="Login"></app-heading>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 col-md-10 mx-auto">
+
+      <form [formGroup]="authForm" (ngSubmit)="onSubmit()" novalidate>
+
+        <app-form-group formControlName="email" type="email" label="Email address" placeholder="Enter an email"
+          [errMsg]="emailErr" ngDefaultControl (appBlurEvent)="blurEvent('email')">
+        </app-form-group>
+
+        <app-form-group formControlName="password" type="password" label="Password" placeholder="Enter a Password"
+          [errMsg]="passwordErr" ngDefaultControl (appBlurEvent)="blurEvent('password')">
+        </app-form-group>
+
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="!authForm.valid">Submit</button>
+
+      </form>
+    </div>
+  </div>
+</div>

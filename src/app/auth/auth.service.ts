@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 // ngrx
 import { Store } from "@ngrx/store";
 import { AppState } from "../reducers";
-import { Register } from "./auth.actions";
+import { Register, Login } from "./auth.actions";
 
 // Firebase
 import { AngularFireAuth } from "@angular/fire/auth";
@@ -22,8 +22,13 @@ export class AuthService {
     private store: Store<AppState>
   ) {}
 
+  // firebase.auth().createUserWithEmailAndPassword(email, password).then(function(user) {
+  //   return user.updateProfile({'displayName: document.getElementById("name").value});
+  // }).catch(function(error) {
+  //   console.log(error);
+  // });
+
   async saveUserToDb(credentials, username: string) {
-    console.log(credentials);
     const user: User = {
       username,
       uid: credentials.user.uid,
@@ -49,18 +54,26 @@ export class AuthService {
       );
       this.saveUserToDb(credentials, username);
     } catch (err) {
-      console.log(err);
+      console.log("Register", err);
     }
   }
 
   async emailLogin(email: string, password: string) {
     try {
-      const user = await this.afAuth.auth.signInWithEmailAndPassword(
+      const credentials = await this.afAuth.auth.signInWithEmailAndPassword(
         email,
         password
       );
+      console.log(credentials);
+
+      const user = {
+        uid: credentials.user.uid,
+        email: credentials.user.email
+      };
+
+      this.store.dispatch(new Login({ user }));
     } catch (err) {
-      console.log(err);
+      console.log("Login", err);
     }
   }
 }
