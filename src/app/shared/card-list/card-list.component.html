@@ -1,3 +1,8 @@
-<p>
-  card-list works!
-</p>
+<div class="row">
+  <div *ngIf="basicCard" [ngClass]="flexType" class="col-12 d-flex">
+    <app-card></app-card>
+  </div>
+  <div *ngIf="imageCard" [ngClass]="flexType" class="col-12 d-flex">
+    <app-card></app-card>
+  </div>
+</div>

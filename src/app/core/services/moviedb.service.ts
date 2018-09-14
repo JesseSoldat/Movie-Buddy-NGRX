@@ -18,9 +18,8 @@ export class MovieDbService {
     const query = `?&query=${term}&sort_by=popularity.desc&api_key=${
       this.apiKey
     }`;
-    const callback = "&callback=JSONP_CALLBACK";
     const url = `${baseUrl}${query}`;
-    this.http.jsonp(url, callback).subscribe(data => {
+    this.http.jsonp(url, "callback").subscribe(data => {
       console.log(data);
     });
   }

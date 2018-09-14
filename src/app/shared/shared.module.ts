@@ -19,6 +19,7 @@ import { CardListComponent } from "./card-list/card-list.component";
 import { HeadingComponent } from "./heading/heading.component";
 import { OverlayComponent } from "./overlay/overlay.component";
 import { SpinnerComponent } from "./spinner/spinner.component";
+import { IconBtnComponent } from "./icon-btn/icon-btn.component";
 
 @NgModule({
   imports: [
@@ -42,6 +43,7 @@ import { SpinnerComponent } from "./spinner/spinner.component";
     HeadingComponent,
     OverlayComponent,
     SpinnerComponent,
+    IconBtnComponent,
     // Directives
     OnBlurDirective
   ],
@@ -53,7 +55,8 @@ import { SpinnerComponent } from "./spinner/spinner.component";
     HeadingComponent,
     OverlayComponent,
     SpinnerComponent,
-    CardListComponent
+    CardListComponent,
+    IconBtnComponent
   ]
 })
 export class SharedModule {}

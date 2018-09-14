@@ -1,3 +1,20 @@
-<p>
-  card works!
-</p>
+<div class="card mb-4" [ngStyle]="{'width': cardSize }">
+  <div class="card-body d-flex flex-column justify-content-center align-items-center">
+    <h5 class="card-title">
+      Superman
+    </h5>
+    <h6 class="card-subtitle mb2">The man of steel</h6>
+    <div class="row">
+      <div class="col-12 d-flex mt-4">
+
+        <app-icon-btn (btnClicked)="onBtnClicked()" btnClass="btn-default" iconClass="fa-eye" text='View'></app-icon-btn>
+
+        <div style="width: 20px"></div>
+
+        <!-- <app-icon-btn (btnClicked)="onBtnClicked" btnClass="btn-default" iconClass="fa-edit" text='Edit'></app-icon-btn> -->
+
+      </div>
+    </div>
+
+  </div>
+</div>
