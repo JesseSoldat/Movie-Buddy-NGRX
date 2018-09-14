@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HttpClientJsonpModule } from "@angular/common/http";
 // NGRX
 import { StoreModule } from "@ngrx/store";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
@@ -27,6 +27,7 @@ import { MessageComponent } from "./message/message.component";
 
 // Services
 import { AuthService } from "./services/auth.service";
+import { MovieDbService } from "./services/moviedb.service";
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { AuthService } from "./services/auth.service";
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
+    HttpClientJsonpModule,
     // Firebase
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
@@ -47,7 +49,8 @@ import { AuthService } from "./services/auth.service";
   exports: [AppRoutingModule, NavbarComponent, MessageComponent],
   providers: [
     { provide: RouterStateSerializer, useClass: CustomSerializer },
-    AuthService
+    AuthService,
+    MovieDbService
   ],
   declarations: [NavbarComponent, WelcomeComponent, MessageComponent]
 })

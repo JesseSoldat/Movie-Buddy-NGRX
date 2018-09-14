@@ -5,9 +5,6 @@ import { ReactiveFormsModule } from "@angular/forms";
 // NGRX
 import { StoreModule } from "@ngrx/store";
 import { sharedReducer } from "./shared.reducer";
-// Components
-import { SearchBoxComponent } from "./search-box/search-box.component";
-import { CardComponent } from "./card/card.component";
 // import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFireDatabaseModule } from "@angular/fire/database";
@@ -15,6 +12,10 @@ import { AngularFireStorageModule } from "@angular/fire/storage";
 import { FormGroupComponent } from "./inputs/form-group/form-group.component";
 // Directive
 import { OnBlurDirective } from "./inputs/blur.directive";
+// Components
+import { SearchBoxComponent } from "./search-box/search-box.component";
+import { CardComponent } from "./card/card.component";
+import { CardListComponent } from "./card-list/card-list.component";
 import { HeadingComponent } from "./heading/heading.component";
 import { OverlayComponent } from "./overlay/overlay.component";
 import { SpinnerComponent } from "./spinner/spinner.component";
@@ -36,6 +37,7 @@ import { SpinnerComponent } from "./spinner/spinner.component";
     // Components
     SearchBoxComponent,
     CardComponent,
+    CardListComponent,
     FormGroupComponent,
     HeadingComponent,
     OverlayComponent,
@@ -50,7 +52,8 @@ import { SpinnerComponent } from "./spinner/spinner.component";
     OnBlurDirective,
     HeadingComponent,
     OverlayComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    CardListComponent
   ]
 })
 export class SharedModule {}
