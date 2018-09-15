@@ -30,6 +30,6 @@ export class MovieDbService {
         map((res: any) => res.results),
         tap(movieList => this.store.dispatch(new GetMovieList(movieList)))
       )
-      .subscribe(movieList => {});
+      .subscribe(() => {});
   }
 }

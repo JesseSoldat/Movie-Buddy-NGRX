@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 // NGRX
-import { AppState } from "../../reducers";
+import { AppState } from "../../../reducers";
 import { Store, select } from "@ngrx/store";
-import { selectShowOverlay } from "../selectors/shared.selectors";
+import { selectShowOverlay } from "../../selectors/shared.selectors";
 
 @Component({
   selector: "app-overlay",

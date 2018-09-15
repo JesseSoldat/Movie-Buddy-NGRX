@@ -1,0 +1,10 @@
+<div class="row">
+  <div class="col-xs-12 col-sm-10 mx-auto">
+    <div *ngIf="listType === 'basicCard'" class="col-12 d-flex flex-wrap" [ngClass]="flexType">
+      <app-card *ngFor="let movie of movieList$ | async" [movie]="movie"></app-card>
+    </div>
+    <div *ngIf="listType === 'imageCard'" class="col-12 d-flex flex-wrap" [ngClass]="flexType">
+      <app-img-card *ngFor="let movie of movieList$ | async" [movie]="movie"></app-img-card>
+    </div>
+  </div>
+</div>

@@ -15,7 +15,7 @@ import {
   tap
 } from "rxjs/operators";
 
-import { MovieDbService } from "../../core/services/moviedb.service";
+import { MovieDbService } from "../../../core/services/moviedb.service";
 
 @Component({
   selector: "app-search-box",
