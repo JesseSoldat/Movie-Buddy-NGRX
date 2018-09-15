@@ -12,6 +12,7 @@ import {
 } from "../../shared/shared.selectors";
 
 const emptyMsg = {
+  title: "",
   msg: "",
   color: ""
 };

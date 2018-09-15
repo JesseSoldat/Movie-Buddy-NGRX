@@ -73,7 +73,7 @@ export class AuthService {
 
       this.store.dispatch(new Login({ user }));
     } catch (err) {
-      const msg = { msg: err.message, color: "red" };
+      const msg = { title: null, msg: err.message, color: "red" };
       this.store.dispatch(new ShowMsg({ msg }));
     }
   }

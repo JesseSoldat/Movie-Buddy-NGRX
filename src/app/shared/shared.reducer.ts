@@ -11,7 +11,7 @@ export interface SharedState {
 export const initialSharedState: SharedState = {
   showOverlay: false,
   showSpinner: false,
-  msg: { msg: "", color: "" }
+  msg: { title: "", msg: "", color: "" }
 };
 
 export const sharedReducer = (state = initialSharedState, action) => {
