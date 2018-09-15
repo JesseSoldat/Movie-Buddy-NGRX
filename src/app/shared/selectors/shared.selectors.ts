@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { SharedState } from "./shared.reducer";
+import { SharedState } from "../reducers/shared.reducer";
 
 const titleEnum = {
   green: "Success: ",

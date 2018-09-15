@@ -1,6 +1,6 @@
 import { Action } from "@ngrx/store";
 
-import { Msg } from "../models/msg.model";
+import { Msg } from "../../models/msg.model";
 
 export enum SharedActionTypes {
   ShowOverlay = "ShowOverlay",

@@ -41,7 +41,7 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
       tap(text => this.submitSearch(text)) // call the search service
     );
 
-    this.inputStream$.subscribe(text => console.log(text));
+    this.inputStream$.subscribe(text => {});
   }
 
   submitSearch(searchTerm: string) {

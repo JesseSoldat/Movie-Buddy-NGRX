@@ -1,9 +1,14 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-
-// ngrx
+import { map, tap } from "rxjs/operators";
+// NGRX
 import { Store } from "@ngrx/store";
 import { AppState } from "../../reducers";
+// Actions
+import {
+  GetMovieList,
+  GetMovieDetails
+} from "../../shared/actions/movie.actions";
 
 @Injectable()
 export class MovieDbService {
@@ -19,8 +24,12 @@ export class MovieDbService {
       this.apiKey
     }`;
     const url = `${baseUrl}${query}`;
-    this.http.jsonp(url, "callback").subscribe(data => {
-      console.log(data);
-    });
+    this.http
+      .jsonp(url, "callback")
+      .pipe(
+        map((res: any) => res.results),
+        tap(movieList => this.store.dispatch(new GetMovieList(movieList)))
+      )
+      .subscribe(movieList => {});
   }
 }

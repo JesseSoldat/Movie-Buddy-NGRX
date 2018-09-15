@@ -22,6 +22,7 @@ export class IconBtnComponent implements OnInit {
   ngOnInit() {}
 
   onBtnClick() {
-    this.btnClicked.emit();
+    // this.btnClicked.emit();
+    console.log("clicked btn");
   }
 }

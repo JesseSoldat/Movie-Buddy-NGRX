@@ -7,11 +7,16 @@
     <div class="row">
       <div class="col-12 d-flex mt-4">
 
-        <app-icon-btn (btnClicked)="onBtnClicked()" btnClass="btn-default" iconClass="fa-eye" text='View'></app-icon-btn>
+
+        <button (click)="onBtnClick('addToFavorites')" class="btn btn-secondary">
+          <i class="fas fa-heart mr-1"></i><span>Favorites</span>
+        </button>
 
         <div style="width: 20px"></div>
 
-        <!-- <app-icon-btn (btnClicked)="onBtnClicked" btnClass="btn-default" iconClass="fa-edit" text='Edit'></app-icon-btn> -->
+        <button (click)="onBtnClick('addToFavorites')" class="btn btn-primary">
+          <i class="fa fa-eye mr-1"></i><span>View</span>
+        </button>
 
       </div>
     </div>
