@@ -9,6 +9,14 @@ const routes: Routes = [
   {
     path: "dashboard",
     loadChildren: "./dashboard/dashboard.module#DashboardModule"
+  },
+  {
+    path: "details",
+    loadChildren: "./movies/movies.module#MoviesModule"
+  },
+  {
+    path: "favorites",
+    loadChildren: "./favorites/favorites.module#FavoritesModule"
   }
 ];
 

@@ -8,6 +8,10 @@ body {
   position: relative;
 }
 
+.spacer100 {
+  height: 100px;
+}
+
 .spacer80 {
   height: 80px;
 }

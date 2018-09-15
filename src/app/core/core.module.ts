@@ -28,6 +28,7 @@ import { MessageComponent } from "./message/message.component";
 // Services
 import { AuthService } from "./services/auth.service";
 import { MovieDbService } from "./services/moviedb.service";
+import { FavoritesService } from "./services/favorites.service";
 
 @NgModule({
   imports: [
@@ -50,7 +51,8 @@ import { MovieDbService } from "./services/moviedb.service";
   providers: [
     { provide: RouterStateSerializer, useClass: CustomSerializer },
     AuthService,
-    MovieDbService
+    MovieDbService,
+    FavoritesService
   ],
   declarations: [NavbarComponent, WelcomeComponent, MessageComponent]
 })

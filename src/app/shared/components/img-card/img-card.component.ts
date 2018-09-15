@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 
 import { Movie } from "../../../models/movie.model";
 
@@ -13,11 +14,13 @@ export class ImgCardComponent implements OnInit {
   @Input()
   cardSize = "250px";
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit() {}
 
-  onCardBtnClicked() {
-    console.log("card");
+  addToFavorites() {}
+
+  viewDetails() {
+    this.router.navigateByUrl(`/details/${this.movie.id}`);
   }
 }
