@@ -1,6 +1,7 @@
 import { Action } from "@ngrx/store";
 
 import { Movie } from "../../models/movie.model";
+import { MovieDetails } from "../../models/movie-details.model";
 
 export enum MovieActionTypes {
   GetMovieList = "GetMovieList",
@@ -16,7 +17,7 @@ export class GetMovieList implements Action {
 export class GetMovieDetails implements Action {
   readonly type = MovieActionTypes.GetMovieDetails;
 
-  constructor(public payload: { movieDetails: Movie }) {}
+  constructor(public payload: { movieDetails: MovieDetails }) {}
 }
 
 export type MovieActions = GetMovieList | GetMovieDetails;
