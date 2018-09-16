@@ -24,15 +24,27 @@ export class AuthEffects {
     })
   );
 
+  onAuthNav() {
+    switch (window.location.pathname) {
+      case "/login":
+      case "/register":
+      case "/welcome":
+        this.router.navigateByUrl("/movies");
+        break;
+      default:
+        break;
+    }
+  }
+
   @Effect({ dispatch: false })
   login$ = this.action$.pipe(
     ofType<Login>(AuthActionTypes.LoginAction),
     tap(action => {
       try {
         localStorage.setItem("user", JSON.stringify(action.payload.user));
-        this.router.navigateByUrl("/movies");
+        this.onAuthNav();
       } catch (err) {
-        this.router.navigateByUrl("/movies");
+        this.onAuthNav();
         console.log("Could not save user to local storage");
       }
     })

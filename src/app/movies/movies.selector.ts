@@ -22,34 +22,28 @@ export const selectMovieList = createSelector(
     )
 );
 
+export const createMovieDetails = (obj: MovieDetails): MovieDetails => ({
+  id: obj.id,
+  title: obj.title,
+  genres: obj.genres.length
+    ? obj.genres
+    : "The movie genres are not available.",
+  budget: obj.budget || "The movie budget is not available.",
+  revenue: obj.revenue || "The movie revenue is not available.",
+  homepage: obj.homepage || "The movie homepage is not available.",
+  overview: obj.overview || "The movie overview is not available.",
+  poster_path: obj.poster_path
+    ? `${posterUrl}${obj.poster_path}`
+    : "../../../assets/noFilm.png",
+  release_date: obj.release_date || "The movie release date is not available.",
+  runtime: obj.runtime || "The movie length is not available.",
+  voter_average: obj.voter_average || "The movie score is not available."
+});
+
 export const selectMovieDetails = createSelector(
   selectMovieState,
   (movieState: MovieState) => {
     const { movieDetails } = movieState;
-    console.log(movieDetails);
-
-    return movieDetails
-      ? {
-          id: movieDetails.id,
-          title: movieDetails.title,
-          genres: movieDetails.genres.length ? movieDetails.genres : [],
-          budget: movieDetails.budget || "The movie budget is not available.",
-          revenue:
-            movieDetails.revenue || "The movie revenue is not available.",
-          homepage:
-            movieDetails.homepage || "The movie homepage is not available.",
-          overview:
-            movieDetails.overview || "The movie overview is not available.",
-          poster_path: movieDetails.poster_path
-            ? `${posterUrl}${movieDetails.poster_path}`
-            : "../../../assets/noFilm.png",
-          release_date:
-            movieDetails.release_date ||
-            "The movie release date is not available.",
-          runtime: movieDetails.runtime || "The movie length is not available.",
-          voter_average:
-            movieDetails.voter_average || "The movie score is not available."
-        }
-      : null;
+    return movieDetails ? this.createMovieDetails(movieDetails) : null;
   }
 );

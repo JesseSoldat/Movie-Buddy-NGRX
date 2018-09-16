@@ -4,7 +4,7 @@
     [routerLinkActiveOptions]="{ exact: true }">Movie
     Buddy</a>
 
-  <a *ngIf="$isLoggedOut | async" class="navbar-brand" routerLink="/" routerLinkActive="active"
+  <a *ngIf="$isLoggedOut | async" class="navbar-brand" routerLink="/welcome" routerLinkActive="active"
     [routerLinkActiveOptions]="{ exact: true }">Movie
     Buddy</a>
 
@@ -32,10 +32,10 @@
 
     <ul class="navbar-nav ml-auto" *ngIf="$isLoggedOut | async">
       <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" routerLink="auth/register">Register</a>
+        <a class="nav-link" routerLink="register">Register</a>
       </li>
       <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" routerLink="auth/login">Login</a>
+        <a class="nav-link" routerLink="login">Login</a>
       </li>
     </ul>
   </div>

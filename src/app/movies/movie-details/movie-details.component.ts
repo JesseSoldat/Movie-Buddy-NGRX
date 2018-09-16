@@ -26,16 +26,14 @@ export class MovieDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.movieDbService.getMovieDetails(params.id);
-
-      this.movieDetail$ = this.store.pipe(select(selectMovieDetails));
+      this.movieDbService.getMovieDetails(params.id).subscribe(details => {});
 
       this.store
         .pipe(
           select(selectMovieDetails),
           tap(m => {
             if (m) {
-              console.log("movie:", m);
+              // console.log("movie:", m);
             }
           })
         )

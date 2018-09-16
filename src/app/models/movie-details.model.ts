@@ -1,7 +1,7 @@
 export interface MovieDetails {
   id: number | string;
   title: string;
-  genres: String[];
+  genres: String[] | string;
   budget: number | string;
   revenue: number | string;
   homepage: string;

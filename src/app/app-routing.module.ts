@@ -5,11 +5,7 @@ import { Routes, RouterModule, PreloadAllModules } from "@angular/router";
 import { WelcomeComponent } from "./core/welcome/welcome.component";
 
 const routes: Routes = [
-  { path: "", component: WelcomeComponent },
-  // {
-  //   path: "dashboard",
-  //   loadChildren: "./dashboard/dashboard.module#DashboardModule"
-  // },
+  { path: "welcome", component: WelcomeComponent },
   {
     path: "movies",
     loadChildren: "./movies/movies.module#MoviesModule"

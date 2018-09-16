@@ -25,7 +25,7 @@ export class AuthService {
 
   async saveUserToDb(credentials, username: string) {
     const user: User = {
-      username,
+      username: username.toLowerCase(),
       uid: credentials.user.uid,
       email: credentials.user.email
     };

@@ -32,15 +32,14 @@ export class MovieDbService {
       .subscribe(() => {});
   }
 
-  getMovieDetails(movieId: string) {
+  getMovieDetails(movieId: string | number) {
     const url = `${this.baseUrl}movie/${movieId}?api_key=${this.apiKey}`;
-    this.http
+    return this.http
       .jsonp(url, "callback")
       .pipe(
         tap((movieDetails: MovieDetails) =>
           this.store.dispatch(new GetMovieDetails({ movieDetails }))
         )
-      )
-      .subscribe(() => {});
+      );
   }
 }
