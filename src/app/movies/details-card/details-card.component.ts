@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from "@angular/core";
 
-import { Observable } from "rxjs";
 import { MovieDetails } from "../../models/movie-details.model";
 
 @Component({
@@ -14,7 +13,5 @@ export class DetailsCardComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {
-    console.log(this.movie);
-  }
+  ngOnInit() {}
 }

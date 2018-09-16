@@ -28,6 +28,8 @@ export class MovieDetailsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.movieDbService.getMovieDetails(params.id);
 
+      this.movieDetail$ = this.store.pipe(select(selectMovieDetails));
+
       this.store
         .pipe(
           select(selectMovieDetails),

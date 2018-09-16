@@ -1,27 +1,8 @@
 <div class="container">
   <app-heading heading="Movie Details"></app-heading>
-  <!-- <app-details-card [movieDetails]="movieDetails$ | async"></app-details-card> -->
+
   <app-spinner *ngIf="!movie"></app-spinner>
-  <div class="row" *ngIf="movie">
-    <div class="col-xs-12 col-sm-10 col-md-8 mx-auto">
-      <div class="card card-body">
 
-        <div class="row">
+  <app-details-card *ngIf="movie" [movieDetails]="movie"></app-details-card>
 
-
-          <div class="col-xs-12 col-md-6">
-            <img [src]="movie?.poster_path" class="img-responsive img-rounded">
-          </div>
-
-          <div class="col-xs-12 col-md-6">
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">
-                <strong>{{movie?.title}}</strong>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>

@@ -1,15 +1,15 @@
 export interface MovieDetails {
-  id: number;
+  id: number | string;
   title: string;
   genres: String[];
-  budget: number;
-  revenue: number;
+  budget: number | string;
+  revenue: number | string;
   homepage: string;
   overview: string;
   poster_path: string;
   release_date: string;
-  runtime: number;
-  voter_average: number;
+  runtime: number | string;
+  voter_average: number | string;
 }
 
 // budget: 150000000
