@@ -10,6 +10,8 @@ import { MovieDetailsComponent } from "./movie-details/movie-details.component";
 import { DetailsCardComponent } from "./details-card/details-card.component";
 import { MoviesSearchComponent } from "./movies-search/movies-search.component";
 import { FavoritesComponent } from './favorites/favorites.component';
+import { CardListComponent } from './card-list/card-list.component';
+import { CardComponent } from './card/card.component';
 
 @NgModule({
   imports: [
@@ -23,7 +25,9 @@ import { FavoritesComponent } from './favorites/favorites.component';
     MovieDetailsComponent,
     DetailsCardComponent,
     MoviesSearchComponent,
-    FavoritesComponent
+    FavoritesComponent,
+    CardListComponent,
+    CardComponent
   ]
 })
 export class MoviesModule {}

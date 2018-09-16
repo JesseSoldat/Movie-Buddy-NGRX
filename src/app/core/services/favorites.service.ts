@@ -13,7 +13,7 @@ import { MovieDetails } from "../../models/movie-details.model";
 import { selectUserUid } from "../../auth/auth.selectors";
 // Actions
 import { ShowOverlay } from "../../shared/actions/shared.actions";
-import { GetFavorites } from "../../movies/movie.actions";
+import { GetFavorites, DeleteFromFavorites } from "../../movies/movie.actions";
 
 @Injectable()
 export class FavoritesService {
@@ -58,12 +58,13 @@ export class FavoritesService {
     });
   }
 
-  removeFromFavorites(key: string) {
+  async removeFromFavorites(key: string, movieId: string | number) {
     this.store.dispatch(new ShowOverlay({ showOverlay: true }));
     const url = `moviedb/users/${this.userId}/favorites`;
     this.favorites = this.afDb.list(url);
-    this.favorites.remove(key).then(() => {
-      this.store.dispatch(new ShowOverlay({ showOverlay: false }));
-    });
+    await this.favorites.remove(key);
+
+    this.store.dispatch(new DeleteFromFavorites({ movieId }));
+    this.store.dispatch(new ShowOverlay({ showOverlay: false }));
   }
 }

@@ -16,13 +16,10 @@ import { TruncateTextPipe } from "./pipes/truncateText.pipe";
 // Components
 import { FormGroupComponent } from "./components/inputs/form-group/form-group.component";
 import { SearchBoxComponent } from "./components/search-box/search-box.component";
-import { CardComponent } from "./components/card/card.component";
-import { CardListComponent } from "./components/card-list/card-list.component";
 import { HeadingComponent } from "./components/heading/heading.component";
 import { OverlayComponent } from "./components/overlay/overlay.component";
 import { SpinnerComponent } from "./components/spinner/spinner.component";
 import { IconBtnComponent } from "./components/icon-btn/icon-btn.component";
-import { ImgCardComponent } from "./components/img-card/img-card.component";
 
 @NgModule({
   imports: [
@@ -40,14 +37,11 @@ import { ImgCardComponent } from "./components/img-card/img-card.component";
     ReactiveFormsModule,
     // Components
     SearchBoxComponent,
-    CardComponent,
-    CardListComponent,
     FormGroupComponent,
     HeadingComponent,
     OverlayComponent,
     SpinnerComponent,
     IconBtnComponent,
-    ImgCardComponent,
     // Directives
     OnBlurDirective,
     // Pipes
@@ -55,15 +49,12 @@ import { ImgCardComponent } from "./components/img-card/img-card.component";
   ],
   declarations: [
     SearchBoxComponent,
-    CardComponent,
     FormGroupComponent,
     OnBlurDirective,
     HeadingComponent,
     OverlayComponent,
     SpinnerComponent,
-    CardListComponent,
     IconBtnComponent,
-    ImgCardComponent,
     TruncateTextPipe
   ]
 })

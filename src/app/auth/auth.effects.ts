@@ -29,6 +29,7 @@ export class AuthEffects {
       case "/login":
       case "/register":
       case "/welcome":
+      case "/":
         this.router.navigateByUrl("/movies");
         break;
       default:

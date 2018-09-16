@@ -1,5 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import { FavoritesService } from "../../core/services/favorites.service";
+import { Observable } from "rxjs";
+import { Movie } from "../../models/movie.model";
+// NGRX
+import { Store, select } from "@ngrx/store";
+import { AppState } from "../../reducers";
+import { selectMovieList, selectFilteredMovieList } from "../movies.selector";
 
 @Component({
   selector: "app-movies-search",
@@ -7,9 +13,15 @@ import { FavoritesService } from "../../core/services/favorites.service";
   styleUrls: ["./movies-search.component.css"]
 })
 export class MoviesSearchComponent implements OnInit {
-  constructor(private favoritesService: FavoritesService) {}
+  movieList$: Observable<Movie[]>;
+
+  constructor(
+    private store: Store<AppState>,
+    private favoritesService: FavoritesService
+  ) {}
 
   ngOnInit() {
     this.favoritesService.getFavorites();
+    this.movieList$ = this.store.pipe(select(selectFilteredMovieList));
   }
 }

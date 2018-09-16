@@ -1,3 +1,4 @@
-<p>
-  favorites works!
-</p>
+<app-overlay></app-overlay>
+<app-heading heading="Favorites"></app-heading>
+
+<app-card-list [movieList$]="favorites$" parent="favorites"></app-card-list>

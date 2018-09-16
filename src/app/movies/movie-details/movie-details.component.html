@@ -1,8 +1,9 @@
 <div class="container-fluid">
   <app-heading heading="Movie Details"></app-heading>
 
-  <app-spinner *ngIf="!movie"></app-spinner>
+  <app-spinner *ngIf="!movieDetails$ | async"></app-spinner>
 
-  <app-details-card *ngIf="movie" [movieDetails]="movie"></app-details-card>
+  <app-details-card *ngIf="movieDetails$ | async as movieDetails" [movieDetails]="movieDetails" [parent]="parent$ | async"></app-details-card>
+
 
 </div>

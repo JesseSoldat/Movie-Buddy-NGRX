@@ -8,14 +8,18 @@
     <div class="row mt-2">
       <div class="col-12 d-flex">
 
-        <button (click)="addToFavorites()" class="btn btn-secondary">
-          <i class="fas fa-heart mr-1"></i><span>Favorites</span>
+        <button *ngIf="parent === 'search'" (click)="addToFavorites()" class="btn btn-secondary">
+          <i class="fas fa-heart mr-2"></i><span>Favorites</span>
+        </button>
+
+        <button *ngIf="parent === 'favorites'" (click)="removeFromFavorites()" class="btn btn-secondary">
+          <i class="fa fa-trash mr-2"></i><span>Delete</span>
         </button>
 
         <div style="width: 20px"></div>
 
         <button (click)="viewDetails()" class="btn btn-primary">
-          <i class="fa fa-eye mr-1"></i><span>View</span>
+          <i class="fa fa-eye mr-2"></i><span>View</span>
         </button>
 
       </div>

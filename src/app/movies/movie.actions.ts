@@ -6,7 +6,8 @@ import { MovieDetails } from "../models/movie-details.model";
 export enum MovieActionTypes {
   GetMovieList = "GetMovieList",
   GetMovieDetails = "GetMovieDetails",
-  GetFavorites = "GetFavorites"
+  GetFavorites = "GetFavorites",
+  DeleteFromFavorites = "DeleteFromFavorites"
 }
 
 export class GetMovieList implements Action {
@@ -27,4 +28,14 @@ export class GetFavorites implements Action {
   constructor(public payload: { favorites: MovieDetails[] }) {}
 }
 
-export type MovieActions = GetMovieList | GetMovieDetails | GetFavorites;
+export class DeleteFromFavorites implements Action {
+  readonly type = MovieActionTypes.DeleteFromFavorites;
+
+  constructor(public payload: { movieId: string | number }) {}
+}
+
+export type MovieActions =
+  | GetMovieList
+  | GetMovieDetails
+  | GetFavorites
+  | DeleteFromFavorites;
