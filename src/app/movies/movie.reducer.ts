@@ -28,8 +28,6 @@ export const movieReducer = (state = initialMovieState, action) => {
       return { ...state, favorites: payload.favorites };
 
     case MovieActionTypes.DeleteFromFavorites:
-      console.log(payload);
-
       let favoritesCopy = [...state.favorites];
       favoritesCopy.filter(obj => obj.id === payload.movieId);
 

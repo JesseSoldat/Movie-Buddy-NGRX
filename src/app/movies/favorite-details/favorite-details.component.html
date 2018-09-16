@@ -1,0 +1,8 @@
+<div class="container-fluid">
+  <app-heading heading="Movie Details"></app-heading>
+
+  <app-spinner *ngIf="!favoriteDetails"></app-spinner>
+
+  <app-details-card *ngIf="favoriteDetails as movieDetails" [movieDetails]="movieDetails" parent="favorites"></app-details-card>
+
+</div>

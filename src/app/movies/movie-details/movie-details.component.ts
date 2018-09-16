@@ -1,7 +1,6 @@
-import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
-import { ActivatedRoute, Params } from "@angular/router";
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import { Observable } from "rxjs";
-import { tap, map } from "rxjs/operators";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
 
@@ -16,7 +15,6 @@ import { MovieDbService } from "../../core/services/moviedb.service";
 })
 export class MovieDetailsComponent implements OnInit {
   movieDetails$: Observable<MovieDetails>;
-  parent$: Observable<Params>;
 
   constructor(
     private store: Store<AppState>,
@@ -25,8 +23,6 @@ export class MovieDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.parent$ = this.route.queryParams.pipe(map(params => params.parent));
-
     this.route.params.subscribe(params => {
       this.movieDbService.getMovieDetails(params.id).subscribe(details => {});
     });

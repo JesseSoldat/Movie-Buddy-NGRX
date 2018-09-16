@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import { map, tap } from "rxjs/operators";
 // Firebase
 import {
@@ -22,7 +23,8 @@ export class FavoritesService {
 
   constructor(
     private store: Store<AppState>,
-    private afDb: AngularFireDatabase
+    private afDb: AngularFireDatabase,
+    private router: Router
   ) {
     this.store
       .pipe(select(selectUserUid))
@@ -48,6 +50,8 @@ export class FavoritesService {
       .subscribe();
   }
 
+  getFavoriteDetails(movieId: number) {}
+
   addToFavorites(movie: MovieDetails) {
     this.store.dispatch(new ShowOverlay({ showOverlay: true }));
     const url = `moviedb/users/${this.userId}/favorites`;
@@ -58,12 +62,19 @@ export class FavoritesService {
     });
   }
 
-  async removeFromFavorites(key: string, movieId: string | number) {
+  async removeFromFavorites(
+    key: string,
+    movieId: string | number,
+    page = null
+  ) {
     this.store.dispatch(new ShowOverlay({ showOverlay: true }));
     const url = `moviedb/users/${this.userId}/favorites`;
     this.favorites = this.afDb.list(url);
     await this.favorites.remove(key);
 
+    if (page === "details") {
+      this.router.navigateByUrl("/movies/favorites");
+    }
     this.store.dispatch(new DeleteFromFavorites({ movieId }));
     this.store.dispatch(new ShowOverlay({ showOverlay: false }));
   }

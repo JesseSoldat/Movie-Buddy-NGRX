@@ -32,9 +32,15 @@ export class CardComponent implements OnInit {
   ngOnInit() {}
 
   viewDetails() {
-    this.router.navigate(["/movies", this.movie.id], {
-      queryParams: { parent: this.parent }
-    });
+    let id, url;
+    if (this.parent === "search") {
+      id = this.movie.id;
+      url = `/movies/${id}`;
+    } else {
+      id = this.movie.key;
+      url = `/movies/favorites/${id}`;
+    }
+    this.router.navigateByUrl(url);
   }
 
   addToFavorites() {

@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { MovieDetails } from "../../models/movie-details.model";
+import { FavoritesService } from "../../core/services/favorites.service";
 
 @Component({
   selector: "app-details-card",
@@ -14,7 +15,10 @@ export class DetailsCardComponent implements OnInit {
   @Input("parent")
   parent: string;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private favoritesService: FavoritesService
+  ) {}
 
   ngOnInit() {}
 
@@ -29,6 +33,10 @@ export class DetailsCardComponent implements OnInit {
   }
 
   removeFromFavorites() {
-    console.log("delete");
+    this.favoritesService.removeFromFavorites(
+      this.movie.key,
+      this.movie.id,
+      "details"
+    );
   }
 }

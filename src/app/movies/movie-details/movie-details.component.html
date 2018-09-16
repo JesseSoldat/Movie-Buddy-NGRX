@@ -3,7 +3,7 @@
 
   <app-spinner *ngIf="!movieDetails$ | async"></app-spinner>
 
-  <app-details-card *ngIf="movieDetails$ | async as movieDetails" [movieDetails]="movieDetails" [parent]="parent$ | async"></app-details-card>
+  <app-details-card *ngIf="movieDetails$ | async as movieDetails" [movieDetails]="movieDetails" parent="search"></app-details-card>
 
 
 </div>
