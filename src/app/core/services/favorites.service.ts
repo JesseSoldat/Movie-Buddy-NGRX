@@ -52,14 +52,15 @@ export class FavoritesService {
 
   getFavoriteDetails(movieId: number) {}
 
-  addToFavorites(movie: MovieDetails) {
+  async addToFavorites(movie: MovieDetails, route = null) {
     this.store.dispatch(new ShowOverlay({ showOverlay: true }));
     const url = `moviedb/users/${this.userId}/favorites`;
     this.favorites = this.afDb.list(url);
-    this.favorites.push(movie).then(item => {
-      // console.log("Saved", item.key);
-      this.store.dispatch(new ShowOverlay({ showOverlay: false }));
-    });
+    await this.favorites.push(movie);
+    if (route) {
+      this.router.navigateByUrl(route);
+    }
+    this.store.dispatch(new ShowOverlay({ showOverlay: false }));
   }
 
   async removeFromFavorites(

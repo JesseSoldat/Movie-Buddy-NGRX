@@ -23,10 +23,11 @@ export const selectMovieList = createSelector(
     )
 );
 
-// --------------------------- Favorites -----------------------------------
+// --------------------------- Favorites Newest First -----------------------------------
 export const selectFavorites = createSelector(
   selectMovieState,
-  (movieState: MovieState) => <MovieDetails[]>movieState.favorites
+  (movieState: MovieState) =>
+    <MovieDetails[]>movieState.favorites.slice().reverse()
 );
 // --------------------------- Favorite Details -----------------------------------
 
@@ -76,8 +77,6 @@ export const selectMovieDetails = createSelector(
   selectMovieState,
   (movieState: MovieState) => {
     const { movieDetails } = movieState;
-    console.log(movieDetails);
-
     return movieDetails ? createMovieDetails(movieDetails) : null;
   }
 );

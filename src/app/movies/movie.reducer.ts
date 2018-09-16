@@ -25,7 +25,7 @@ export const movieReducer = (state = initialMovieState, action) => {
       return { ...state, movieDetails: payload.movieDetails };
 
     case MovieActionTypes.GetFavorites:
-      return { ...state, favorites: payload.favorites };
+      return { ...state, favorites: payload.favorites, movieDetails: null };
 
     case MovieActionTypes.DeleteFromFavorites:
       let favoritesCopy = [...state.favorites];

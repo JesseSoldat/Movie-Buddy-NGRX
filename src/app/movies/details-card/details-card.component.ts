@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { Router } from "@angular/router";
-
+// Models
 import { MovieDetails } from "../../models/movie-details.model";
+// Services
 import { FavoritesService } from "../../core/services/favorites.service";
 
 @Component({
@@ -29,7 +30,7 @@ export class DetailsCardComponent implements OnInit {
   }
 
   addToFavorites() {
-    console.log("add");
+    this.favoritesService.addToFavorites(this.movie, "/movies/favorites");
   }
 
   removeFromFavorites() {
