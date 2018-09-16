@@ -7,6 +7,7 @@ const posterUrl = "http://image.tmdb.org/t/p/w500/";
 
 export const selectMovieState = createFeatureSelector<MovieState>("movie");
 
+// Movie List
 export const selectMovieList = createSelector(
   selectMovieState,
   (movieState: MovieState) =>
@@ -22,6 +23,27 @@ export const selectMovieList = createSelector(
     )
 );
 
+// Favorites
+export const selectFavorites = createSelector(
+  selectMovieState,
+  (movieState: MovieState) => <MovieDetails[]>movieState.favorites
+);
+
+// Select Filtered Movie Search List
+export const selectFilteredMovieList = createSelector(
+  selectFavorites,
+  selectMovieList,
+  (favorites, movies) => {
+    if (movies.length && favorites.length) {
+      return movies.filter(
+        movie => !favorites.find(favorite => movie.id === favorite.id)
+      );
+    }
+    return movies;
+  }
+);
+
+// Movie Details
 export const createMovieDetails = (obj: MovieDetails): MovieDetails => ({
   id: obj.id,
   title: obj.title,
@@ -44,6 +66,6 @@ export const selectMovieDetails = createSelector(
   selectMovieState,
   (movieState: MovieState) => {
     const { movieDetails } = movieState;
-    return movieDetails ? this.createMovieDetails(movieDetails) : null;
+    return movieDetails ? createMovieDetails(movieDetails) : null;
   }
 );

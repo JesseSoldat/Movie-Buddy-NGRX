@@ -32,6 +32,10 @@ export class MessageComponent implements OnInit {
     this.showMsg$ = this.store.pipe(select(selectShowMsg));
     this.hideMsg$ = this.store.pipe(select(selectHideMsg));
     this.msg$ = this.store.pipe(select(selectMsg));
+
+    setTimeout(() => {
+      this.close();
+    }, 3000);
   }
 
   close() {

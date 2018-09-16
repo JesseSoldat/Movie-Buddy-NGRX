@@ -3,7 +3,10 @@ import { Store, select } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { AppState } from "../../../reducers";
 import { Movie } from "../../../models/movie.model";
-import { selectMovieList } from "../../../movies/movies.selector";
+import {
+  selectMovieList,
+  selectFilteredMovieList
+} from "../../../movies/movies.selector";
 
 @Component({
   selector: "app-card-list",
@@ -21,6 +24,6 @@ export class CardListComponent implements OnInit {
   constructor(private store: Store<AppState>) {}
 
   ngOnInit() {
-    this.movieList$ = this.store.pipe(select(selectMovieList));
+    this.movieList$ = this.store.pipe(select(selectFilteredMovieList));
   }
 }

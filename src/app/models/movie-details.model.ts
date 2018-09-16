@@ -1,4 +1,5 @@
 export interface MovieDetails {
+  key?: string; // ref to the firebase database
   id: number | string;
   title: string;
   genres: String[] | string;

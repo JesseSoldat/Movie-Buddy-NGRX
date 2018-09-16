@@ -3,9 +3,11 @@ import { Routes, RouterModule } from "@angular/router";
 
 import { MoviesSearchComponent } from "./movies-search/movies-search.component";
 import { MovieDetailsComponent } from "./movie-details/movie-details.component";
+import { FavoritesComponent } from "./favorites/favorites.component";
 
 const routes: Routes = [
   { path: "", component: MoviesSearchComponent },
+  { path: "favorites", component: FavoritesComponent },
   { path: ":id", component: MovieDetailsComponent }
 ];
 

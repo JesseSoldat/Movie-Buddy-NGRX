@@ -19,3 +19,5 @@ export const selectUser = createSelector(
 );
 
 export const selectUserUid = createSelector(selectUser, user => user.uid);
+
+export const selectUsername = createSelector(selectUser, user => user.username);

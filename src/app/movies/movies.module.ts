@@ -9,6 +9,7 @@ import { MoviesRoutingModule } from "./movies-routing.module";
 import { MovieDetailsComponent } from "./movie-details/movie-details.component";
 import { DetailsCardComponent } from "./details-card/details-card.component";
 import { MoviesSearchComponent } from "./movies-search/movies-search.component";
+import { FavoritesComponent } from './favorites/favorites.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { MoviesSearchComponent } from "./movies-search/movies-search.component";
   declarations: [
     MovieDetailsComponent,
     DetailsCardComponent,
-    MoviesSearchComponent
+    MoviesSearchComponent,
+    FavoritesComponent
   ]
 })
 export class MoviesModule {}
