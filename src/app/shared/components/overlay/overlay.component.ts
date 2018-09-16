@@ -11,11 +11,11 @@ import { selectShowOverlay } from "../../selectors/shared.selectors";
   styleUrls: ["./overlay.component.css"]
 })
 export class OverlayComponent implements OnInit {
-  $showOverlay: Observable<boolean>;
+  showOverlay$: Observable<boolean>;
 
   constructor(private store: Store<AppState>) {}
 
   ngOnInit() {
-    this.$showOverlay = this.store.pipe(select(selectShowOverlay));
+    this.showOverlay$ = this.store.pipe(select(selectShowOverlay));
   }
 }

@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
 
-  <a *ngIf="($isLoggedIn | async)" class="navbar-brand" routerLink="/dashboard" routerLinkActive="active"
+  <a *ngIf="($isLoggedIn | async)" class="navbar-brand" routerLink="/movies" routerLinkActive="active"
     [routerLinkActiveOptions]="{ exact: true }">Movie
     Buddy</a>
 
@@ -19,14 +19,15 @@
     <!-- right hand links -->
     <ul class="navbar-nav ml-auto" *ngIf="$isLoggedIn | async">
       <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-        <a class="nav-link" routerLink="/dashboard">Dashboard</a>
-      </li>
-      <li class="nav-item" routerLinkActive="active" (click)="logout()">
-        <a class="nav-link">Logout</a>
+        <a class="nav-link" routerLink="/movies">Dashboard</a>
       </li>
       <li class="nav-item" routerLinkActive="active">
         <a class="nav-link" routerLink="/favorites">Favorites</a>
       </li>
+      <li class="nav-item" routerLinkActive="active" (click)="logout()">
+        <a class="nav-link">Logout</a>
+      </li>
+
     </ul>
 
     <ul class="navbar-nav ml-auto" *ngIf="$isLoggedOut | async">

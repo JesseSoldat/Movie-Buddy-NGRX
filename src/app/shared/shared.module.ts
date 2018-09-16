@@ -5,7 +5,6 @@ import { ReactiveFormsModule } from "@angular/forms";
 // NGRX
 import { StoreModule } from "@ngrx/store";
 import { sharedReducer } from "./reducers/shared.reducer";
-import { movieReducer } from "./reducers/movie.reducer";
 // import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFireDatabaseModule } from "@angular/fire/database";
@@ -33,8 +32,7 @@ import { ImgCardComponent } from "./components/img-card/img-card.component";
     AngularFireAuthModule,
     AngularFireDatabaseModule,
     AngularFireStorageModule,
-    StoreModule.forFeature("shared", sharedReducer),
-    StoreModule.forFeature("movie", movieReducer)
+    StoreModule.forFeature("shared", sharedReducer)
   ],
   exports: [
     CommonModule,

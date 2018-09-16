@@ -3,7 +3,7 @@ import { Store, select } from "@ngrx/store";
 import { Observable } from "rxjs";
 import { AppState } from "../../../reducers";
 import { Movie } from "../../../models/movie.model";
-import { selectMovieList } from "../../selectors/movie.selector";
+import { selectMovieList } from "../../../movies/movies.selector";
 
 @Component({
   selector: "app-card-list",

@@ -1,9 +1,12 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
+import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
 
-import { GetMovieDetails } from "../../shared/actions/movie.actions";
+import { MovieDetails } from "../../models/movie-details.model";
+import { selectMovieDetails } from "../movies.selector";
 import { MovieDbService } from "../../core/services/moviedb.service";
 
 @Component({
@@ -12,6 +15,9 @@ import { MovieDbService } from "../../core/services/moviedb.service";
   styleUrls: ["./movie-details.component.css"]
 })
 export class MovieDetailsComponent implements OnInit {
+  movieDetail$: Observable<MovieDetails>;
+  movie;
+
   constructor(
     private store: Store<AppState>,
     private route: ActivatedRoute,
@@ -20,8 +26,18 @@ export class MovieDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      console.log(params.id);
       this.movieDbService.getMovieDetails(params.id);
+
+      this.store
+        .pipe(
+          select(selectMovieDetails),
+          tap(m => {
+            if (m) {
+              console.log("movie:", m);
+            }
+          })
+        )
+        .subscribe(m => (this.movie = m));
     });
   }
 }

@@ -16,9 +16,9 @@ export class AuthEffects {
     tap(action => {
       try {
         localStorage.setItem("user", JSON.stringify(action.payload.user));
-        this.router.navigateByUrl("/dashboard");
+        this.router.navigateByUrl("/movies");
       } catch (err) {
-        this.router.navigateByUrl("/dashboard");
+        this.router.navigateByUrl("/movies");
         console.log("Could not save user to local storage");
       }
     })
@@ -30,9 +30,9 @@ export class AuthEffects {
     tap(action => {
       try {
         localStorage.setItem("user", JSON.stringify(action.payload.user));
-        this.router.navigateByUrl("/dashboard");
+        this.router.navigateByUrl("/movies");
       } catch (err) {
-        this.router.navigateByUrl("/dashboard");
+        this.router.navigateByUrl("/movies");
         console.log("Could not save user to local storage");
       }
     })
@@ -62,7 +62,6 @@ export class AuthEffects {
       return of(new Logout());
     } catch (err) {
       return of(new Logout());
-      console.log("Could not read from local storage");
     }
   });
 }

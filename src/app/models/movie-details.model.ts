@@ -1,6 +1,7 @@
 export interface MovieDetails {
   id: number;
   title: string;
+  genres: String[];
   budget: number;
   revenue: number;
   homepage: string;

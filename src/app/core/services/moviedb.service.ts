@@ -5,10 +5,7 @@ import { map, tap } from "rxjs/operators";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../reducers";
 // Actions
-import {
-  GetMovieList,
-  GetMovieDetails
-} from "../../shared/actions/movie.actions";
+import { GetMovieList, GetMovieDetails } from "../../movies/movie.actions";
 
 import { MovieDetails } from "../../models/movie-details.model";
 

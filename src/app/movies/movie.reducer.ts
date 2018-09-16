@@ -1,10 +1,11 @@
-import { MovieActionTypes } from "../actions/movie.actions";
+import { MovieActionTypes } from "./movie.actions";
 
-import { Movie } from "../../models/movie.model";
+import { Movie } from "../models/movie.model";
+import { MovieDetails } from "../models/movie-details.model";
 
 export interface MovieState {
   movieList: Movie[];
-  movieDetails: Movie;
+  movieDetails: MovieDetails;
 }
 
 export const initialMovieState = {
@@ -19,7 +20,7 @@ export const movieReducer = (state = initialMovieState, action) => {
       return { ...state, movieList: payload, movieDetails: null };
 
     case MovieActionTypes.GetMovieDetails:
-      return { ...state, movieDetails: payload };
+      return { ...state, movieDetails: payload.movieDetails };
 
     default:
       return { ...state };

@@ -1,12 +1,27 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
+import { SharedModule } from "../shared/shared.module";
+import { StoreModule } from "@ngrx/store";
+import { movieReducer } from "./movie.reducer";
+
 import { MoviesRoutingModule } from "./movies-routing.module";
-import { MovieDetailsComponent } from './movie-details/movie-details.component';
+import { MovieDetailsComponent } from "./movie-details/movie-details.component";
+import { DetailsCardComponent } from "./details-card/details-card.component";
+import { MoviesSearchComponent } from "./movies-search/movies-search.component";
 
 @NgModule({
-  imports: [CommonModule, MoviesRoutingModule],
+  imports: [
+    CommonModule,
+    MoviesRoutingModule,
+    SharedModule,
+    StoreModule.forFeature("movie", movieReducer)
+  ],
   exports: [MoviesRoutingModule],
-  declarations: [MovieDetailsComponent]
+  declarations: [
+    MovieDetailsComponent,
+    DetailsCardComponent,
+    MoviesSearchComponent
+  ]
 })
 export class MoviesModule {}

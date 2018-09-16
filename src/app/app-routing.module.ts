@@ -6,12 +6,12 @@ import { WelcomeComponent } from "./core/welcome/welcome.component";
 
 const routes: Routes = [
   { path: "", component: WelcomeComponent },
+  // {
+  //   path: "dashboard",
+  //   loadChildren: "./dashboard/dashboard.module#DashboardModule"
+  // },
   {
-    path: "dashboard",
-    loadChildren: "./dashboard/dashboard.module#DashboardModule"
-  },
-  {
-    path: "details",
+    path: "movies",
     loadChildren: "./movies/movies.module#MoviesModule"
   },
   {

@@ -21,6 +21,6 @@ export class ImgCardComponent implements OnInit {
   addToFavorites() {}
 
   viewDetails() {
-    this.router.navigateByUrl(`/details/${this.movie.id}`);
+    this.router.navigateByUrl(`/movies/${this.movie.id}`);
   }
 }
