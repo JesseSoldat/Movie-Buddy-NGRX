@@ -12,7 +12,8 @@ import { AngularFireStorageModule } from "@angular/fire/storage";
 // Directive
 import { OnBlurDirective } from "./directives/blur.directive";
 // Pipes
-import { TruncateTextPipe } from "./pipes/truncateText.pipe";
+import { TruncateTextPipe } from "./pipes/truncate-text.pipe";
+import { FilterListPipe } from "./pipes/filter-list.pipe";
 // Components
 import { FormGroupComponent } from "./components/inputs/form-group/form-group.component";
 import { SearchBoxComponent } from "./components/search-box/search-box.component";
@@ -20,6 +21,7 @@ import { HeadingComponent } from "./components/heading/heading.component";
 import { OverlayComponent } from "./components/overlay/overlay.component";
 import { SpinnerComponent } from "./components/spinner/spinner.component";
 import { IconBtnComponent } from "./components/icon-btn/icon-btn.component";
+import { FilterBoxComponent } from "./components/filter-box/filter-box.component";
 
 @NgModule({
   imports: [
@@ -42,10 +44,12 @@ import { IconBtnComponent } from "./components/icon-btn/icon-btn.component";
     OverlayComponent,
     SpinnerComponent,
     IconBtnComponent,
+    FilterBoxComponent,
     // Directives
     OnBlurDirective,
     // Pipes
-    TruncateTextPipe
+    TruncateTextPipe,
+    FilterListPipe
   ],
   declarations: [
     SearchBoxComponent,
@@ -55,7 +59,9 @@ import { IconBtnComponent } from "./components/icon-btn/icon-btn.component";
     OverlayComponent,
     SpinnerComponent,
     IconBtnComponent,
-    TruncateTextPipe
+    TruncateTextPipe,
+    FilterListPipe,
+    FilterBoxComponent
   ]
 })
 export class SharedModule {}

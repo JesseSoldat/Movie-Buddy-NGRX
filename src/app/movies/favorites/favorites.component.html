@@ -1,4 +1,12 @@
 <app-overlay></app-overlay>
 <app-heading heading="Favorites"></app-heading>
 
-<app-card-list [movieList$]="favorites$" parent="favorites"></app-card-list>
+<app-filter-box (onFilterText)="onFilterText($event)"></app-filter-box>
+
+<div class="row">
+  <div class="col-xs-12 col-sm-10 mx-auto">
+    <div class="col-12 d-flex justify-content-around flex-wrap">
+      <app-card *ngFor="let movie of favorites | filterList: filterListBy" [movie]="movie" parent="favorites"></app-card>
+    </div>
+  </div>
+</div>

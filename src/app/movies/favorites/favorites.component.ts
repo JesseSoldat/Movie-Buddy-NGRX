@@ -16,7 +16,8 @@ import { FavoritesService } from "../../core/services/favorites.service";
   styleUrls: ["./favorites.component.css"]
 })
 export class FavoritesComponent implements OnInit {
-  favorites$: Observable<MovieDetails[]>;
+  favorites: MovieDetails[];
+  filterListBy = "";
 
   constructor(
     private store: Store<AppState>,
@@ -24,13 +25,19 @@ export class FavoritesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.favorites$ = this.store.pipe(
-      select(selectFavorites),
-      tap(favorites => {
-        if (favorites.length <= 0) {
-          this.favoritesService.getFavorites();
-        }
-      })
-    );
+    this.store
+      .pipe(
+        select(selectFavorites),
+        tap(favorites => {
+          if (favorites.length <= 0) {
+            this.favoritesService.getFavorites();
+          }
+        })
+      )
+      .subscribe(favorites => (this.favorites = favorites));
+  }
+
+  onFilterText(text) {
+    this.filterListBy = text;
   }
 }

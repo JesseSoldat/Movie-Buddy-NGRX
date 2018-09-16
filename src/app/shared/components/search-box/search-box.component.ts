@@ -3,10 +3,11 @@ import {
   ViewChild,
   ElementRef,
   OnInit,
-  AfterViewInit
+  AfterViewInit,
+  OnDestroy
 } from "@angular/core";
 
-import { Observable, fromEvent } from "rxjs";
+import { Observable, fromEvent, Subscription } from "rxjs";
 import {
   map,
   filter,
@@ -22,11 +23,12 @@ import { MovieDbService } from "../../../core/services/moviedb.service";
   templateUrl: "./search-box.component.html",
   styleUrls: ["./search-box.component.css"]
 })
-export class SearchBoxComponent implements OnInit, AfterViewInit {
+export class SearchBoxComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild("searchInput")
   searchInput: ElementRef;
   searchTerm: string;
   inputStream$: Observable<string>;
+  inputSubscription: Subscription;
 
   constructor(private movieDbService: MovieDbService) {}
 
@@ -41,7 +43,11 @@ export class SearchBoxComponent implements OnInit, AfterViewInit {
       tap(text => this.submitSearch(text)) // call the search service
     );
 
-    this.inputStream$.subscribe(text => {});
+    this.inputSubscription = this.inputStream$.subscribe(text => {});
+  }
+
+  ngOnDestroy(): void {
+    this.inputSubscription.unsubscribe();
   }
 
   submitSearch(searchTerm: string) {
