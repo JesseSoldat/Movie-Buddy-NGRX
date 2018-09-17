@@ -1,5 +1,5 @@
 export interface MatchedUser {
-  name: string;
+  username: string;
   uid: string;
   isMatch: string[];
   noMatch: string[];

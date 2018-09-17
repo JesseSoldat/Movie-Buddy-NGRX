@@ -1,9 +1,13 @@
 import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
+// Models
+import { MatchedUser } from "../../models/matched-user.model";
 // NGRX
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
+import { selectMatches } from "../matches.selector";
 // Services
-import { FavoritesService } from "../../core/services/favorites.service";
+import { MatchesService } from "../../core/services/matches.service";
 
 @Component({
   selector: "app-matches",
@@ -12,13 +16,15 @@ import { FavoritesService } from "../../core/services/favorites.service";
 })
 export class MatchesComponent implements OnInit {
   uid: string;
+  matches$: Observable<MatchedUser[]>;
 
   constructor(
     private store: Store<AppState>,
-    private favoritesService: FavoritesService
+    private matchesService: MatchesService
   ) {}
 
   ngOnInit() {
-    this.favoritesService.getOtherUsersLists();
+    this.matchesService.getOtherUsersLists();
+    this.matches$ = this.store.pipe(select(selectMatches));
   }
 }

@@ -6,14 +6,14 @@ export interface MatchesState {
 }
 
 export const initialMatchesState = {
-  matches: []
+  matches: null
 };
 
 export const matchesReducer = (state = initialMatchesState, action) => {
   const { type, payload } = action;
   switch (type) {
     case MatchesActionTypes.GetMatches:
-      return { ...state };
+      return { ...state, matches: payload.matches };
 
     default:
       return { ...state };
