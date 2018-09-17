@@ -4,7 +4,7 @@ import { FormsModule } from "@angular/forms";
 import { ReactiveFormsModule } from "@angular/forms";
 // NGRX
 import { StoreModule } from "@ngrx/store";
-import { sharedReducer } from "./reducers/shared.reducer";
+import { sharedReducer } from "./shared.reducer";
 // import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFireDatabaseModule } from "@angular/fire/database";

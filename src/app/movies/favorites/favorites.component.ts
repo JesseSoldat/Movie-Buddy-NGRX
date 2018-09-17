@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 // Models
 import { MovieDetails } from "../../models/movie-details.model";
@@ -7,6 +6,7 @@ import { MovieDetails } from "../../models/movie-details.model";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
 import { selectFavorites } from "../movies.selector";
+import { ShowSpinner } from "../../shared/shared.actions";
 // Services
 import { FavoritesService } from "../../core/services/favorites.service";
 
@@ -25,16 +25,21 @@ export class FavoritesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.store.dispatch(new ShowSpinner({ showSpinner: true }));
     this.store
       .pipe(
         select(selectFavorites),
         tap(favorites => {
           if (favorites.length <= 0) {
             this.favoritesService.getFavorites();
+          } else {
+            this.store.dispatch(new ShowSpinner({ showSpinner: false }));
           }
         })
       )
-      .subscribe(favorites => (this.favorites = favorites));
+      .subscribe(favorites => {
+        this.favorites = favorites;
+      });
   }
 
   onFilterText(text) {

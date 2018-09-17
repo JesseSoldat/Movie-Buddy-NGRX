@@ -33,7 +33,7 @@ export const selectFavorites = createSelector(
 
 export const selectFavoriteDetailsFromFavorites = (key: string) =>
   createSelector(selectFavorites, favorites => {
-    if (favorites.length) {
+    if (favorites && favorites.length) {
       const favoriteDetails = favorites.find(obj => obj.key === key);
       return favoriteDetails;
     }
@@ -45,7 +45,7 @@ export const selectFilteredMovieList = createSelector(
   selectFavorites,
   selectMovieList,
   (favorites, movies) => {
-    if (movies.length && favorites.length) {
+    if (movies.length && favorites && favorites.length) {
       return movies.filter(
         movie => !favorites.find(favorite => movie.id === favorite.id)
       );

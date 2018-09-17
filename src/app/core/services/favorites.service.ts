@@ -12,14 +12,8 @@ import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
 import { selectUserUid } from "../../auth/auth.selectors";
 // Actions
-import { ShowOverlay } from "../../shared/actions/shared.actions";
+import { ShowOverlay, ShowSpinner } from "../../shared/shared.actions";
 import { GetFavorites, DeleteFromFavorites } from "../../movies/movie.actions";
-
-export interface FbUser {
-  key: string;
-  favorites: Map<string, MovieDetails>;
-  user: User;
-}
 
 export interface OtherUser {
   user: User;
@@ -53,14 +47,13 @@ export class FavoritesService {
             ...action.payload.val()
           }))
         ),
-        tap((favorites: MovieDetails[]) =>
-          this.store.dispatch(new GetFavorites({ favorites }))
-        )
+        tap((favorites: MovieDetails[]) => {
+          this.store.dispatch(new ShowSpinner({ showSpinner: false }));
+          this.store.dispatch(new GetFavorites({ favorites }));
+        })
       )
-      .subscribe();
+      .subscribe(() => {});
   }
-
-  getFavoriteDetails(movieId: number) {}
 
   async addToFavorites(movie: MovieDetails, route = null) {
     this.store.dispatch(new ShowOverlay({ showOverlay: true }));

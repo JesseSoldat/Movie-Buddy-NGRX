@@ -1,11 +1,14 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Observable } from "rxjs";
+// Models
+import { MovieDetails } from "../../models/movie-details.model";
+// NGRX
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
-
-import { MovieDetails } from "../../models/movie-details.model";
 import { selectMovieDetails } from "../movies.selector";
+import { ShowSpinner, ShowMsg } from "../../shared/shared.actions";
+// Services
 import { MovieDbService } from "../../core/services/moviedb.service";
 
 @Component({
@@ -14,6 +17,7 @@ import { MovieDbService } from "../../core/services/moviedb.service";
   styleUrls: ["./movie-details.component.css"]
 })
 export class MovieDetailsComponent implements OnInit {
+  errMsg = "An error ocurred while fetching the data.";
   movieDetails$: Observable<MovieDetails>;
 
   constructor(
@@ -24,9 +28,27 @@ export class MovieDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.movieDbService.getMovieDetails(params.id).subscribe(details => {});
+      this.movieDbService
+        .getMovieDetails(params.id)
+        .subscribe(details => this.handleSuccess(), err => this.handleError());
     });
 
     this.movieDetails$ = this.store.pipe(select(selectMovieDetails));
+  }
+
+  handleSuccess() {
+    this.store.dispatch(new ShowSpinner({ showSpinner: false }));
+  }
+
+  handleError(msg = this.errMsg) {
+    this.store.dispatch(
+      new ShowMsg({
+        msg: {
+          title: "Error",
+          msg,
+          color: "red"
+        }
+      })
+    );
   }
 }

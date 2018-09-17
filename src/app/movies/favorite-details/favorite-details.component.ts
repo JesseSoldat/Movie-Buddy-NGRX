@@ -1,9 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Params } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
 import { FavoritesService } from "../../core/services/favorites.service";
 import { selectFavoriteDetailsFromFavorites } from "../movies.selector";
+import { ShowSpinner } from "../../shared/shared.actions";
 
 @Component({
   selector: "app-favorite-details",
@@ -24,6 +25,7 @@ export class FavoriteDetailsComponent implements OnInit {
         .pipe(select(selectFavoriteDetailsFromFavorites(params.id)))
         .subscribe(details => {
           if (details) {
+            this.store.dispatch(new ShowSpinner({ showSpinner: false }));
             this.favoriteDetails = details;
           } else {
             this.favoritesService.getFavorites();

@@ -2,10 +2,11 @@
 <app-heading heading="Favorites"></app-heading>
 
 <app-filter-box (onFilterText)="onFilterText($event)"></app-filter-box>
+<app-spinner></app-spinner>
 
 <div class="row">
   <div class="col-xs-12 col-sm-10 mx-auto">
-    <div class="col-12 d-flex justify-content-around flex-wrap">
+    <div class="d-flex justify-content-around flex-wrap">
       <app-card *ngFor="let movie of favorites | filterList: filterListBy" [movie]="movie" parent="favorites"></app-card>
     </div>
   </div>

@@ -6,16 +6,34 @@ import { Store } from "@ngrx/store";
 import { AppState } from "../../reducers";
 // Actions
 import { GetMovieList, GetMovieDetails } from "../../movies/movie.actions";
-
+import { ShowSpinner, ShowMsg } from "../../shared/shared.actions";
+// Models
 import { MovieDetails } from "../../models/movie-details.model";
 
 @Injectable()
 export class MovieDbService {
+  errMsg = "An error ocurred while fetching the data.";
   apiKey: string;
   baseUrl = "https://api.themoviedb.org/3/";
 
   constructor(private http: HttpClient, private store: Store<AppState>) {
     this.apiKey = "c79f0a4b4f8b9c843e385c5cdb521ae1";
+  }
+
+  handleSuccess() {
+    this.store.dispatch(new ShowSpinner({ showSpinner: false }));
+  }
+
+  handleError(msg = this.errMsg) {
+    this.store.dispatch(
+      new ShowMsg({
+        msg: {
+          title: "Error",
+          msg,
+          color: "red"
+        }
+      })
+    );
   }
 
   getListOfMovies(term: string) {
@@ -33,13 +51,13 @@ export class MovieDbService {
   }
 
   getMovieDetails(movieId: string | number) {
+    this.store.dispatch(new ShowSpinner({ showSpinner: true }));
     const url = `${this.baseUrl}movie/${movieId}?api_key=${this.apiKey}`;
-    return this.http
-      .jsonp(url, "callback")
-      .pipe(
-        tap((movieDetails: MovieDetails) =>
-          this.store.dispatch(new GetMovieDetails({ movieDetails }))
-        )
-      );
+    return this.http.jsonp(url, "callback").pipe(
+      tap((movieDetails: MovieDetails) => {
+        this.store.dispatch(new ShowSpinner({ showSpinner: false }));
+        this.store.dispatch(new GetMovieDetails({ movieDetails }));
+      })
+    );
   }
 }

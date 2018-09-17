@@ -1,9 +1,7 @@
 <app-overlay></app-overlay>
 <div class="container-fluid">
   <app-heading heading="Movie Details"></app-heading>
-
-  <app-spinner *ngIf="!movieDetails$ | async"></app-spinner>
-
+  <app-spinner></app-spinner>
   <app-details-card *ngIf="movieDetails$ | async as movieDetails" [movieDetails]="movieDetails" parent="search"></app-details-card>
 
 

@@ -1,6 +1,6 @@
-import { SharedActionTypes } from "../actions/shared.actions";
+import { SharedActionTypes } from "./shared.actions";
 
-import { Msg } from "../../models/msg.model";
+import { Msg } from "../models/msg.model";
 
 export interface SharedState {
   showOverlay: boolean;

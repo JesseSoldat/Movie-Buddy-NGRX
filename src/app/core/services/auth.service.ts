@@ -4,7 +4,7 @@ import { Injectable } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../reducers";
 import { Register, Login, Logout } from "../../auth/auth.actions";
-import { ShowOverlay, ShowMsg } from "../../shared/actions/shared.actions";
+import { ShowOverlay, ShowMsg } from "../../shared/shared.actions";
 
 // Firebase
 import { AngularFireAuth } from "@angular/fire/auth";

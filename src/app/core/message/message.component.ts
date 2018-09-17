@@ -4,12 +4,12 @@ import { Msg } from "../../models/msg.model";
 // NGRX
 import { AppState } from "../../reducers";
 import { Store, select } from "@ngrx/store";
-import { ShowMsg } from "../../shared/actions/shared.actions";
+import { ShowMsg } from "../../shared/shared.actions";
 import {
   selectMsg,
   selectShowMsg,
   selectHideMsg
-} from "../../shared/selectors/shared.selectors";
+} from "../../shared/shared.selectors";
 
 const emptyMsg = {
   title: "",
