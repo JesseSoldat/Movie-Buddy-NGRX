@@ -4,21 +4,20 @@ import { map } from "rxjs/operators";
 // Lodash
 import { intersection, difference, orderBy } from "lodash";
 // Firebase
-import { AngularFireDatabase } from "@angular/fire/database";
+import {
+  AngularFireDatabase,
+  AngularFireList,
+  AngularFireObject
+} from "@angular/fire/database";
 // NGRX
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
 import { selectUserUid } from "../../auth/auth.selectors";
-import { GetMatches } from "../../matches/matches.action";
+import { GetMatches, GetMatch } from "../../matches/matches.action";
 // Models
-import { MovieDetails } from "../../models/movie-details.model";
 import { User } from "../../models/user.model";
 import { MatchedUser } from "../../models/matched-user.model";
-export interface FbUser {
-  key: string;
-  favorites: Map<string, MovieDetails>;
-  user: User;
-}
+import { FbUser } from "../../models/fb-user.model";
 
 export interface OtherUser {
   user: User;
@@ -29,9 +28,10 @@ export interface OtherUser {
 export class MatchesService {
   userId: string;
   myList: string[]; // current users favorites
-  otherUsersList: any;
-  otherUsersIds: OtherUser[];
-  matchedUserList: MatchedUser[];
+  otherUser: AngularFireObject<FbUser>; // single matched user
+  otherUsersList: AngularFireList<FbUser>; // all users
+  otherUsersIds: OtherUser[]; // others users movie ids
+  matchedUserList: MatchedUser[]; // all user data formatted
 
   constructor(
     private store: Store<AppState>,
@@ -42,13 +42,27 @@ export class MatchesService {
       .subscribe(uid => (this.userId = uid));
   }
 
+  // Single user and their movies
+  getOtherUserMovies(uid: string) {
+    const url = `moviedb/users/${uid}`;
+    this.otherUser = this.afDb.object(url);
+
+    this.otherUser.snapshotChanges().subscribe(action => {
+      const match: FbUser = action.payload.val();
+      match["key"] = action.key;
+      console.log(match);
+      this.store.dispatch(new GetMatch({ match }));
+    });
+  }
+
+  // List of other Users and their movies
   getOtherUsersLists() {
     const url = "moviedb/users";
     this.otherUsersList = this.afDb.list(url);
     this.otherUsersList
       .snapshotChanges()
       .pipe(
-        map((actions: any) => {
+        map(actions => {
           const usersList: FbUser[] = actions.map(action => ({
             key: action.key,
             ...action.payload.val()
