@@ -1,4 +1,8 @@
 import { Component, OnInit } from "@angular/core";
+// NGRX
+import { Store, select } from "@ngrx/store";
+import { AppState } from "../../reducers";
+import { selectUserUid } from "../../auth/auth.selectors";
 // Services
 import { FavoritesService } from "../../core/services/favorites.service";
 
@@ -8,9 +12,15 @@ import { FavoritesService } from "../../core/services/favorites.service";
   styleUrls: ["./matches.component.css"]
 })
 export class MatchesComponent implements OnInit {
-  constructor(private favoritesService: FavoritesService) {}
+  uid: string;
+
+  constructor(
+    private store: Store<AppState>,
+    private favoritesService: FavoritesService
+  ) {}
 
   ngOnInit() {
+    this.store.pipe(select(selectUserUid)).subscribe(uid => (this.uid = uid));
     this.favoritesService.getOtherUsersLists();
   }
 }
