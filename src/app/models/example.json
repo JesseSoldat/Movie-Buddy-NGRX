@@ -1,0 +1,26 @@
+{
+  "users": [
+    {
+      "localId": "80gjApnNozTn2U7TohieOwJLgox2",
+      "email": "kim@kim.com",
+      "displayName": "kim",
+      "photoUrl": "",
+      "passwordHash": "UkVEQUNURUQ=",
+      "emailVerified": false,
+      "passwordUpdatedAt": 1537110392000,
+      "providerUserInfo": [
+        {
+          "providerId": "password",
+          "displayName": "kim",
+          "photoUrl": "",
+          "federatedId": "kim@kim.com",
+          "email": "kim@kim.com",
+          "rawId": "kim@kim.com"
+        }
+      ],
+      "validSince": "1537110392",
+      "lastLoginAt": "1537194325000",
+      "createdAt": "1537110392000"
+    }
+  ]
+}

@@ -9,11 +9,10 @@ import { MoviesRoutingModule } from "./movies-routing.module";
 import { MovieDetailsComponent } from "./movie-details/movie-details.component";
 import { DetailsCardComponent } from "./details-card/details-card.component";
 import { MoviesSearchComponent } from "./movies-search/movies-search.component";
-import { FavoritesComponent } from './favorites/favorites.component';
-import { CardListComponent } from './card-list/card-list.component';
-import { CardComponent } from './card/card.component';
-import { FavoriteDetailsComponent } from './favorite-details/favorite-details.component';
-import { MatchesComponent } from './matches/matches.component';
+import { FavoritesComponent } from "./favorites/favorites.component";
+import { CardListComponent } from "./card-list/card-list.component";
+import { CardComponent } from "./card/card.component";
+import { FavoriteDetailsComponent } from "./favorite-details/favorite-details.component";
 
 @NgModule({
   imports: [
@@ -30,8 +29,7 @@ import { MatchesComponent } from './matches/matches.component';
     FavoritesComponent,
     CardListComponent,
     CardComponent,
-    FavoriteDetailsComponent,
-    MatchesComponent
+    FavoriteDetailsComponent
   ]
 })
 export class MoviesModule {}

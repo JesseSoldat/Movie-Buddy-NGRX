@@ -13,6 +13,7 @@ import {
 // Models
 import { MovieDetails } from "../../models/movie-details.model";
 import { User } from "../../models/user.model";
+import { MatchedUser } from "../../models/matched-user.model";
 // NGRX
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
@@ -21,28 +22,15 @@ import { selectUserUid } from "../../auth/auth.selectors";
 import { ShowOverlay } from "../../shared/actions/shared.actions";
 import { GetFavorites, DeleteFromFavorites } from "../../movies/movie.actions";
 
-export interface Favorites {
-  favorites: Map<string, MovieDetails>;
-}
-
 export interface FbUser {
   key: string;
-  favorites: Favorites;
+  favorites: Map<string, MovieDetails>;
   user: User;
 }
 
 export interface OtherUser {
   user: User;
   favoriteIds: string[];
-}
-
-export interface MatchedUser {
-  name: string;
-  uid: string;
-  isMatch: string[];
-  noMatch: string[];
-  matched: number;
-  unmatched: number;
 }
 
 @Injectable()
@@ -120,10 +108,14 @@ export class FavoritesService {
       .snapshotChanges()
       .pipe(
         map((actions: any) => {
+          console.log(actions);
+
           const usersList: FbUser[] = actions.map(action => ({
             key: action.key,
             ...action.payload.val()
           }));
+          console.log(usersList);
+
           return usersList;
         })
       )

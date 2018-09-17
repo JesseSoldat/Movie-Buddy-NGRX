@@ -7,7 +7,7 @@ const posterUrl = "http://image.tmdb.org/t/p/w500/";
 
 export const selectMovieState = createFeatureSelector<MovieState>("movie");
 
-// ---------------------------- Movie List ---------------------------------
+// ----------------- Movie List ------------------
 export const selectMovieList = createSelector(
   selectMovieState,
   (movieState: MovieState) =>
@@ -23,7 +23,7 @@ export const selectMovieList = createSelector(
     )
 );
 
-// --------------------------- Favorites Newest First -----------------------------------
+// ------------- Favorites Newest First --------------------
 export const selectFavorites = createSelector(
   selectMovieState,
   (movieState: MovieState) =>
