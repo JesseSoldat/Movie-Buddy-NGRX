@@ -1,13 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { Observable } from "rxjs";
-// Models
-import { MatchedUser } from "../../models/matched-user.model";
+import { Router, ActivatedRoute } from "@angular/router";
 // NGRX
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
-import { selectMatches } from "../matches.selector";
-// Services
 import { MatchesService } from "../../core/services/matches.service";
+import { selectNonMatchedUserMovies } from "../matches.selector";
 
 @Component({
   selector: "app-matches",
@@ -16,15 +13,22 @@ import { MatchesService } from "../../core/services/matches.service";
 })
 export class MatchesComponent implements OnInit {
   uid: string;
-  matches$: Observable<MatchedUser[]>;
+  matches;
 
   constructor(
     private store: Store<AppState>,
-    private matchesService: MatchesService
+    private matchesService: MatchesService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    this.matchesService.getOtherUsersLists();
-    this.matches$ = this.store.pipe(select(selectMatches));
+    this.route.params.subscribe(param => {
+      this.uid = param.id;
+      this.matchesService.getOtherUserMovies(this.uid);
+    });
+    this.store
+      .pipe(select(selectNonMatchedUserMovies))
+      .subscribe(matches => (this.matches = matches));
   }
 }

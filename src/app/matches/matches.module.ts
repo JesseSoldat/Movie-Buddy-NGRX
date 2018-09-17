@@ -8,6 +8,7 @@ import { MatchesRoutingModule } from "./matches-routing.module";
 import { SharedModule } from "../shared/shared.module";
 import { MatchesComponent } from "./matches/matches.component";
 import { MatchDetailsComponent } from './match-details/match-details.component';
+import { MatchedUsersComponent } from './matched-users/matched-users.component';
 
 @NgModule({
   imports: [
@@ -16,6 +17,6 @@ import { MatchDetailsComponent } from './match-details/match-details.component';
     MatchesRoutingModule,
     StoreModule.forFeature("matches", matchesReducer)
   ],
-  declarations: [MatchesComponent, MatchDetailsComponent]
+  declarations: [MatchesComponent, MatchDetailsComponent, MatchedUsersComponent]
 })
 export class MatchesModule {}

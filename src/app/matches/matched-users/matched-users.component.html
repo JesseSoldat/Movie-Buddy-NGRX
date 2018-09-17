@@ -1,0 +1,27 @@
+<app-overlay></app-overlay>
+<app-heading heading="Search Others' Movies"></app-heading>
+<app-spinner *ngIf="!(matches$ | async)"></app-spinner>
+<div class="container">
+  <div class="row" *ngIf="matches$ | async as matches">
+    <div class="col-12 mx-auto mt-3">
+      <ul class="list-group list-group-flush" *ngFor="let match of matches">
+        <li class="list-group-item py-5">
+          <div class="row">
+            <div class="col-xs-12 col-md-8">
+              <span class="matchedUser mr-2">{{match.username | titlecase }} has matched <b>{{match.matched}}</b>
+                movies with
+                you. They have <b>{{match.unmatched}}</b> other movies?
+              </span>
+            </div>
+            <div class="col-xs-12 col-md-4">
+              <button class="btn btn-primary btn-lg" [routerLink]="[ '/matches/user', match.uid ]">Check out their
+                other
+                movies</button>
+            </div>
+          </div>
+
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

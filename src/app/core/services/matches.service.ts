@@ -13,7 +13,11 @@ import {
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
 import { selectUserUid } from "../../auth/auth.selectors";
-import { GetMatches, GetMatch } from "../../matches/matches.action";
+import {
+  GetMatches,
+  GetMatch,
+  GetUserFavoriteIds
+} from "../../matches/matches.action";
 // Models
 import { User } from "../../models/user.model";
 import { MatchedUser } from "../../models/matched-user.model";
@@ -50,7 +54,6 @@ export class MatchesService {
     this.otherUser.snapshotChanges().subscribe(action => {
       const match: FbUser = action.payload.val();
       match["key"] = action.key;
-      console.log(match);
       this.store.dispatch(new GetMatch({ match }));
     });
   }
@@ -79,6 +82,9 @@ export class MatchesService {
           if (user.key === this.userId) {
             // console.log(user);
             this.myList = this.getFavoriteIds(user.favorites);
+            this.store.dispatch(
+              new GetUserFavoriteIds({ userFavoriteIds: this.myList })
+            );
             // console.log(this.myList);
           }
           // Others List

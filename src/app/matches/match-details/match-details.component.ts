@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
 import { MatchesService } from "../../core/services/matches.service";
+import { selectNonMatchedUserMovies } from "../matches.selector";
 
 @Component({
   selector: "app-match-details",
@@ -12,6 +13,7 @@ import { MatchesService } from "../../core/services/matches.service";
 })
 export class MatchDetailsComponent implements OnInit {
   uid: string;
+  matches;
 
   constructor(
     private store: Store<AppState>,
@@ -25,5 +27,8 @@ export class MatchDetailsComponent implements OnInit {
       this.uid = param.id;
       this.matchesService.getOtherUserMovies(this.uid);
     });
+    this.store
+      .pipe(select(selectNonMatchedUserMovies))
+      .subscribe(matches => (this.matches = matches));
   }
 }
