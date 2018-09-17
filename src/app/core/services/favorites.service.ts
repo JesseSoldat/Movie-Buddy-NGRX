@@ -20,6 +20,7 @@ import { GetFavorites, DeleteFromFavorites } from "../../movies/movie.actions";
 export class FavoritesService {
   userId: string;
   favorites: AngularFireList<MovieDetails>;
+  otherUsersList: any;
 
   constructor(
     private store: Store<AppState>,
@@ -78,5 +79,22 @@ export class FavoritesService {
     }
     this.store.dispatch(new DeleteFromFavorites({ movieId }));
     this.store.dispatch(new ShowOverlay({ showOverlay: false }));
+  }
+
+  getOtherUsersLists() {
+    const url = "moviedb/users";
+    this.otherUsersList = this.afDb.list(url);
+    this.otherUsersList
+      .snapshotChanges()
+      .pipe(
+        map((actions: any) => {
+          const usersList = actions.map(action => ({
+            key: action.key,
+            ...action.payload.val()
+          }));
+          console.log(usersList);
+        })
+      )
+      .subscribe();
   }
 }

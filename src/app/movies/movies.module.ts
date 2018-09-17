@@ -13,6 +13,7 @@ import { FavoritesComponent } from './favorites/favorites.component';
 import { CardListComponent } from './card-list/card-list.component';
 import { CardComponent } from './card/card.component';
 import { FavoriteDetailsComponent } from './favorite-details/favorite-details.component';
+import { MatchesComponent } from './matches/matches.component';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { FavoriteDetailsComponent } from './favorite-details/favorite-details.co
     FavoritesComponent,
     CardListComponent,
     CardComponent,
-    FavoriteDetailsComponent
+    FavoriteDetailsComponent,
+    MatchesComponent
   ]
 })
 export class MoviesModule {}

@@ -5,11 +5,13 @@ import { MoviesSearchComponent } from "./movies-search/movies-search.component";
 import { MovieDetailsComponent } from "./movie-details/movie-details.component";
 import { FavoritesComponent } from "./favorites/favorites.component";
 import { FavoriteDetailsComponent } from "./favorite-details/favorite-details.component";
+import { MatchesComponent } from "./matches/matches.component";
 
 const routes: Routes = [
   { path: "", component: MoviesSearchComponent },
   { path: "favorites", component: FavoritesComponent },
   { path: "favorites/:id", component: FavoriteDetailsComponent },
+  { path: "matches", component: MatchesComponent },
   { path: ":id", component: MovieDetailsComponent }
 ];
 
