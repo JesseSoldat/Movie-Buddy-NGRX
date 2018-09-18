@@ -6,7 +6,7 @@ import { of } from "rxjs";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../reducers";
 // Actions
-import { GetMovieList, GetMovieDetails } from "../../movies/movie.actions";
+import { MoviesLoaded, GetMovieDetails } from "../../movies/movie.actions";
 import { ShowSpinner, ShowMsg } from "../../shared/shared.actions";
 // Models
 import { MovieDetails } from "../../models/movie-details.model";
@@ -46,7 +46,7 @@ export class MovieDbService {
       .jsonp(url, "callback")
       .pipe(
         map((res: any) => res.results),
-        tap(movieList => this.store.dispatch(new GetMovieList(movieList)))
+        tap(movieList => this.store.dispatch(new MoviesLoaded(movieList)))
       )
       .subscribe(() => {});
   }

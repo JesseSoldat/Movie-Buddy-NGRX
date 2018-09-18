@@ -1,12 +1,12 @@
 import {
   Component,
+  Output,
+  EventEmitter,
   ViewChild,
   ElementRef,
-  OnInit,
   AfterViewInit,
   OnDestroy
 } from "@angular/core";
-
 import { Observable, fromEvent, Subscription } from "rxjs";
 import {
   map,
@@ -16,23 +16,19 @@ import {
   tap
 } from "rxjs/operators";
 
-import { MovieDbService } from "../../../core/services/moviedb.service";
-
 @Component({
   selector: "app-search-box",
   templateUrl: "./search-box.component.html",
   styleUrls: ["./search-box.component.css"]
 })
-export class SearchBoxComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SearchBoxComponent implements AfterViewInit, OnDestroy {
+  @Output("searchChanged")
+  searchChanged: EventEmitter<string> = new EventEmitter();
   @ViewChild("searchInput")
   searchInput: ElementRef;
   searchTerm: string;
   inputStream$: Observable<string>;
   inputSubscription: Subscription;
-
-  constructor(private movieDbService: MovieDbService) {}
-
-  ngOnInit() {}
 
   ngAfterViewInit() {
     this.inputStream$ = fromEvent(this.searchInput.nativeElement, "keyup").pipe(
@@ -51,7 +47,6 @@ export class SearchBoxComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   submitSearch(searchTerm: string) {
-    // console.log("calling api for", searchTerm);
-    this.movieDbService.getListOfMovies(searchTerm);
+    this.searchChanged.emit(searchTerm);
   }
 }

@@ -4,12 +4,17 @@ import { Movie } from "../models/movie.model";
 import { MovieDetails } from "../models/movie-details.model";
 
 export enum MovieActionTypes {
-  GetMovieList = "GetMovieList",
+  MoviesRequested = "[Movie Search Page] MoviesRequested",
+  MoviesLoaded = "[Movies Service] MoviesLoaded",
   GetMovieDetails = "GetMovieDetails"
 }
 
-export class GetMovieList implements Action {
-  readonly type = MovieActionTypes.GetMovieList;
+export class MoviesRequested implements Action {
+  readonly type = MovieActionTypes.MoviesRequested;
+}
+
+export class MoviesLoaded implements Action {
+  readonly type = MovieActionTypes.MoviesLoaded;
 
   constructor(public payload: { movieList: Movie[] }) {}
 }
@@ -20,4 +25,4 @@ export class GetMovieDetails implements Action {
   constructor(public payload: { movieDetails: MovieDetails }) {}
 }
 
-export type MovieActions = GetMovieList | GetMovieDetails;
+export type MovieActions = MoviesRequested | MoviesLoaded | GetMovieDetails;
