@@ -13,7 +13,7 @@ import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
 import { selectUserUid } from "../../auth/auth.selectors";
 // Actions
-import { ShowOverlay, ShowSpinner, ShowMsg } from "../../shared/shared.actions";
+import { ShowOverlay, ShowMsg } from "../../shared/shared.actions";
 import {
   FavoritesLoaded,
   DeleteFromFavorites
@@ -36,19 +36,28 @@ export class FavoritesService {
     private router: Router
   ) {
     this.store
-      .pipe(select(selectUserUid))
-      .subscribe(uid => (this.userId = uid));
+      .pipe(
+        select(selectUserUid),
+        first()
+      )
+      .subscribe(
+        uid => (this.userId = uid),
+        err => console.log("Err: Favorites Service - selectUserUid", err),
+        () => console.log("Complete Favorites Service - selectUserUid")
+      );
   }
 
-  handleStart(type = "overlay") {
-    if (type === "overlay") {
-      this.store.dispatch(new ShowOverlay({ showOverlay: true }));
-    } else {
-      this.store.dispatch(new ShowSpinner({ showSpinner: true }));
-    }
+  handleStart() {
+    this.store.dispatch(
+      new ShowOverlay({ showOverlay: true, from: "ShowOverlayFS" })
+    );
   }
 
-  handleSuccess() {}
+  handleSuccess() {
+    this.store.dispatch(
+      new ShowOverlay({ showOverlay: false, from: "ShowOverlayFS" })
+    );
+  }
 
   handleError(msg = this.errMsg) {
     this.store.dispatch(
@@ -57,7 +66,8 @@ export class FavoritesService {
           title: "Error",
           msg,
           color: "red"
-        }
+        },
+        from: "ShowOverlayFS"
       })
     );
   }

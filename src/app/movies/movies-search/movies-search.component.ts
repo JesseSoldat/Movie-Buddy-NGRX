@@ -6,7 +6,7 @@ import { tap, filter, first } from "rxjs/operators";
 // NGRX
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
-import { MoviesRequested } from "../movie.actions";
+import { MoviesRequested, MovieDetailsRequested } from "../movie.actions";
 import { FavoritesRequested } from "../favorites.actions";
 import {
   selectFavorites,
@@ -68,6 +68,8 @@ export class MoviesSearchComponent implements OnInit {
     this.movieList$ = this.store.pipe(select(selectFilteredMovieList));
   }
 
+  // ---------------- CB Events ---------------------
+
   // Search Box
   onSearchChanged(searchTerm: string) {
     this.store.dispatch(new MoviesRequested());
@@ -80,14 +82,19 @@ export class MoviesSearchComponent implements OnInit {
   }
 
   addToFavorites(keys: MovieKeys) {
+    this.store.dispatch(new MovieDetailsRequested("MovieDetailsRequestedSP"));
     this.movieDbService
       .getMovieDetails(keys.id)
       .pipe(first())
-      .subscribe((details: MovieDetails) => {
-        const movieDetails: MovieDetails = createMovieDetails(details);
-        // console.log("movie details", movieDetails);
+      .subscribe(
+        (details: MovieDetails) => {
+          const movieDetails: MovieDetails = createMovieDetails(details);
+          // console.log("movie details", movieDetails);
 
-        this.favoritesService.addToFavorites(movieDetails);
-      });
+          this.favoritesService.addToFavorites(movieDetails);
+        },
+        err => console.log("addToFavorites SP", err),
+        () => console.log("addToFavorites Complete")
+      );
   }
 }

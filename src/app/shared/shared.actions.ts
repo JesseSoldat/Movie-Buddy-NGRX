@@ -3,27 +3,32 @@ import { Action } from "@ngrx/store";
 import { Msg } from "../models/msg.model";
 
 export enum SharedActionTypes {
-  ShowOverlay = "ShowOverlay",
-  ShowSpinner = "ShowSpinner",
-  ShowMsg = "ShowMsg"
+  // Overlay
+  ShowOverlayAS = "[Auth Service] ShowOverlay",
+  ShowOverlayFS = "[Favorites Service] ShowOverlay",
+  ShowOverlayMS = "[Movie Service] ShowOverlay",
+  // MSG
+  ShowMsgAS = "[Auth Service] ShowMsg",
+  ShowMsgFS = "[Favorites Service] ShowMsg",
+  ShowMsgMS = "[Movie Service] ShowMsg",
+  ShowMsgMC = "[Message Component] ShowMsg",
+  ShowMsgMDP = "[Movie Details Page] ShowMsg"
 }
 
 export class ShowOverlay implements Action {
-  readonly type = SharedActionTypes.ShowOverlay;
+  type: string;
 
-  constructor(public payload: { showOverlay: boolean }) {}
-}
-
-export class ShowSpinner implements Action {
-  readonly type = SharedActionTypes.ShowSpinner;
-
-  constructor(public payload: { showSpinner: boolean }) {}
+  constructor(public payload: { showOverlay: boolean; from: string }) {
+    this.type = SharedActionTypes[payload.from];
+  }
 }
 
 export class ShowMsg implements Action {
-  readonly type = SharedActionTypes.ShowMsg;
+  type: string;
 
-  constructor(public payload: { msg: Msg }) {}
+  constructor(public payload: { msg: Msg; from: string }) {
+    this.type = SharedActionTypes[payload.from];
+  }
 }
 
-export type SharedActions = ShowOverlay | ShowSpinner | ShowMsg;
+export type SharedActions = ShowOverlay | ShowMsg;

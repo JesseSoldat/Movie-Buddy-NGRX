@@ -21,23 +21,19 @@ export const selectShowOverlay = createSelector(
   sharedState => sharedState.showOverlay
 );
 
-// SPINNER
-export const selectShowSpinner = createSelector(
-  selectSharedState,
-  sharedState => sharedState.showSpinner
-);
-
 // MESSAGE
-const formatMsg = msg => ({
-  title: msg.title ? msg.title : titleEnum[msg.color],
-  msg: msg.msg,
-  color: colorEnum[msg.color]
-});
+const formatMsg = msg => {
+  if (!msg) {
+    return null;
+  }
+
+  return {
+    title: msg.title ? msg.title : titleEnum[msg.color],
+    msg: msg.msg,
+    color: colorEnum[msg.color]
+  };
+};
 
 export const selectMsg = createSelector(selectSharedState, sharedState =>
   formatMsg(sharedState.msg)
 );
-
-export const selectShowMsg = createSelector(selectMsg, msg => !!msg.msg);
-
-export const selectHideMsg = createSelector(selectMsg, msg => !msg);

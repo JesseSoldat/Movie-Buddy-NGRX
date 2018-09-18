@@ -4,30 +4,26 @@ import { Msg } from "../models/msg.model";
 
 export interface SharedState {
   showOverlay: boolean;
-  showSpinner: boolean;
   msg: Msg;
 }
 
 export const initialSharedState: SharedState = {
   showOverlay: false,
-  showSpinner: false,
-  msg: { title: "", msg: "", color: "" }
+  msg: null
 };
 
 export const sharedReducer = (state = initialSharedState, action) => {
   const { type, payload } = action;
 
   switch (type) {
-    case SharedActionTypes.ShowOverlay:
+    case SharedActionTypes.ShowOverlayFS:
+    case SharedActionTypes.ShowOverlayMS:
       return { ...state, showOverlay: payload.showOverlay };
 
-    case SharedActionTypes.ShowSpinner:
-      return { ...state, showSpinner: payload.showSpinner };
-
-    case SharedActionTypes.ShowMsg:
+    case SharedActionTypes.ShowMsgFS:
+    case SharedActionTypes.ShowMsgMS:
       return {
         ...state,
-        showSpinner: false,
         showOverlay: false,
         msg: payload.msg
       };

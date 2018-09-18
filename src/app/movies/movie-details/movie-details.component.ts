@@ -7,7 +7,7 @@ import { MovieDetails } from "../../models/movie-details.model";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
 import { selectMovieDetails } from "../movies.selector";
-import { ShowSpinner, ShowMsg } from "../../shared/shared.actions";
+import { ShowMsg } from "../../shared/shared.actions";
 // Services
 import { MovieDbService } from "../../core/services/moviedb.service";
 
@@ -36,9 +36,7 @@ export class MovieDetailsComponent implements OnInit {
     this.movieDetails$ = this.store.pipe(select(selectMovieDetails));
   }
 
-  handleSuccess() {
-    this.store.dispatch(new ShowSpinner({ showSpinner: false }));
-  }
+  handleSuccess() {}
 
   handleError(msg = this.errMsg) {
     this.store.dispatch(
@@ -47,7 +45,8 @@ export class MovieDetailsComponent implements OnInit {
           title: "Error",
           msg,
           color: "red"
-        }
+        },
+        from: "ShowMsgMDP"
       })
     );
   }

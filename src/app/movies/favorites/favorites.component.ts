@@ -24,7 +24,7 @@ export class FavoritesComponent implements OnInit {
   favorites$: Observable<MovieDetails[]>;
   favorites: MovieDetails[];
 
-  // Search Box Inputs
+  // Filter Box Inputs
   filterListBy = "";
 
   // Card Inputs
@@ -56,6 +56,9 @@ export class FavoritesComponent implements OnInit {
     );
   }
 
+  // ---------------- CB Events ---------------------
+
+  // Filter Box
   onFilterText(text) {
     this.filterListBy = text;
   }

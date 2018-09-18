@@ -19,7 +19,7 @@ export const movieReducer = (state = initialMovieState, action) => {
     case MovieActionTypes.MoviesLoaded:
       return { ...state, movieList: payload, movieDetails: null };
 
-    case MovieActionTypes.GetMovieDetails:
+    case MovieActionTypes.MovieDetailsLoaded:
       return { ...state, movieDetails: payload.movieDetails };
 
     default:

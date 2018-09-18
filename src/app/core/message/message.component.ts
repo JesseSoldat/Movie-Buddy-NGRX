@@ -1,24 +1,14 @@
 import { Component, OnInit } from "@angular/core";
 // Rxjs
 import { Observable } from "rxjs";
-import { tap, first } from "rxjs/operators";
+import { tap, filter } from "rxjs/operators";
 // Models
 import { Msg } from "../../models/msg.model";
 // NGRX
 import { AppState } from "../../reducers";
 import { Store, select } from "@ngrx/store";
 import { ShowMsg } from "../../shared/shared.actions";
-import {
-  selectMsg,
-  selectShowMsg,
-  selectHideMsg
-} from "../../shared/shared.selectors";
-
-const emptyMsg = {
-  title: "",
-  msg: "",
-  color: ""
-};
+import { selectMsg } from "../../shared/shared.selectors";
 
 @Component({
   selector: "app-message",
@@ -26,18 +16,17 @@ const emptyMsg = {
   styleUrls: ["./message.component.css"]
 })
 export class MessageComponent implements OnInit {
-  showMsg$: Observable<boolean>;
-  hideMsg$: Observable<boolean>;
   msg$: Observable<Msg>;
   constructor(private store: Store<AppState>) {}
 
   ngOnInit() {
-    this.showMsg$ = this.store.pipe(select(selectShowMsg));
-    this.hideMsg$ = this.store.pipe(select(selectHideMsg));
-
     this.msg$ = this.store.pipe(
       select(selectMsg),
-      first(),
+
+      filter(msg => {
+        console.log("Msg:", msg);
+        return msg !== null;
+      }),
       tap(msg => {
         if (msg.color !== "alert-danger") {
           setTimeout(() => {
@@ -49,6 +38,6 @@ export class MessageComponent implements OnInit {
   }
 
   close() {
-    this.store.dispatch(new ShowMsg({ msg: emptyMsg }));
+    this.store.dispatch(new ShowMsg({ msg: null, from: "ShowMsgMC" }));
   }
 }

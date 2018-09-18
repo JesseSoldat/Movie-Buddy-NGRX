@@ -6,8 +6,8 @@ import { of } from "rxjs";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../reducers";
 // Actions
-import { MoviesLoaded, GetMovieDetails } from "../../movies/movie.actions";
-import { ShowSpinner, ShowMsg } from "../../shared/shared.actions";
+import { MoviesLoaded, MovieDetailsLoaded } from "../../movies/movie.actions";
+import { ShowMsg } from "../../shared/shared.actions";
 // Models
 import { MovieDetails } from "../../models/movie-details.model";
 
@@ -21,9 +21,7 @@ export class MovieDbService {
     this.apiKey = "c79f0a4b4f8b9c843e385c5cdb521ae1";
   }
 
-  handleSuccess() {
-    this.store.dispatch(new ShowSpinner({ showSpinner: false }));
-  }
+  handleSuccess() {}
 
   handleError(msg = this.errMsg) {
     this.store.dispatch(
@@ -32,7 +30,8 @@ export class MovieDbService {
           title: "Error",
           msg,
           color: "red"
-        }
+        },
+        from: ""
       })
     );
   }
@@ -52,7 +51,6 @@ export class MovieDbService {
   }
 
   getMovieDetails(movieId: string | number) {
-    this.store.dispatch(new ShowSpinner({ showSpinner: true }));
     const url = `${this.baseUrl}movie/${movieId}?api_key=${this.apiKey}`;
     return this.http.jsonp(url, "callback").pipe(
       tap(details => {
@@ -64,7 +62,7 @@ export class MovieDbService {
       }),
       tap((movieDetails: MovieDetails) => {
         this.handleSuccess();
-        this.store.dispatch(new GetMovieDetails({ movieDetails }));
+        this.store.dispatch(new MovieDetailsLoaded({ movieDetails }));
       }),
       first()
     );

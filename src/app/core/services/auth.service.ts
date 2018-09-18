@@ -24,11 +24,15 @@ export class AuthService {
   ) {}
 
   handleStart() {
-    this.store.dispatch(new ShowOverlay({ showOverlay: true }));
+    this.store.dispatch(
+      new ShowOverlay({ showOverlay: true, from: "ShowOverlayAS" })
+    );
   }
 
   handleSuccess() {
-    this.store.dispatch(new ShowOverlay({ showOverlay: false }));
+    this.store.dispatch(
+      new ShowOverlay({ showOverlay: false, from: "ShowOverlayAS" })
+    );
   }
 
   handleErrors(err, type) {
@@ -36,8 +40,7 @@ export class AuthService {
       ? err.message
       : `An error ocurred while trying to ${type}.`;
     const msg = { title: null, msg: error, color: "red" };
-    this.store.dispatch(new ShowMsg({ msg }));
-    this.store.dispatch(new ShowOverlay({ showOverlay: false }));
+    this.store.dispatch(new ShowMsg({ msg, from: "ShowOverlayAS" }));
   }
 
   async saveUserToDb(credentials, username: string) {
