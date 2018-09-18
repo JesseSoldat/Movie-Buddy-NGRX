@@ -2,12 +2,16 @@
 <app-heading heading="Favorites"></app-heading>
 
 <app-filter-box (onFilterText)="onFilterText($event)"></app-filter-box>
-<app-spinner></app-spinner>
 
-<div class="row">
+<div class="row" *ngIf="(favorites$ | async) as favorites; else showSpinner">
   <div class="col-xs-12 col-sm-10 mx-auto">
     <div class="d-flex justify-content-around flex-wrap">
       <app-card *ngFor="let movie of favorites | filterList: filterListBy" [movie]="movie" parent="favorites"></app-card>
     </div>
   </div>
 </div>
+
+
+<ng-template #showSpinner>
+  <app-spinner></app-spinner>
+</ng-template>

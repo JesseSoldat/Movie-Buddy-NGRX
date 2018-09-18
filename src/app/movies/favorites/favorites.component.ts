@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Observable } from "rxjs";
 import { tap, filter, first } from "rxjs/operators";
 // Models
 import { MovieDetails } from "../../models/movie-details.model";
@@ -6,7 +7,7 @@ import { MovieDetails } from "../../models/movie-details.model";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
 import { selectFavorites } from "../movies.selector";
-import { ShowSpinner } from "../../shared/shared.actions";
+import { FavoritesRequested } from "../favorites.actions";
 // Services
 import { FavoritesService } from "../../core/services/favorites.service";
 
@@ -16,6 +17,7 @@ import { FavoritesService } from "../../core/services/favorites.service";
   styleUrls: ["./favorites.component.css"]
 })
 export class FavoritesComponent implements OnInit {
+  favorites$: Observable<MovieDetails[]>;
   favorites: MovieDetails[];
   filterListBy = "";
 
@@ -25,28 +27,22 @@ export class FavoritesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.store.dispatch(new ShowSpinner({ showSpinner: true }));
-    // this.favoritesService.getFavorites();
-
-    this.store
-      .pipe(
-        select(selectFavorites),
-        filter(favorites => {
-          console.log("filter:", favorites);
-          if (!favorites) {
-            this.favoritesService.getFavorites();
-          }
-          return favorites !== null;
-        }),
-        first(),
-        tap(favorites => {
-          console.log("tap:", favorites);
-
-          this.favorites = favorites;
-          this.store.dispatch(new ShowSpinner({ showSpinner: false }));
-        })
-      )
-      .subscribe(favorites => {});
+    this.favorites$ = this.store.pipe(
+      select(selectFavorites),
+      filter(favorites => {
+        console.log("filter:", favorites);
+        if (!favorites) {
+          this.store.dispatch(new FavoritesRequested("FavoritesRequestedFP"));
+          this.favoritesService.getFavorites();
+        }
+        return favorites !== null;
+      }),
+      first(),
+      tap(favorites => {
+        console.log("tap:", favorites);
+        this.favorites = favorites;
+      })
+    );
   }
 
   onFilterText(text) {

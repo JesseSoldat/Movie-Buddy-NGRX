@@ -48,9 +48,7 @@ export class FavoritesService {
     }
   }
 
-  handleSuccess() {
-    this.store.dispatch(new ShowSpinner({ showSpinner: false }));
-  }
+  handleSuccess() {}
 
   handleError(msg = this.errMsg) {
     this.store.dispatch(
@@ -88,7 +86,6 @@ export class FavoritesService {
               : actions
         ),
         tap((favoritesList: MovieDetails[]) => {
-          this.handleSuccess();
           this.store.dispatch(new FavoritesLoaded({ favoritesList }));
         })
       )
