@@ -2,9 +2,11 @@
 <div class="container-fluid">
   <app-heading heading="Movie Details"></app-heading>
 
-  <app-spinner></app-spinner>
+  <app-details-card *ngIf="(favoriteDetails$ | async) as movieDetails" (handleLeftBtnClick)="goBack($event)"
+    (handleRightBtnClick)="removeFromFavorites($event)" [movieDetails]="movieDetails" [leftBtn]="leftBtn" [rightBtn]="rightBtn"></app-details-card>
 
-  <app-details-card *ngIf="favoriteDetails as movieDetails" (onAddToFavorites)="addToFavorites($event)" [movieDetails]="movieDetails"
-    parent="favorites"></app-details-card>
+  <ng-template #showSpinner>
+    <app-spinner></app-spinner>
+  </ng-template>
 
 </div>

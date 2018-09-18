@@ -1,9 +1,17 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
+// Rxjs
+import { Observable } from "rxjs";
+import { filter, tap, first } from "rxjs/operators";
+// Models
+import { MovieDetails } from "../../models/movie-details.model";
+import { IconBtn } from "../../models/icon-btn.model";
+// Ngrx
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
-import { FavoritesService } from "../../core/services/favorites.service";
 import { selectFavoriteDetailsFromFavorites } from "../movies.selector";
+// Services
+import { FavoritesService } from "../../core/services/favorites.service";
 
 @Component({
   selector: "app-favorite-details",
@@ -11,28 +19,49 @@ import { selectFavoriteDetailsFromFavorites } from "../movies.selector";
   styleUrls: ["./favorite-details.component.css"]
 })
 export class FavoriteDetailsComponent implements OnInit {
-  favoriteDetails;
+  favoriteDetails$: Observable<MovieDetails>;
+
+  // Card Inputs
+  leftBtn: IconBtn = { text: "Go Back", icon: "fas fa-chevron-left" };
+  rightBtn: IconBtn = { text: "Delete", icon: "fa fa-trash" };
+
   constructor(
     private store: Store<AppState>,
     private route: ActivatedRoute,
+    private router: Router,
     private favoritesService: FavoritesService
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.store
-        .pipe(select(selectFavoriteDetailsFromFavorites(params.id)))
-        .subscribe(details => {
-          if (details) {
-            this.favoriteDetails = details;
-          } else {
-            this.favoritesService.getFavorites();
-          }
-        });
+    this.route.params.pipe(first()).subscribe(params => {
+      this.getFavoriteDetails(params.id);
     });
   }
 
-  addToFavorites(movie) {
-    console.log("addToFavorites", movie);
+  getFavoriteDetails(id) {
+    this.favoriteDetails$ = this.store.pipe(
+      select(selectFavoriteDetailsFromFavorites(id)),
+      filter((details: MovieDetails) => {
+        console.log("Filter - Favorite Details:", details);
+        if (!details) {
+          this.favoritesService.getFavorites();
+        }
+        return details !== null;
+      }),
+      first(),
+      tap((details: MovieDetails) => {
+        console.log("Tap - Favorite Details:", details);
+      })
+    );
+  }
+
+  // ------------------- CB Events ---------------------------
+  // Card
+  goBack() {
+    this.router.navigateByUrl("/movies/favorites");
+  }
+
+  removeFromFavorites(movie) {
+    this.favoritesService.removeFromFavorites(movie.key, movie.id, "details");
   }
 }

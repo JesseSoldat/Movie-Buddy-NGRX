@@ -14,7 +14,7 @@ export class CardComponent implements OnInit {
   @Output()
   handleLeftBtnClick: EventEmitter<MovieKeys> = new EventEmitter();
   @Output()
-  handleRightBtnClick: EventEmitter<any> = new EventEmitter();
+  handleRightBtnClick: EventEmitter<MovieKeys> = new EventEmitter();
   @Input()
   data: Movie | MovieDetails;
   @Input()

@@ -7,7 +7,7 @@ import { Store } from "@ngrx/store";
 import { AppState } from "../../reducers";
 // Actions
 import { MoviesLoaded, MovieDetailsLoaded } from "../../movies/movie.actions";
-import { ShowMsg } from "../../shared/shared.actions";
+import { ShowMsg, ShowOverlay } from "../../shared/shared.actions";
 // Models
 import { MovieDetails } from "../../models/movie-details.model";
 
@@ -21,7 +21,11 @@ export class MovieDbService {
     this.apiKey = "c79f0a4b4f8b9c843e385c5cdb521ae1";
   }
 
-  handleSuccess() {}
+  handleSuccess() {
+    this.store.dispatch(
+      new ShowOverlay({ showOverlay: false, from: "ShowOverlayMS" })
+    );
+  }
 
   handleError(msg = this.errMsg) {
     this.store.dispatch(
@@ -60,11 +64,11 @@ export class MovieDbService {
         this.handleError();
         return of(null);
       }),
+      first(),
       tap((movieDetails: MovieDetails) => {
         this.handleSuccess();
         this.store.dispatch(new MovieDetailsLoaded({ movieDetails }));
-      }),
-      first()
+      })
     );
   }
 }
