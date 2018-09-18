@@ -33,4 +33,8 @@ export class FavoriteDetailsComponent implements OnInit {
         });
     });
   }
+
+  addToFavorites(movie) {
+    console.log("addToFavorites", movie);
+  }
 }

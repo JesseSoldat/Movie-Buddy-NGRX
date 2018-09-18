@@ -6,13 +6,11 @@ import { MovieDetails } from "../models/movie-details.model";
 export interface MovieState {
   movieList: Movie[];
   movieDetails: MovieDetails;
-  favorites: MovieDetails[];
 }
 
 export const initialMovieState = {
-  movieList: [],
-  movieDetails: null,
-  favorites: null
+  movieList: null,
+  movieDetails: null
 };
 
 export const movieReducer = (state = initialMovieState, action) => {
@@ -23,15 +21,6 @@ export const movieReducer = (state = initialMovieState, action) => {
 
     case MovieActionTypes.GetMovieDetails:
       return { ...state, movieDetails: payload.movieDetails };
-
-    case MovieActionTypes.GetFavorites:
-      return { ...state, favorites: payload.favorites, movieDetails: null };
-
-    case MovieActionTypes.DeleteFromFavorites:
-      let favoritesCopy = [...state.favorites];
-      favoritesCopy.filter(obj => obj.id === payload.movieId);
-
-      return { ...state, favorites: favoritesCopy };
 
     default:
       return { ...state };

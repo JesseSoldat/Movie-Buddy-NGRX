@@ -5,6 +5,7 @@ import { Movie } from "../../models/movie.model";
 // NGRX
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
+import { FavoritesRequested } from "../favorites.actions";
 import { selectFilteredMovieList } from "../movies.selector";
 
 @Component({
@@ -21,6 +22,7 @@ export class MoviesSearchComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.store.dispatch(new FavoritesRequested("FavoritesRequestedSP"));
     this.favoritesService.getFavorites();
     this.movieList$ = this.store.pipe(select(selectFilteredMovieList));
   }

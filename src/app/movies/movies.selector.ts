@@ -1,5 +1,6 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { MovieState } from "./movie.reducer";
+import { FavoritesState } from "./favorites.reducer";
 import { Movie } from "../models/movie.model";
 import { MovieDetails } from "../models/movie-details.model";
 
@@ -7,11 +8,19 @@ const posterUrl = "http://image.tmdb.org/t/p/w500/";
 
 export const selectMovieState = createFeatureSelector<MovieState>("movie");
 
+export const selectFavoritesState = createFeatureSelector<FavoritesState>(
+  "favorites"
+);
+
 // ----------------- Movie List ------------------
 export const selectMovieList = createSelector(
   selectMovieState,
-  (movieState: MovieState) =>
-    movieState.movieList.map(
+  (movieState: MovieState) => {
+    if (!movieState.movieList) {
+      return null;
+    }
+
+    return movieState.movieList.map(
       movie =>
         <Movie>{
           id: movie.id,
@@ -20,20 +29,21 @@ export const selectMovieList = createSelector(
             ? `${posterUrl}${movie.poster_path}`
             : "../../../assets/noFilm.png"
         }
-    )
-);
-
-// ------------- Favorites Newest First --------------------
-export const selectFavorites = createSelector(
-  selectMovieState,
-  (movieState: MovieState) => {
-    if (!movieState.favorites) {
-      return null;
-    }
-    return <MovieDetails[]>movieState.favorites.slice().reverse();
+    );
   }
 );
-// --------------------------- Favorite Details -----------------------------------
+
+// ------------- Favorites Newest First ----------------
+export const selectFavorites = createSelector(
+  selectFavoritesState,
+  (favoritesState: FavoritesState) => {
+    if (!favoritesState.favoritesList) {
+      return null;
+    }
+    return <MovieDetails[]>favoritesState.favoritesList.slice().reverse();
+  }
+);
+// -------------- Favorite Details -------------------
 
 export const selectFavoriteDetailsFromFavorites = (key: string) =>
   createSelector(selectFavorites, favorites => {
@@ -44,17 +54,19 @@ export const selectFavoriteDetailsFromFavorites = (key: string) =>
     return null;
   });
 
-// ----------------- Select Filtered Movie Search List --------------------------
+// --------- Select Filtered Movie Search List ---------------
 export const selectFilteredMovieList = createSelector(
   selectFavorites,
   selectMovieList,
   (favorites, movies) => {
-    if (movies.length && favorites && favorites.length) {
-      return movies.filter(
-        movie => !favorites.find(favorite => movie.id === favorite.id)
-      );
+    if (!movies) {
+      return null;
+    } else if (!favorites) {
+      return movies;
     }
-    return movies;
+    return movies.filter(
+      movie => !favorites.find(favorite => movie.id === favorite.id)
+    );
   }
 );
 
@@ -82,5 +94,13 @@ export const selectMovieDetails = createSelector(
   (movieState: MovieState) => {
     const { movieDetails } = movieState;
     return movieDetails ? createMovieDetails(movieDetails) : null;
+  }
+);
+
+export const selectFavoriteDetails = createSelector(
+  selectFavoritesState,
+  (favoritesState: FavoritesState) => {
+    const { favoriteDetails } = favoritesState;
+    return favoriteDetails ? favoriteDetails : null;
   }
 );

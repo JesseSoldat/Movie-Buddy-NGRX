@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { tap } from "rxjs/operators";
+import { tap, filter, first } from "rxjs/operators";
 // Models
 import { MovieDetails } from "../../models/movie-details.model";
 // NGRX
@@ -26,20 +26,27 @@ export class FavoritesComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new ShowSpinner({ showSpinner: true }));
+    // this.favoritesService.getFavorites();
+
     this.store
       .pipe(
         select(selectFavorites),
-        tap(favorites => {
-          if (favorites.length <= 0) {
+        filter(favorites => {
+          console.log("filter:", favorites);
+          if (!favorites) {
             this.favoritesService.getFavorites();
-          } else {
-            this.store.dispatch(new ShowSpinner({ showSpinner: false }));
           }
+          return favorites !== null;
+        }),
+        first(),
+        tap(favorites => {
+          console.log("tap:", favorites);
+
+          this.favorites = favorites;
+          this.store.dispatch(new ShowSpinner({ showSpinner: false }));
         })
       )
-      .subscribe(favorites => {
-        this.favorites = favorites;
-      });
+      .subscribe(favorites => {});
   }
 
   onFilterText(text) {

@@ -14,7 +14,10 @@ import { AppState } from "../../reducers";
 import { selectUserUid } from "../../auth/auth.selectors";
 // Actions
 import { ShowOverlay, ShowSpinner, ShowMsg } from "../../shared/shared.actions";
-import { GetFavorites, DeleteFromFavorites } from "../../movies/movie.actions";
+import {
+  FavoritesLoaded,
+  DeleteFromFavorites
+} from "../../movies/favorites.actions";
 
 export interface OtherUser {
   user: User;
@@ -84,9 +87,9 @@ export class FavoritesService {
                 }))
               : actions
         ),
-        tap((favorites: MovieDetails[]) => {
+        tap((favoritesList: MovieDetails[]) => {
           this.handleSuccess();
-          this.store.dispatch(new GetFavorites({ favorites }));
+          this.store.dispatch(new FavoritesLoaded({ favoritesList }));
         })
       )
       .subscribe(() => {});

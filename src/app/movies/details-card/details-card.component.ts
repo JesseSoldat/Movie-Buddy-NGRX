@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { Router } from "@angular/router";
 // Models
 import { MovieDetails } from "../../models/movie-details.model";
@@ -15,6 +15,8 @@ export class DetailsCardComponent implements OnInit {
   movie: MovieDetails;
   @Input("parent")
   parent: string;
+  @Output()
+  onAddToFavorites: EventEmitter<any>;
 
   constructor(
     private router: Router,
@@ -30,7 +32,8 @@ export class DetailsCardComponent implements OnInit {
   }
 
   addToFavorites() {
-    this.favoritesService.addToFavorites(this.movie, "/movies/favorites");
+    this.onAddToFavorites.emit(this.movie);
+    // this.favoritesService.addToFavorites(this.movie, "/movies/favorites");
   }
 
   removeFromFavorites() {

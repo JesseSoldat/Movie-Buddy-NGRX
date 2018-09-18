@@ -4,6 +4,7 @@
 
   <app-spinner></app-spinner>
 
-  <app-details-card *ngIf="favoriteDetails as movieDetails" [movieDetails]="movieDetails" parent="favorites"></app-details-card>
+  <app-details-card *ngIf="favoriteDetails as movieDetails" (onAddToFavorites)="addToFavorites($event)" [movieDetails]="movieDetails"
+    parent="favorites"></app-details-card>
 
 </div>

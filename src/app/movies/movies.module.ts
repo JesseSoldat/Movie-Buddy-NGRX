@@ -7,6 +7,7 @@ import { MoviesRoutingModule } from "./movies-routing.module";
 import { StoreModule } from "@ngrx/store";
 import { EffectsModule } from "@ngrx/effects";
 import { movieReducer } from "./movie.reducer";
+import { favoritesReducer } from "./favorites.reducer";
 import { MovieEffects } from "./movies.effects";
 // Components
 import { MovieDetailsComponent } from "./movie-details/movie-details.component";
@@ -23,6 +24,7 @@ import { FavoriteDetailsComponent } from "./favorite-details/favorite-details.co
     MoviesRoutingModule,
     SharedModule,
     StoreModule.forFeature("movie", movieReducer),
+    StoreModule.forFeature("favorites", favoritesReducer),
     EffectsModule.forFeature([MovieEffects])
   ],
   exports: [MoviesRoutingModule],
