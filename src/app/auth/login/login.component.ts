@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 import { AuthService } from "../../core/services/auth.service";
@@ -10,7 +10,7 @@ import { fieldValidation } from "../helpers/fieldValidation";
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.css"]
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   showOverlay: false;
   authForm: FormGroup;
   // Errors
@@ -22,8 +22,6 @@ export class LoginComponent implements OnInit {
       password: new FormControl("", [Validators.required])
     });
   }
-
-  ngOnInit() {}
 
   createErrorMsg(control, err) {
     if (control === "email") {

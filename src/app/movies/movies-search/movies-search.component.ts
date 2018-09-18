@@ -6,7 +6,11 @@ import { tap, filter, first } from "rxjs/operators";
 // NGRX
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
-import { MoviesRequested, MovieDetailsRequested } from "../movie.actions";
+import {
+  MoviesRequested,
+  MoviesLoaded,
+  MovieDetailsRequested
+} from "../movie.actions";
 import { FavoritesRequested } from "../favorites.actions";
 import {
   selectFavorites,
@@ -42,6 +46,12 @@ export class MoviesSearchComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.getFavorites();
+    this.getMovies();
+    this.movieList$ = this.store.pipe(select(selectFilteredMovieList));
+  }
+  // API Calls and Populate the Store
+  getFavorites() {
     this.store
       .pipe(
         select(selectFavorites),
@@ -64,8 +74,19 @@ export class MoviesSearchComponent implements OnInit {
         () =>
           console.log("STORE: selectFavorites - MoviesSearchComponent Complete")
       );
+  }
 
-    this.movieList$ = this.store.pipe(select(selectFilteredMovieList));
+  getMovies() {
+    try {
+      const movies = JSON.parse(localStorage.getItem("movies"));
+      console.log(movies);
+
+      if (movies) {
+        this.store.dispatch(
+          new MoviesLoaded({ movieList: movies, from: "MoviesLoadedSP" })
+        );
+      }
+    } catch (err) {}
   }
 
   // ---------------- CB Events ---------------------

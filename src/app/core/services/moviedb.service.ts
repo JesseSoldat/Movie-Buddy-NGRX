@@ -49,7 +49,11 @@ export class MovieDbService {
       .jsonp(url, "callback")
       .pipe(
         map((res: any) => res.results),
-        tap(movieList => this.store.dispatch(new MoviesLoaded(movieList)))
+        tap(movieList =>
+          this.store.dispatch(
+            new MoviesLoaded({ movieList, from: "MoviesLoadedMS" })
+          )
+        )
       )
       .subscribe(() => {});
   }

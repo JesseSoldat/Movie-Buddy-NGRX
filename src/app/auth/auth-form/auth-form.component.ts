@@ -5,8 +5,9 @@ import {
   FormControl,
   Validators
 } from "@angular/forms";
-
+// Validator
 import { confirmPasswordValidator } from "./confirmPassword.validator";
+// Models
 import { User } from "../../models/user.model";
 import { Auth } from "../../models/auth.model";
 // helpers

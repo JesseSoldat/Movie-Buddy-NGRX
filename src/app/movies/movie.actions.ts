@@ -5,7 +5,8 @@ import { MovieDetails } from "../models/movie-details.model";
 
 export enum MovieActionTypes {
   MoviesRequested = "[Movie Search Page] MoviesRequested",
-  MoviesLoaded = "[Movies Service] MoviesLoaded",
+  MoviesLoadedMS = "[Movies Service] MoviesLoaded",
+  MoviesLoadedSP = "[Movies Search Page] MoviesLoaded",
   MovieDetailsRequestedSP = "[Movie Search Page] MovieDetailsRequested",
   MovieDetailsLoaded = "[Movies Service] MovieDetailsLoaded",
   MovieDetailsCleared = "[Movie Details Page] MovieDetailsCleared"
@@ -17,9 +18,11 @@ export class MoviesRequested implements Action {
 }
 
 export class MoviesLoaded implements Action {
-  readonly type = MovieActionTypes.MoviesLoaded;
+  type: string;
 
-  constructor(public payload: { movieList: Movie[] }) {}
+  constructor(public payload: { movieList: Movie[]; from: string }) {
+    this.type = MovieActionTypes[payload.from];
+  }
 }
 
 // Movie Details
