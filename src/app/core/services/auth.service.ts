@@ -23,6 +23,14 @@ export class AuthService {
     private store: Store<AppState>
   ) {}
 
+  handleStart() {
+    this.store.dispatch(new ShowOverlay({ showOverlay: true }));
+  }
+
+  handleSuccess() {
+    this.store.dispatch(new ShowOverlay({ showOverlay: false }));
+  }
+
   handleErrors(err, type) {
     let error = err.message
       ? err.message
@@ -44,14 +52,14 @@ export class AuthService {
       await this.afDb.object(ref).set({ user });
 
       this.store.dispatch(new Register({ user }));
-      this.store.dispatch(new ShowOverlay({ showOverlay: false }));
+      this.handleSuccess();
     } catch (err) {
       this.handleErrors(err, "register");
     }
   }
 
   async emailRegister(username: string, email: string, password: string) {
-    this.store.dispatch(new ShowOverlay({ showOverlay: true }));
+    this.handleStart();
 
     try {
       const credentials = await this.afAuth.auth.createUserWithEmailAndPassword(
@@ -70,7 +78,7 @@ export class AuthService {
   }
 
   async emailLogin(email: string, password: string) {
-    this.store.dispatch(new ShowOverlay({ showOverlay: true }));
+    this.handleStart();
     try {
       const credentials = await this.afAuth.auth.signInWithEmailAndPassword(
         email,
@@ -84,7 +92,7 @@ export class AuthService {
       };
 
       this.store.dispatch(new Login({ user }));
-      this.store.dispatch(new ShowOverlay({ showOverlay: false }));
+      this.handleSuccess();
     } catch (err) {
       this.handleErrors(err, "login");
     }

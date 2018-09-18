@@ -1,5 +1,8 @@
 import { Component, OnInit } from "@angular/core";
+// Rxjs
 import { Observable } from "rxjs";
+import { tap, first } from "rxjs/operators";
+// Models
 import { Msg } from "../../models/msg.model";
 // NGRX
 import { AppState } from "../../reducers";
@@ -31,11 +34,18 @@ export class MessageComponent implements OnInit {
   ngOnInit() {
     this.showMsg$ = this.store.pipe(select(selectShowMsg));
     this.hideMsg$ = this.store.pipe(select(selectHideMsg));
-    this.msg$ = this.store.pipe(select(selectMsg));
 
-    setTimeout(() => {
-      this.close();
-    }, 3000);
+    this.msg$ = this.store.pipe(
+      select(selectMsg),
+      first(),
+      tap(msg => {
+        if (msg.color !== "alert-danger") {
+          setTimeout(() => {
+            this.close();
+          }, 3000);
+        }
+      })
+    );
   }
 
   close() {

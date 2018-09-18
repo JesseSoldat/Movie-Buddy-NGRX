@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 // Rxjs
-import { map, tap } from "rxjs/operators";
+import { map, tap, first, shareReplay, catchError } from "rxjs/operators";
+import { of } from "rxjs";
 // Firebase
 import { AngularFireDatabase, AngularFireList } from "@angular/fire/database";
 // Models
@@ -12,7 +13,7 @@ import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
 import { selectUserUid } from "../../auth/auth.selectors";
 // Actions
-import { ShowOverlay, ShowSpinner } from "../../shared/shared.actions";
+import { ShowOverlay, ShowSpinner, ShowMsg } from "../../shared/shared.actions";
 import { GetFavorites, DeleteFromFavorites } from "../../movies/movie.actions";
 
 export interface OtherUser {
@@ -22,6 +23,7 @@ export interface OtherUser {
 
 @Injectable()
 export class FavoritesService {
+  errMsg = "An error ocurred while fetching the data.";
   userId: string;
   favorites: AngularFireList<MovieDetails>;
 
@@ -35,20 +37,55 @@ export class FavoritesService {
       .subscribe(uid => (this.userId = uid));
   }
 
+  handleStart(type = "overlay") {
+    if (type === "overlay") {
+      this.store.dispatch(new ShowOverlay({ showOverlay: true }));
+    } else {
+      this.store.dispatch(new ShowSpinner({ showSpinner: true }));
+    }
+  }
+
+  handleSuccess() {
+    this.store.dispatch(new ShowSpinner({ showSpinner: false }));
+  }
+
+  handleError(msg = this.errMsg) {
+    this.store.dispatch(
+      new ShowMsg({
+        msg: {
+          title: "Error",
+          msg,
+          color: "red"
+        }
+      })
+    );
+  }
+
   getFavorites() {
     const url = `moviedb/users/${this.userId}/favorites`;
     this.favorites = this.afDb.list(url);
     this.favorites
       .snapshotChanges()
       .pipe(
-        map(actions =>
-          actions.map(action => ({
-            key: action.key,
-            ...action.payload.val()
-          }))
+        shareReplay(),
+        tap(actions => {
+          // throw new Error();
+        }),
+        catchError(actions => {
+          this.handleError();
+          return of(null);
+        }),
+        map(
+          actions =>
+            actions
+              ? actions.map(action => ({
+                  key: action.key,
+                  ...action.payload.val()
+                }))
+              : actions
         ),
         tap((favorites: MovieDetails[]) => {
-          this.store.dispatch(new ShowSpinner({ showSpinner: false }));
+          this.handleSuccess();
           this.store.dispatch(new GetFavorites({ favorites }));
         })
       )
@@ -56,14 +93,14 @@ export class FavoritesService {
   }
 
   async addToFavorites(movie: MovieDetails, route = null) {
-    this.store.dispatch(new ShowOverlay({ showOverlay: true }));
+    this.handleStart();
     const url = `moviedb/users/${this.userId}/favorites`;
     this.favorites = this.afDb.list(url);
     await this.favorites.push(movie);
     if (route) {
       this.router.navigateByUrl(route);
     }
-    this.store.dispatch(new ShowOverlay({ showOverlay: false }));
+    this.handleSuccess();
   }
 
   async removeFromFavorites(
@@ -71,7 +108,7 @@ export class FavoritesService {
     movieId: string | number,
     page = null
   ) {
-    this.store.dispatch(new ShowOverlay({ showOverlay: true }));
+    this.handleStart();
     const url = `moviedb/users/${this.userId}/favorites`;
     this.favorites = this.afDb.list(url);
     await this.favorites.remove(key);
@@ -79,7 +116,7 @@ export class FavoritesService {
     if (page === "details") {
       this.router.navigateByUrl("/movies/favorites");
     }
+    this.handleSuccess();
     this.store.dispatch(new DeleteFromFavorites({ movieId }));
-    this.store.dispatch(new ShowOverlay({ showOverlay: false }));
   }
 }

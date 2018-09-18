@@ -5,7 +5,7 @@ import { Movie } from "../../models/movie.model";
 // NGRX
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
-import { selectMovieList, selectFilteredMovieList } from "../movies.selector";
+import { selectFilteredMovieList } from "../movies.selector";
 
 @Component({
   selector: "app-movies-search",

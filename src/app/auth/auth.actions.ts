@@ -4,7 +4,7 @@ import { User } from "../models/user.model";
 export enum AuthActionTypes {
   LoginAction = "[Login] Action",
   RegisterAction = "[Register] Action",
-  LogoutAction = "[Logout] Action"
+  LogoutAction = "[Navbar Logout] Action"
 }
 
 export class Register implements Action {

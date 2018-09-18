@@ -12,7 +12,7 @@ export interface MovieState {
 export const initialMovieState = {
   movieList: [],
   movieDetails: null,
-  favorites: []
+  favorites: null
 };
 
 export const movieReducer = (state = initialMovieState, action) => {

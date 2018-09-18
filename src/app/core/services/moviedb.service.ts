@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { map, tap, catchError } from "rxjs/operators";
+import { map, tap, first, catchError } from "rxjs/operators";
 import { of } from "rxjs";
 // NGRX
 import { Store } from "@ngrx/store";
@@ -55,14 +55,18 @@ export class MovieDbService {
     this.store.dispatch(new ShowSpinner({ showSpinner: true }));
     const url = `${this.baseUrl}movie/${movieId}?api_key=${this.apiKey}`;
     return this.http.jsonp(url, "callback").pipe(
+      tap(details => {
+        // throw new Error();
+      }),
       catchError(err => {
         this.handleError();
-        return of([]);
+        return of(null);
       }),
       tap((movieDetails: MovieDetails) => {
         this.handleSuccess();
         this.store.dispatch(new GetMovieDetails({ movieDetails }));
-      })
+      }),
+      first()
     );
   }
 }
