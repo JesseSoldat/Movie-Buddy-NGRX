@@ -28,6 +28,9 @@ export const favoritesReducer = (state = initialFavoritesState, action) => {
 
       return { ...state, favoritesList: favoritesCopy };
 
+    case FavoritesActionTypes.FavoriteDetailsCleared:
+      return { ...state, favoriteDetails: null };
+
     default:
       return { ...state };
   }

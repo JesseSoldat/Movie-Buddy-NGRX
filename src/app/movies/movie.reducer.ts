@@ -22,6 +22,9 @@ export const movieReducer = (state = initialMovieState, action) => {
     case MovieActionTypes.MovieDetailsLoaded:
       return { ...state, movieDetails: payload.movieDetails };
 
+    case MovieActionTypes.MovieDetailsCleared:
+      return { ...state, movieDetails: null };
+
     default:
       return { ...state };
   }

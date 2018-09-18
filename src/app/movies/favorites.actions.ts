@@ -6,7 +6,8 @@ export enum FavoritesActionTypes {
   FavoritesRequestedSP = "[Search Page] FavoritesRequested",
   FavoritesRequestedFP = "[Favorites Page] FavoritesRequested",
   FavoritesLoaded = "[Favorites Service] FavoritesLoaded",
-  DeleteFromFavorites = "[Favorites Service] DeleteFromFavorites"
+  DeleteFromFavorites = "[Favorites Service] DeleteFromFavorites",
+  FavoriteDetailsCleared = "[Favorite Details Page] FavoriteDetailsCleared"
 }
 
 export class FavoritesRequested implements Action {
@@ -29,7 +30,12 @@ export class DeleteFromFavorites implements Action {
   constructor(public payload: { movieId: string | number }) {}
 }
 
+export class FavoriteDetailsCleared implements Action {
+  readonly type = FavoritesActionTypes.FavoriteDetailsCleared;
+}
+
 export type FavoritesActions =
   | FavoritesRequested
   | FavoritesLoaded
-  | DeleteFromFavorites;
+  | DeleteFromFavorites
+  | FavoriteDetailsCleared;

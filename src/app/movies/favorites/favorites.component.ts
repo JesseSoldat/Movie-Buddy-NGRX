@@ -48,7 +48,6 @@ export class FavoritesComponent implements OnInit {
         }
         return favorites !== null;
       }),
-      // first(),
       tap((favorites: MovieDetails[]) => {
         console.log("tap:", favorites);
         this.favorites = favorites;

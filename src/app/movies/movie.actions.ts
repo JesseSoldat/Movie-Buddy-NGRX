@@ -7,7 +7,8 @@ export enum MovieActionTypes {
   MoviesRequested = "[Movie Search Page] MoviesRequested",
   MoviesLoaded = "[Movies Service] MoviesLoaded",
   MovieDetailsRequestedSP = "[Movie Search Page] MovieDetailsRequested",
-  MovieDetailsLoaded = "[Movies Service] MovieDetailsLoaded"
+  MovieDetailsLoaded = "[Movies Service] MovieDetailsLoaded",
+  MovieDetailsCleared = "[Movie Details Page] MovieDetailsCleared"
 }
 
 // Movie List
@@ -36,8 +37,13 @@ export class MovieDetailsLoaded implements Action {
   constructor(public payload: { movieDetails: MovieDetails }) {}
 }
 
+export class MovieDetailsCleared implements Action {
+  readonly type = MovieActionTypes.MovieDetailsCleared;
+}
+
 export type MovieActions =
   | MoviesRequested
   | MoviesLoaded
   | MovieDetailsRequested
-  | MovieDetailsLoaded;
+  | MovieDetailsLoaded
+  | MovieDetailsCleared;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 // Rxjs
 import { first } from "rxjs/operators";
@@ -11,6 +11,7 @@ import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
 import { selectMovieDetails } from "../movies.selector";
 import { ShowMsg } from "../../shared/shared.actions";
+import { MovieDetailsCleared } from "../movie.actions";
 // Services
 import { MovieDbService } from "../../core/services/moviedb.service";
 import { FavoritesService } from "../../core/services/favorites.service";
@@ -20,7 +21,7 @@ import { FavoritesService } from "../../core/services/favorites.service";
   templateUrl: "./movie-details.component.html",
   styleUrls: ["./movie-details.component.css"]
 })
-export class MovieDetailsComponent implements OnInit {
+export class MovieDetailsComponent implements OnInit, OnDestroy {
   errMsg = "An error ocurred while fetching the data.";
   movieDetails$: Observable<MovieDetails>;
 
@@ -49,6 +50,10 @@ export class MovieDetailsComponent implements OnInit {
     });
 
     this.movieDetails$ = this.store.pipe(select(selectMovieDetails));
+  }
+
+  ngOnDestroy() {
+    this.store.dispatch(new MovieDetailsCleared());
   }
 
   handleSuccess(type = "success") {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 // Rxjs
 import { Observable } from "rxjs";
@@ -9,6 +9,7 @@ import { IconBtn } from "../../models/icon-btn.model";
 // Ngrx
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
+import { FavoriteDetailsCleared } from "../favorites.actions";
 import { selectFavoriteDetailsFromFavorites } from "../movies.selector";
 // Services
 import { FavoritesService } from "../../core/services/favorites.service";
@@ -18,7 +19,7 @@ import { FavoritesService } from "../../core/services/favorites.service";
   templateUrl: "./favorite-details.component.html",
   styleUrls: ["./favorite-details.component.css"]
 })
-export class FavoriteDetailsComponent implements OnInit {
+export class FavoriteDetailsComponent implements OnInit, OnDestroy {
   favoriteDetails$: Observable<MovieDetails>;
 
   // Card Inputs
@@ -38,6 +39,11 @@ export class FavoriteDetailsComponent implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    this.store.dispatch(new FavoriteDetailsCleared());
+  }
+
+  // -------------- API / STORE Calls --------------------
   getFavoriteDetails(id) {
     this.favoriteDetails$ = this.store.pipe(
       select(selectFavoriteDetailsFromFavorites(id)),
