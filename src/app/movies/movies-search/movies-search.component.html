@@ -1,4 +1,13 @@
 <app-overlay></app-overlay>
 <app-heading heading="Movie Search"></app-heading>
 <app-search-box (searchChanged)="onSearchChanged($event)"></app-search-box>
-<app-card-list [movieList$]="movieList$" parent="search"></app-card-list>
+
+<div class="row">
+  <div class="col-xs-12 col-sm-10 mx-auto">
+    <div class="col-12 d-flex justify-content-around flex-wrap">
+      <app-card *ngFor="let movie of movieList$ | async" (handleLeftBtnClick)="handleView($event)"
+        (handleRightBtnClick)="addToFavorites($event)" [data]="movie" [leftBtn]="leftBtn" [rightBtn]="rightBtn">
+      </app-card>
+    </div>
+  </div>
+</div>

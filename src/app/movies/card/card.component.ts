@@ -1,14 +1,9 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
-import { first } from "rxjs/operators";
+import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
 // Models
 import { Movie } from "../../models/movie.model";
 import { MovieDetails } from "../../models/movie-details.model";
-// Services
-import { FavoritesService } from "../../core/services/favorites.service";
-import { MovieDbService } from "../../core/services/moviedb.service";
-// Selectors
-import { createMovieDetails } from "../movies.selector";
+import { MovieKeys } from "../../models/movie-keys.model";
+import { IconBtn } from "../../models/icon-btn.model";
 
 @Component({
   selector: "app-card",
@@ -16,45 +11,33 @@ import { createMovieDetails } from "../movies.selector";
   styleUrls: ["./card.component.css"]
 })
 export class CardComponent implements OnInit {
+  @Output()
+  handleLeftBtnClick: EventEmitter<MovieKeys> = new EventEmitter();
+  @Output()
+  handleRightBtnClick: EventEmitter<any> = new EventEmitter();
   @Input()
-  movie: Movie | MovieDetails;
+  data: Movie | MovieDetails;
   @Input()
-  parent: string;
+  leftBtn: IconBtn;
+  @Input()
+  rightBtn: IconBtn;
   @Input()
   cardSize = "250px";
 
-  constructor(
-    private router: Router,
-    private movieDbService: MovieDbService,
-    private favoritesService: FavoritesService
-  ) {}
+  keys: MovieKeys;
 
-  ngOnInit() {}
-
-  viewDetails() {
-    let id, url;
-    if (this.parent === "search") {
-      id = this.movie.id;
-      url = `/movies/${id}`;
-    } else {
-      id = this.movie.key;
-      url = `/movies/favorites/${id}`;
-    }
-    this.router.navigateByUrl(url);
+  ngOnInit() {
+    this.keys = {
+      key: this.data.key || "",
+      id: this.data.id
+    };
   }
 
-  addToFavorites() {
-    this.movieDbService
-      .getMovieDetails(this.movie.id)
-      .pipe(first())
-      .subscribe((details: MovieDetails) => {
-        const movieDetails: MovieDetails = createMovieDetails(details);
-
-        this.favoritesService.addToFavorites(movieDetails);
-      });
+  onLeftBtnClick() {
+    this.handleLeftBtnClick.emit(this.keys);
   }
 
-  removeFromFavorites() {
-    this.favoritesService.removeFromFavorites(this.movie.key, this.movie.id);
+  onRightBtnClick() {
+    this.handleRightBtnClick.emit(this.keys);
   }
 }

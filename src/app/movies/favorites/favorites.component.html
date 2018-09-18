@@ -6,7 +6,9 @@
 <div class="row" *ngIf="(favorites$ | async) as favorites; else showSpinner">
   <div class="col-xs-12 col-sm-10 mx-auto">
     <div class="d-flex justify-content-around flex-wrap">
-      <app-card *ngFor="let movie of favorites | filterList: filterListBy" [movie]="movie" parent="favorites"></app-card>
+      <app-card *ngFor="let movie of favorites | filterList: filterListBy" (handleLeftBtnClick)="handleView($event)"
+        (handleRightBtnClick)="removeFromFavorites($event)" [data]="movie" [leftBtn]="leftBtn" [rightBtn]="rightBtn">
+      </app-card>
     </div>
   </div>
 </div>
