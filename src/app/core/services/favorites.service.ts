@@ -13,15 +13,17 @@ import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
 import { selectUserUid } from "../../auth/auth.selectors";
 // Actions
-import { ShowOverlay, ShowMsg } from "../../shared/shared.actions";
 import {
   FavoritesLoaded,
   FavoritesDeleted,
   FavoritesAdded
 } from "../../movies/favorites.actions";
 // Utils
-import { createErrorMsg } from "../../utils/createErrorMsg";
-import { createShowOverlay } from "../../utils/createShowOverlay";
+import {
+  errMsg,
+  showOverlay,
+  hideOverlay
+} from "../../utils/ui.action.dispatchers";
 
 export interface OtherUser {
   user: User;
@@ -34,9 +36,9 @@ export class FavoritesService {
   favorites: AngularFireList<MovieDetails>;
   fromMsg = "ShowMsgFS";
   fromOverlay = "ShowOverlayFS";
-  FavoritesLoadedFS = "FavoritesLoadedFS";
-  FavoritesDeletedFS = "FavoritesDeletedFS";
-  FavoritesAddedFS = "FavoritesAddedFS";
+  favoritesLoadedFS = "FavoritesLoadedFS";
+  favoritesDeletedFS = "FavoritesDeletedFS";
+  favoritesAddedFS = "FavoritesAddedFS";
 
   constructor(
     private store: Store<AppState>,
@@ -48,27 +50,10 @@ export class FavoritesService {
         select(selectUserUid),
         first()
       )
-      .subscribe(
-        uid => (this.userId = uid),
-        err => console.log("Err: Favorites Service - selectUserUid", err),
-        () => {
-          // console.log("Complete Favorites Service - selectUserUid")
-        }
-      );
+      .subscribe(uid => (this.userId = uid), err => {});
   }
 
-  showOverlay() {
-    this.store.dispatch(createShowOverlay(this.fromOverlay, true));
-  }
-
-  hideOverlay() {
-    this.store.dispatch(createShowOverlay(this.fromOverlay, false));
-  }
-
-  showErrMsg(msg = null) {
-    this.store.dispatch(createErrorMsg(this.fromMsg, msg));
-  }
-
+  // Helpers
   handleComplete(source) {
     // console.log(`${source} Observable has completed`);
   }
@@ -95,20 +80,22 @@ export class FavoritesService {
           // throw new Error();
         }),
         catchError(actions => {
-          this.showErrMsg();
+          errMsg(this.store, this.fromMsg);
           return of([]);
         }),
         map(actions => this.mapActionsToList(actions)),
         tap((favoritesList: MovieDetails[]) => {
           this.store.dispatch(
-            new FavoritesLoaded({ favoritesList, from: this.FavoritesLoadedFS })
+            new FavoritesLoaded({ favoritesList, from: this.favoritesLoadedFS })
           );
         })
       )
       .subscribe(
         favoritesList => {},
         err => {},
-        () => this.handleComplete("getFavorites")
+        () => {
+          // this.handleComplete("getFavorites")
+        }
       );
   }
 
@@ -127,21 +114,24 @@ export class FavoritesService {
         map(actions => this.mapActionsToList(actions)),
         tap((favoritesList: MovieDetails[]) => {
           this.store.dispatch(
-            new FavoritesAdded({ favoritesList, from: this.FavoritesAddedFS })
+            new FavoritesAdded({ favoritesList, from: this.favoritesAddedFS })
           );
         })
       )
       .subscribe(
-        () => this.hideOverlay(),
+        () => hideOverlay(this.store, this.fromOverlay),
         err =>
-          this.showErrMsg(
+          errMsg(
+            this.store,
+            this.fromMsg,
             "An error ocurred while adding the movie to your favorites"
           )
       );
   }
 
   removeFromFavorites(key: string, movieId: number, page = null) {
-    this.showOverlay();
+    showOverlay(this.store, this.fromOverlay);
+
     this.favorites = this.afDb.list(`moviedb/users/${this.userId}/favorites`);
     this.favorites.remove(key);
 
@@ -149,8 +139,8 @@ export class FavoritesService {
       this.router.navigateByUrl("/movies/favorites");
     }
     this.store.dispatch(
-      new FavoritesDeleted({ movieId, from: this.FavoritesDeletedFS })
+      new FavoritesDeleted({ movieId, from: this.favoritesDeletedFS })
     );
-    this.hideOverlay();
+    hideOverlay(this.store, this.fromOverlay);
   }
 }

@@ -19,8 +19,8 @@ export enum FavoritesActionTypes {
 export class FavoritesRequested implements Action {
   type: string;
 
-  constructor(public payload: string) {
-    this.type = FavoritesActionTypes[payload];
+  constructor(public payload: { from: string }) {
+    this.type = FavoritesActionTypes[payload.from];
   }
 }
 

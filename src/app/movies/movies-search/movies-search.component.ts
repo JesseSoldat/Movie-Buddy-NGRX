@@ -41,11 +41,14 @@ import {
 })
 export class MoviesSearchComponent implements OnInit {
   movieList$: Observable<Movie[]>;
+  // From Action Types
   fromMsg = "ShowMsgMSP";
   fromShowOverlay = "ShowOverlayMSP";
-  favoritesRequested = "FavoritesRequestedMSP";
   moviesRequested = "MoviesRequestedMSP";
   movieDetailsRequested = "MovieDetailsRequestedMSP";
+  favoritesRequestedMSP = "FavoritesRequestedMSP";
+  favoritesLoadedFromLocalStorageMSP = "FavoritesLoadedFromLocalStorageMSP";
+  moviesLoadedFromLocalStorageMSP = "MoviesLoadedFromLocalStorageMSP";
 
   // Card Inputs
   leftBtn: IconBtn = { text: "View", icon: "fa fa-eye" };
@@ -59,7 +62,9 @@ export class MoviesSearchComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.store.dispatch(new FavoritesRequested(this.favoritesRequested));
+    this.store.dispatch(
+      new FavoritesRequested({ from: this.favoritesRequestedMSP })
+    );
     this.loadDataFromStorage();
 
     this.movieList$ = this.store.pipe(select(selectFilteredMovieList));
@@ -76,7 +81,6 @@ export class MoviesSearchComponent implements OnInit {
         filter((favorites: MovieDetails[]) => {
           // console.log("Movie SP filter:", favorites);
           if (!favorites) {
-            this.store.dispatch(new FavoritesRequested("FavoritesRequestedSP"));
             this.favoritesService.getFavorites();
           }
           return favorites !== null;
@@ -98,7 +102,7 @@ export class MoviesSearchComponent implements OnInit {
         this.store.dispatch(
           new FavoritesLoaded({
             favoritesList: favorites,
-            from: "FavoritesLoadedFromLocalStorageSP"
+            from: this.favoritesLoadedFromLocalStorageMSP
           })
         );
         // If no favorites we do not want to load movies from local storage
@@ -109,7 +113,7 @@ export class MoviesSearchComponent implements OnInit {
           this.store.dispatch(
             new MoviesLoaded({
               movieList: movies,
-              from: "MoviesLoadedFromLocalStorageSP"
+              from: this.moviesLoadedFromLocalStorageMSP
             })
           );
         }

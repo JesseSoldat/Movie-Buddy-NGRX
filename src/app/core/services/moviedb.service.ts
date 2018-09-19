@@ -7,7 +7,6 @@ import { Store } from "@ngrx/store";
 import { AppState } from "../../reducers";
 // Actions
 import { MoviesLoaded, MovieDetailsLoaded } from "../../movies/movie.actions";
-import { ShowMsg, ShowOverlay } from "../../shared/shared.actions";
 // Models
 import { MovieDetails } from "../../models/movie-details.model";
 // Utils
@@ -23,7 +22,7 @@ export class MovieDbService {
   baseUrl = "https://api.themoviedb.org/3/";
   fromMsg = "ShowMsgMS";
   fromOverlay = "ShowOverlayMS";
-  MovieDetailsLoadedMS: "MovieDetailsLoadedMS";
+  movieDetailsLoadedMS = "MovieDetailsLoadedMS";
 
   constructor(private http: HttpClient, private store: Store<AppState>) {
     this.apiKey = "c79f0a4b4f8b9c843e385c5cdb521ae1";
@@ -54,7 +53,7 @@ export class MovieDbService {
     const url = `${this.baseUrl}movie/${movieId}?api_key=${this.apiKey}`;
     return this.http.jsonp(url, "callback").pipe(
       tap(details => {
-        throw new Error();
+        // throw new Error();
       }),
       catchError(err => {
         errMsg(this.store, this.fromMsg);
@@ -65,7 +64,7 @@ export class MovieDbService {
         this.store.dispatch(
           new MovieDetailsLoaded({
             movieDetails,
-            from: this.MovieDetailsLoadedMS
+            from: this.movieDetailsLoadedMS
           })
         );
       })

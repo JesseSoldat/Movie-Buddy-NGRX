@@ -1,21 +1,26 @@
 import { Injectable } from "@angular/core";
-
 // NGRX
 import { Store } from "@ngrx/store";
 import { AppState } from "../../reducers";
 import { Register, Login, Logout } from "../../auth/auth.actions";
 import { ShowOverlay, ShowMsg } from "../../shared/shared.actions";
-
 // Firebase
 import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFireDatabase, AngularFireObject } from "@angular/fire/database";
-
 // Models
 import { User } from "../../models/user.model";
+// Utils
+import {
+  errMsg,
+  showOverlay,
+  hideOverlay
+} from "../../utils/ui.action.dispatchers";
 
 @Injectable()
 export class AuthService {
   user: AngularFireObject<{ User }>;
+  fromMsg = "ShowMsgAS";
+  fromOverlay = "ShowOverlayAS";
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -23,24 +28,12 @@ export class AuthService {
     private store: Store<AppState>
   ) {}
 
-  handleStart() {
-    this.store.dispatch(
-      new ShowOverlay({ showOverlay: true, from: "ShowOverlayAS" })
-    );
-  }
-
-  handleSuccess() {
-    this.store.dispatch(
-      new ShowOverlay({ showOverlay: false, from: "ShowOverlayAS" })
-    );
-  }
-
   handleErrors(err, type) {
-    let error = err.message
+    const msg = err.message
       ? err.message
       : `An error ocurred while trying to ${type}.`;
-    const msg = { title: null, msg: error, color: "red" };
-    this.store.dispatch(new ShowMsg({ msg, from: "ShowOverlayAS" }));
+
+    errMsg(this.store, this.fromMsg, msg);
   }
 
   async saveUserToDb(credentials, username: string) {
@@ -50,19 +43,19 @@ export class AuthService {
       email: credentials.user.email
     };
 
-    const ref = `moviedb/users/${user.uid}`;
     try {
-      await this.afDb.object(ref).set({ user });
+      await this.afDb.object(`moviedb/users/${user.uid}`).set({ user });
 
       this.store.dispatch(new Register({ user }));
-      this.handleSuccess();
+
+      hideOverlay(this.store, this.fromOverlay);
     } catch (err) {
       this.handleErrors(err, "register");
     }
   }
 
   async emailRegister(username: string, email: string, password: string) {
-    this.handleStart();
+    showOverlay(this.store, this.fromOverlay);
 
     try {
       const credentials = await this.afAuth.auth.createUserWithEmailAndPassword(
@@ -81,7 +74,8 @@ export class AuthService {
   }
 
   async emailLogin(email: string, password: string) {
-    this.handleStart();
+    showOverlay(this.store, this.fromOverlay);
+
     try {
       const credentials = await this.afAuth.auth.signInWithEmailAndPassword(
         email,
@@ -95,7 +89,8 @@ export class AuthService {
       };
 
       this.store.dispatch(new Login({ user }));
-      this.handleSuccess();
+
+      hideOverlay(this.store, this.fromOverlay);
     } catch (err) {
       this.handleErrors(err, "login");
     }

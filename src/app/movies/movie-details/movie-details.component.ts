@@ -28,9 +28,10 @@ import {
 })
 export class MovieDetailsComponent implements OnInit, OnDestroy {
   movieDetails$: Observable<MovieDetails>;
-  fromMsg: "ShowMsgMDP";
-  MovieDetailsRequestedMDP: "MovieDetailsRequestedMDP";
-  MovieDetailsClearedMDP: "MovieDetailsClearedMDP";
+  // From Action Types
+  fromMsg = "ShowMsgMDP";
+  movieDetailsRequestedMDP = "MovieDetailsRequestedMDP";
+  movieDetailsClearedMDP = "MovieDetailsClearedMDP";
 
   // Card Inputs
   leftBtn: IconBtn = { text: "Go Back", icon: "fas fa-chevron-left" };
@@ -54,14 +55,14 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.store.dispatch(
-      new MovieDetailsCleared({ from: this.MovieDetailsClearedMDP })
+      new MovieDetailsCleared({ from: this.movieDetailsClearedMDP })
     );
   }
 
   // API Calls and Populate the Store
   getMovieDetails(id: number) {
     this.store.dispatch(
-      new MovieDetailsRequested({ from: this.MovieDetailsRequestedMDP })
+      new MovieDetailsRequested({ from: this.movieDetailsRequestedMDP })
     );
     this.movieDbService
       .getMovieDetails(id)

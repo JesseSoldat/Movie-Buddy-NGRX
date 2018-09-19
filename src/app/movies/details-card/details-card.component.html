@@ -19,17 +19,22 @@
               {{movie?.release_date}}
               <br><br>
             </li>
-            <li class="list-group-item" *ngIf="movie?.genres.length > 0">
+            <li class="list-group-item">
               <strong>Generes: </strong><br><br>
-              <div *ngFor="let genre of movie.genres">
-                {{genre.name}}
-              </div>
+
+              <span *ngIf="showGenreMsg; else showGenreList">
+                {{movie.genres}}
+              </span>
+
+              <ng-template #showGenreList>
+                <div *ngFor="let genre of movie.genres">
+                  {{genre.name}}
+                </div>
+              </ng-template>
+
               <br><br>
             </li>
-            <li class="list-group-item" *ngIf="movie?.genres.length < 0">
-              <strong>Generes: </strong><br><br>{{movie.genres}}
-              <br><br>
-            </li>
+
             <li class="list-group-item">
               <strong>Rating: </strong><br><br>{{movie?.voter_average}}
               <br><br>

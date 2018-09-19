@@ -21,7 +21,8 @@ import { FavoritesService } from "../../core/services/favorites.service";
 })
 export class FavoriteDetailsComponent implements OnInit, OnDestroy {
   favoriteDetails$: Observable<MovieDetails>;
-  FavoriteDetailsClearedFDP: "FavoriteDetailsClearedFDP";
+  // From Actions
+  favoriteDetailsClearedFDP: "FavoriteDetailsClearedFDP";
 
   // Card Inputs
   leftBtn: IconBtn = { text: "Go Back", icon: "fas fa-chevron-left" };
@@ -42,7 +43,7 @@ export class FavoriteDetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.store.dispatch(
-      new FavoriteDetailsCleared({ from: this.FavoriteDetailsClearedFDP })
+      new FavoriteDetailsCleared({ from: this.favoriteDetailsClearedFDP })
     );
   }
 

@@ -23,6 +23,9 @@ import { FavoritesService } from "../../core/services/favorites.service";
 export class FavoritesComponent implements OnInit {
   favorites$: Observable<MovieDetails[]>;
   favorites: MovieDetails[];
+  // From Action Types
+  favoritesLoadedFromLocalStorageFP = "FavoritesLoadedFromLocalStorageFP";
+  favoritesRequestedFP = "FavoritesRequestedFP";
 
   // Filter Box Inputs
   filterListBy = "";
@@ -48,7 +51,7 @@ export class FavoritesComponent implements OnInit {
         this.store.dispatch(
           new FavoritesLoaded({
             favoritesList: favorites,
-            from: "FavoritesLoadedFromLocalStorageFP"
+            from: this.favoritesLoadedFromLocalStorageFP
           })
         );
       } else {
@@ -63,9 +66,10 @@ export class FavoritesComponent implements OnInit {
     this.favorites$ = this.store.pipe(
       select(selectFavorites),
       filter((favorites: MovieDetails[]) => {
-        // console.log("filter:", favorites);
         if (!favorites) {
-          this.store.dispatch(new FavoritesRequested("FavoritesRequestedFP"));
+          this.store.dispatch(
+            new FavoritesRequested({ from: this.favoritesRequestedFP })
+          );
           this.loadDataFromStorage();
         }
         return favorites !== null;

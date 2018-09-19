@@ -21,8 +21,11 @@ export class DetailsCardComponent implements OnInit {
 
   @Input("movieDetails")
   movie: MovieDetails;
+  showGenreMsg: boolean;
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.showGenreMsg = typeof this.movie.genres === "string" ? true : false;
+  }
 
   onLeftBtnClick() {
     this.handleLeftBtnClick.emit();
