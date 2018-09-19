@@ -11,7 +11,7 @@ import {
   MoviesLoaded,
   MovieDetailsRequested
 } from "../movie.actions";
-import { FavoritesRequested } from "../favorites.actions";
+import { FavoritesRequested, FavoritesLoaded } from "../favorites.actions";
 import {
   selectFavorites,
   selectFilteredMovieList,
@@ -25,6 +25,7 @@ import { IconBtn } from "../../models/icon-btn.model";
 // Services
 import { FavoritesService } from "../../core/services/favorites.service";
 import { MovieDbService } from "../../core/services/moviedb.service";
+import { ShowOverlay } from "../../shared/shared.actions";
 
 @Component({
   selector: "app-movies-search",
@@ -46,17 +47,50 @@ export class MoviesSearchComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getFavorites();
-    this.getMovies();
+    this.loadDataFromStorage();
     this.movieList$ = this.store.pipe(select(selectFilteredMovieList));
   }
+
+  loadDataFromStorage() {
+    try {
+      const movies = JSON.parse(localStorage.getItem("movies"));
+      const favorites = JSON.parse(localStorage.getItem("favorites"));
+
+      if (favorites) {
+        console.log("Loading Favorites from local storage");
+        this.store.dispatch(
+          new FavoritesLoaded({
+            favoritesList: favorites,
+            from: "FavoritesLoadedFromLocalStorageSP"
+          })
+        );
+        // If no favorites we do not want to load movies from local storage
+        // because an api call for favorites will take time and when the
+        // favorites arrive there will be a flash of movies disappearing as
+        // we filter out favorite movies from movie list
+        if (movies) {
+          console.log("Loading Movies from local storage");
+          this.store.dispatch(
+            new MoviesLoaded({
+              movieList: movies,
+              from: "MoviesLoadedFromLocalStorageSP"
+            })
+          );
+        }
+      } else {
+        console.log("Fetching Favorites from the server");
+        this.getFavorites();
+      }
+    } catch (err) {}
+  }
+
   // API Calls and Populate the Store
   getFavorites() {
     this.store
       .pipe(
         select(selectFavorites),
         filter((favorites: MovieDetails[]) => {
-          console.log("Movie SP filter:", favorites);
+          // console.log("Movie SP filter:", favorites);
           if (!favorites) {
             this.store.dispatch(new FavoritesRequested("FavoritesRequestedSP"));
             this.favoritesService.getFavorites();
@@ -64,29 +98,17 @@ export class MoviesSearchComponent implements OnInit {
           return favorites !== null;
         }),
         first(),
-        tap((favorites: MovieDetails[]) =>
-          console.log("Movie SP tap:", favorites)
-        )
+        tap((favorites: MovieDetails[]) => {
+          // console.log("Movie SP tap:", favorites)
+        })
       )
       .subscribe(
         () => {},
         err => {},
-        () =>
-          console.log("STORE: selectFavorites - MoviesSearchComponent Complete")
+        () => {
+          // console.log("STORE: selectFavorites - MoviesSearchComponent Complete")
+        }
       );
-  }
-
-  getMovies() {
-    try {
-      const movies = JSON.parse(localStorage.getItem("movies"));
-      console.log(movies);
-
-      if (movies) {
-        this.store.dispatch(
-          new MoviesLoaded({ movieList: movies, from: "MoviesLoadedSP" })
-        );
-      }
-    } catch (err) {}
   }
 
   // ---------------- CB Events ---------------------
@@ -103,6 +125,9 @@ export class MoviesSearchComponent implements OnInit {
   }
 
   addToFavorites(keys: MovieKeys) {
+    this.store.dispatch(
+      new ShowOverlay({ showOverlay: true, from: "ShowOverlaySP" })
+    );
     this.store.dispatch(new MovieDetailsRequested("MovieDetailsRequestedSP"));
     this.movieDbService
       .getMovieDetails(keys.id)
@@ -115,7 +140,9 @@ export class MoviesSearchComponent implements OnInit {
           this.favoritesService.addToFavorites(movieDetails);
         },
         err => console.log("addToFavorites SP", err),
-        () => console.log("addToFavorites Complete")
+        () => {
+          // console.log("addToFavorites Complete")
+        }
       );
   }
 }

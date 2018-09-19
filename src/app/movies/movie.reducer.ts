@@ -17,7 +17,7 @@ export const movieReducer = (state = initialMovieState, action) => {
   const { type, payload } = action;
   switch (type) {
     case MovieActionTypes.MoviesLoadedMS:
-    case MovieActionTypes.MoviesLoadedSP:
+    case MovieActionTypes.MoviesLoadedFromLocalStorageSP:
       return { ...state, movieList: payload.movieList, movieDetails: null };
 
     case MovieActionTypes.MovieDetailsLoaded:

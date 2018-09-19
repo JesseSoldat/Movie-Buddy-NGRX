@@ -16,8 +16,12 @@ import { selectUserUid } from "../../auth/auth.selectors";
 import { ShowOverlay, ShowMsg } from "../../shared/shared.actions";
 import {
   FavoritesLoaded,
-  DeleteFromFavorites
+  FavoritesDeleted,
+  FavoritesAdded
 } from "../../movies/favorites.actions";
+// Utils
+import { createErrorMsg } from "../../utils/createErrorMsg";
+import { createShowOverlay } from "../../utils/createShowOverlay";
 
 export interface OtherUser {
   user: User;
@@ -26,7 +30,6 @@ export interface OtherUser {
 
 @Injectable()
 export class FavoritesService {
-  errMsg = "An error ocurred while fetching the data.";
   userId: string;
   favorites: AngularFireList<MovieDetails>;
 
@@ -43,48 +46,49 @@ export class FavoritesService {
       .subscribe(
         uid => (this.userId = uid),
         err => console.log("Err: Favorites Service - selectUserUid", err),
-        () => console.log("Complete Favorites Service - selectUserUid")
+        () => {
+          // console.log("Complete Favorites Service - selectUserUid")
+        }
       );
   }
 
   handleStart() {
-    this.store.dispatch(
-      new ShowOverlay({ showOverlay: true, from: "ShowOverlayFS" })
-    );
+    const from = "ShowOverlayFS";
+    this.store.dispatch(createShowOverlay(from, true));
   }
 
-  handleSuccess() {
-    this.store.dispatch(
-      new ShowOverlay({ showOverlay: false, from: "ShowOverlayFS" })
-    );
+  handleSuccess(showOverlay = true) {
+    if (showOverlay) {
+      const from = "ShowOverlayFS";
+      this.store.dispatch(createShowOverlay(from, false));
+    }
   }
 
-  handleError(msg = this.errMsg) {
-    this.store.dispatch(
-      new ShowMsg({
-        msg: {
-          title: "Error",
-          msg,
-          color: "red"
-        },
-        from: "ShowOverlayFS"
-      })
-    );
+  handleError(msg?) {
+    const from = "ShowMsgFS";
+    this.store.dispatch(createErrorMsg(msg, from));
   }
 
+  handleComplete(source) {
+    // console.log(`${source} Observable has completed`);
+  }
+
+  // firebase the Observable send the complete msg
+  // but the observable get recreated
+  // if using first() the observable is TRULY completed
   getFavorites() {
     const url = `moviedb/users/${this.userId}/favorites`;
     this.favorites = this.afDb.list(url);
     this.favorites
       .snapshotChanges()
       .pipe(
-        shareReplay(),
+        first(),
         tap(actions => {
           // throw new Error();
         }),
         catchError(actions => {
           this.handleError();
-          return of(null);
+          return of([]);
         }),
         map(
           actions =>
@@ -96,21 +100,49 @@ export class FavoritesService {
               : actions
         ),
         tap((favoritesList: MovieDetails[]) => {
-          this.store.dispatch(new FavoritesLoaded({ favoritesList }));
+          this.store.dispatch(
+            new FavoritesLoaded({ favoritesList, from: "FavoritesLoadedFS" })
+          );
         })
       )
-      .subscribe(() => {});
+      .subscribe(() => {
+        this.handleSuccess(false),
+          () => {},
+          this.handleComplete("getFavorites");
+      });
   }
+
+  extractList() {}
 
   async addToFavorites(movie: MovieDetails, route = null) {
     this.handleStart();
     const url = `moviedb/users/${this.userId}/favorites`;
     this.favorites = this.afDb.list(url);
     await this.favorites.push(movie);
+    this.store.dispatch;
     if (route) {
       this.router.navigateByUrl(route);
     }
     this.handleSuccess();
+    this.favorites
+      .snapshotChanges()
+      .pipe(
+        first(),
+        map(
+          actions =>
+            actions
+              ? actions.map(action => ({
+                  key: action.key,
+                  ...action.payload.val()
+                }))
+              : actions
+        ),
+        tap((favoritesList: MovieDetails[]) => {
+          this.store.dispatch(new FavoritesAdded({ favoritesList }));
+          this.handleSuccess();
+        })
+      )
+      .subscribe();
   }
 
   async removeFromFavorites(
@@ -126,7 +158,7 @@ export class FavoritesService {
     if (page === "details") {
       this.router.navigateByUrl("/movies/favorites");
     }
+    this.store.dispatch(new FavoritesDeleted({ movieId }));
     this.handleSuccess();
-    this.store.dispatch(new DeleteFromFavorites({ movieId }));
   }
 }

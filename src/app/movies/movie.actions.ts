@@ -6,7 +6,7 @@ import { MovieDetails } from "../models/movie-details.model";
 export enum MovieActionTypes {
   MoviesRequested = "[Movie Search Page] MoviesRequested",
   MoviesLoadedMS = "[Movies Service] MoviesLoaded",
-  MoviesLoadedSP = "[Movies Search Page] MoviesLoaded",
+  MoviesLoadedFromLocalStorageSP = "[Local Storage - Movies Search Page] MoviesLoaded",
   MovieDetailsRequestedSP = "[Movie Search Page] MovieDetailsRequested",
   MovieDetailsLoaded = "[Movies Service] MovieDetailsLoaded",
   MovieDetailsCleared = "[Movie Details Page] MovieDetailsCleared"

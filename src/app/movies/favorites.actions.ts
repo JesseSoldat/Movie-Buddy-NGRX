@@ -5,8 +5,10 @@ import { MovieDetails } from "../models/movie-details.model";
 export enum FavoritesActionTypes {
   FavoritesRequestedSP = "[Search Page] FavoritesRequested",
   FavoritesRequestedFP = "[Favorites Page] FavoritesRequested",
-  FavoritesLoaded = "[Favorites Service] FavoritesLoaded",
-  DeleteFromFavorites = "[Favorites Service] DeleteFromFavorites",
+  FavoritesLoadedFS = "[Favorites Service] FavoritesLoaded",
+  FavoritesLoadedFromLocalStorageSP = "[Local Storage - Movies Search Page] FavoritesLoaded",
+  FavoritesDeleted = "[Favorites Service] FavoritesDeleted",
+  FavoritesAdded = "[Favorites Service] FavoritesAdded",
   FavoriteDetailsCleared = "[Favorite Details Page] FavoriteDetailsCleared"
 }
 
@@ -19,15 +21,23 @@ export class FavoritesRequested implements Action {
 }
 
 export class FavoritesLoaded implements Action {
-  readonly type = FavoritesActionTypes.FavoritesLoaded;
+  type: string;
 
-  constructor(public payload: { favoritesList: MovieDetails[] }) {}
+  constructor(public payload: { favoritesList: MovieDetails[]; from: string }) {
+    this.type = FavoritesActionTypes[payload.from];
+  }
 }
 
-export class DeleteFromFavorites implements Action {
-  readonly type = FavoritesActionTypes.DeleteFromFavorites;
+export class FavoritesDeleted implements Action {
+  readonly type = FavoritesActionTypes.FavoritesDeleted;
 
   constructor(public payload: { movieId: string | number }) {}
+}
+
+export class FavoritesAdded implements Action {
+  readonly type = FavoritesActionTypes.FavoritesAdded;
+
+  constructor(public payload: { favoritesList: MovieDetails[] }) {}
 }
 
 export class FavoriteDetailsCleared implements Action {
@@ -37,5 +47,5 @@ export class FavoriteDetailsCleared implements Action {
 export type FavoritesActions =
   | FavoritesRequested
   | FavoritesLoaded
-  | DeleteFromFavorites
+  | FavoritesDeleted
   | FavoriteDetailsCleared;

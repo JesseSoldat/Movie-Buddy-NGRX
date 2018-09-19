@@ -38,6 +38,17 @@ export class FavoritesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.loadFavorites();
+  }
+
+  loadDataFromStorage() {
+    const favorites = JSON.parse(localStorage.getItem("favorites"));
+    if (favorites) {
+      this.store.dispatch(new FavoritesRequested("FavoritesRequestedFP"));
+    }
+  }
+
+  loadFavorites() {
     this.favorites$ = this.store.pipe(
       select(selectFavorites),
       filter((favorites: MovieDetails[]) => {
@@ -49,7 +60,7 @@ export class FavoritesComponent implements OnInit {
         return favorites !== null;
       }),
       tap((favorites: MovieDetails[]) => {
-        console.log("tap:", favorites);
+        // console.log("tap:", favorites);
         this.favorites = favorites;
       })
     );

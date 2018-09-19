@@ -22,6 +22,9 @@ export const sharedReducer = (state = initialSharedState, action) => {
 
     case SharedActionTypes.ShowMsgFS:
     case SharedActionTypes.ShowMsgMS:
+    case SharedActionTypes.ShowMsgAS:
+    case SharedActionTypes.ShowMsgMC:
+    case SharedActionTypes.ShowMsgMDP:
       return {
         ...state,
         showOverlay: false,

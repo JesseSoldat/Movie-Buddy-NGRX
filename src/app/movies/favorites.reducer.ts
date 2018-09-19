@@ -15,16 +15,26 @@ export const initialFavoritesState = {
 export const favoritesReducer = (state = initialFavoritesState, action) => {
   const { type, payload } = action;
   switch (type) {
-    case FavoritesActionTypes.FavoritesLoaded:
+    case FavoritesActionTypes.FavoritesLoadedFS:
+    case FavoritesActionTypes.FavoritesLoadedFromLocalStorageSP:
       return {
         ...state,
         favoritesList: payload.favoritesList,
         favoriteDetails: null
       };
 
-    case FavoritesActionTypes.DeleteFromFavorites:
+    case FavoritesActionTypes.FavoritesAdded:
+      return { ...state, favoritesList: payload.favoritesList };
+
+    case FavoritesActionTypes.FavoritesDeleted:
       let favoritesCopy = [...state.favoritesList];
       favoritesCopy.filter(obj => obj.id === payload.movieId);
+
+      try {
+        localStorage.setItem("favorites", JSON.stringify(favoritesCopy));
+      } catch (err) {
+        console.log("Could not save Favorites to local storage");
+      }
 
       return { ...state, favoritesList: favoritesCopy };
 
