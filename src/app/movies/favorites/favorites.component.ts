@@ -11,7 +11,7 @@ import { IconBtn } from "../../models/icon-btn.model";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
 import { selectFavorites } from "../movies.selector";
-import { FavoritesRequested } from "../favorites.actions";
+import { FavoritesRequested, FavoritesLoaded } from "../favorites.actions";
 // Services
 import { FavoritesService } from "../../core/services/favorites.service";
 
@@ -42,9 +42,20 @@ export class FavoritesComponent implements OnInit {
   }
 
   loadDataFromStorage() {
-    const favorites = JSON.parse(localStorage.getItem("favorites"));
-    if (favorites) {
-      this.store.dispatch(new FavoritesRequested("FavoritesRequestedFP"));
+    try {
+      const favorites = JSON.parse(localStorage.getItem("favorites"));
+      if (favorites) {
+        this.store.dispatch(
+          new FavoritesLoaded({
+            favoritesList: favorites,
+            from: "FavoritesLoadedFromLocalStorageFP"
+          })
+        );
+      } else {
+        this.favoritesService.getFavorites();
+      }
+    } catch (err) {
+      this.favoritesService.getFavorites();
     }
   }
 
@@ -52,10 +63,10 @@ export class FavoritesComponent implements OnInit {
     this.favorites$ = this.store.pipe(
       select(selectFavorites),
       filter((favorites: MovieDetails[]) => {
-        console.log("filter:", favorites);
+        // console.log("filter:", favorites);
         if (!favorites) {
           this.store.dispatch(new FavoritesRequested("FavoritesRequestedFP"));
-          this.favoritesService.getFavorites();
+          this.loadDataFromStorage();
         }
         return favorites !== null;
       }),

@@ -29,7 +29,7 @@ export class CardComponent implements OnInit {
   ngOnInit() {
     this.keys = {
       key: this.data.key || "",
-      id: this.data.id
+      id: Number(this.data.id)
     };
   }
 

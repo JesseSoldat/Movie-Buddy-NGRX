@@ -58,7 +58,7 @@ export class MovieDbService {
       .subscribe(() => {});
   }
 
-  getMovieDetails(movieId: string | number) {
+  getMovieDetails(movieId: number, showSuccess = true) {
     const url = `${this.baseUrl}movie/${movieId}?api_key=${this.apiKey}`;
     return this.http.jsonp(url, "callback").pipe(
       tap(details => {
@@ -70,8 +70,15 @@ export class MovieDbService {
       }),
       first(),
       tap((movieDetails: MovieDetails) => {
-        this.handleSuccess();
         this.store.dispatch(new MovieDetailsLoaded({ movieDetails }));
+
+        // when getting the details to save to to Favorites we do not
+        // want to stop the overlay yet. so showSuccess value will be passed
+        // as false
+        if (showSuccess) {
+          console.log("showing overlay");
+          this.handleSuccess();
+        }
       })
     );
   }

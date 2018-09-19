@@ -3,10 +3,11 @@ import { Action } from "@ngrx/store";
 import { MovieDetails } from "../models/movie-details.model";
 
 export enum FavoritesActionTypes {
-  FavoritesRequestedSP = "[Search Page] FavoritesRequested",
+  FavoritesRequestedSP = "[Movie Search Page] FavoritesRequested",
   FavoritesRequestedFP = "[Favorites Page] FavoritesRequested",
   FavoritesLoadedFS = "[Favorites Service] FavoritesLoaded",
-  FavoritesLoadedFromLocalStorageSP = "[Local Storage - Movies Search Page] FavoritesLoaded",
+  FavoritesLoadedFromLocalStorageSP = "[ Movies Search Page - Local Storage ] FavoritesLoaded",
+  FavoritesLoadedFromLocalStorageFP = "[ Favorites Page - Local Storage ] FavoritesLoaded",
   FavoritesDeleted = "[Favorites Service] FavoritesDeleted",
   FavoritesAdded = "[Favorites Service] FavoritesAdded",
   FavoriteDetailsCleared = "[Favorite Details Page] FavoriteDetailsCleared"
@@ -31,7 +32,7 @@ export class FavoritesLoaded implements Action {
 export class FavoritesDeleted implements Action {
   readonly type = FavoritesActionTypes.FavoritesDeleted;
 
-  constructor(public payload: { movieId: string | number }) {}
+  constructor(public payload: { movieId: number }) {}
 }
 
 export class FavoritesAdded implements Action {

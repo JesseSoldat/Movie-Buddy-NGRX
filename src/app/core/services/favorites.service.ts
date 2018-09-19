@@ -115,7 +115,6 @@ export class FavoritesService {
   extractList() {}
 
   async addToFavorites(movie: MovieDetails, route = null) {
-    this.handleStart();
     const url = `moviedb/users/${this.userId}/favorites`;
     this.favorites = this.afDb.list(url);
     await this.favorites.push(movie);
@@ -123,7 +122,6 @@ export class FavoritesService {
     if (route) {
       this.router.navigateByUrl(route);
     }
-    this.handleSuccess();
     this.favorites
       .snapshotChanges()
       .pipe(
@@ -145,11 +143,7 @@ export class FavoritesService {
       .subscribe();
   }
 
-  async removeFromFavorites(
-    key: string,
-    movieId: string | number,
-    page = null
-  ) {
+  async removeFromFavorites(key: string, movieId: number, page = null) {
     this.handleStart();
     const url = `moviedb/users/${this.userId}/favorites`;
     this.favorites = this.afDb.list(url);

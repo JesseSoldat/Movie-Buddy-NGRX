@@ -47,6 +47,7 @@ export class MoviesSearchComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.store.dispatch(new FavoritesRequested("FavoritesRequestedSP"));
     this.loadDataFromStorage();
     this.movieList$ = this.store.pipe(select(selectFilteredMovieList));
   }
@@ -57,7 +58,7 @@ export class MoviesSearchComponent implements OnInit {
       const favorites = JSON.parse(localStorage.getItem("favorites"));
 
       if (favorites) {
-        console.log("Loading Favorites from local storage");
+        // console.log("Loading Favorites from local storage");
         this.store.dispatch(
           new FavoritesLoaded({
             favoritesList: favorites,
@@ -69,7 +70,7 @@ export class MoviesSearchComponent implements OnInit {
         // favorites arrive there will be a flash of movies disappearing as
         // we filter out favorite movies from movie list
         if (movies) {
-          console.log("Loading Movies from local storage");
+          // console.log("Loading Movies from local storage");
           this.store.dispatch(
             new MoviesLoaded({
               movieList: movies,
@@ -130,7 +131,9 @@ export class MoviesSearchComponent implements OnInit {
     );
     this.store.dispatch(new MovieDetailsRequested("MovieDetailsRequestedSP"));
     this.movieDbService
-      .getMovieDetails(keys.id)
+      // pass false to skip hiding overlay between getting the details
+      // and saving the movie to the db
+      .getMovieDetails(keys.id, false)
       .pipe(first())
       .subscribe(
         (details: MovieDetails) => {
