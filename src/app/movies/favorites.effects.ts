@@ -27,7 +27,7 @@ export class FavoritesEffects {
 
   @Effect({ dispatch: false })
   favoritesAdded$ = this.action$.pipe(
-    ofType<FavoritesAdded>(FavoritesActionTypes.FavoritesAdded),
+    ofType<FavoritesAdded>(FavoritesActionTypes.FavoritesAddedFS),
     tap(action => {
       const favorites = action.payload.favoritesList;
       try {

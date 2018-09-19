@@ -24,7 +24,7 @@ export class MessageComponent implements OnInit {
       select(selectMsg),
 
       filter(msg => {
-        console.log("Msg:", msg);
+        // console.log("Msg:", msg);
         return msg !== null;
       }),
       tap(msg => {

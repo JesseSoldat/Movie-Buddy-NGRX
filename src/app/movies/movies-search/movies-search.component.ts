@@ -6,12 +6,14 @@ import { tap, filter, first } from "rxjs/operators";
 // NGRX
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
+// Actions
 import {
   MoviesRequested,
   MoviesLoaded,
   MovieDetailsRequested
 } from "../movie.actions";
 import { FavoritesRequested, FavoritesLoaded } from "../favorites.actions";
+// Selectors
 import {
   selectFavorites,
   selectFilteredMovieList,
@@ -25,7 +27,12 @@ import { IconBtn } from "../../models/icon-btn.model";
 // Services
 import { FavoritesService } from "../../core/services/favorites.service";
 import { MovieDbService } from "../../core/services/moviedb.service";
-import { ShowOverlay } from "../../shared/shared.actions";
+// Utils
+import {
+  errMsg,
+  showOverlay,
+  hideOverlay
+} from "../../utils/ui.action.dispatchers";
 
 @Component({
   selector: "app-movies-search",
@@ -34,6 +41,11 @@ import { ShowOverlay } from "../../shared/shared.actions";
 })
 export class MoviesSearchComponent implements OnInit {
   movieList$: Observable<Movie[]>;
+  fromMsg = "ShowMsgMSP";
+  fromShowOverlay = "ShowOverlayMSP";
+  favoritesRequested = "FavoritesRequestedMSP";
+  moviesRequested = "MoviesRequestedMSP";
+  movieDetailsRequested = "MovieDetailsRequestedMSP";
 
   // Card Inputs
   leftBtn: IconBtn = { text: "View", icon: "fa fa-eye" };
@@ -47,42 +59,10 @@ export class MoviesSearchComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.store.dispatch(new FavoritesRequested("FavoritesRequestedSP"));
+    this.store.dispatch(new FavoritesRequested(this.favoritesRequested));
     this.loadDataFromStorage();
+
     this.movieList$ = this.store.pipe(select(selectFilteredMovieList));
-  }
-
-  loadDataFromStorage() {
-    try {
-      const movies = JSON.parse(localStorage.getItem("movies"));
-      const favorites = JSON.parse(localStorage.getItem("favorites"));
-
-      if (favorites) {
-        // console.log("Loading Favorites from local storage");
-        this.store.dispatch(
-          new FavoritesLoaded({
-            favoritesList: favorites,
-            from: "FavoritesLoadedFromLocalStorageSP"
-          })
-        );
-        // If no favorites we do not want to load movies from local storage
-        // because an api call for favorites will take time and when the
-        // favorites arrive there will be a flash of movies disappearing as
-        // we filter out favorite movies from movie list
-        if (movies) {
-          // console.log("Loading Movies from local storage");
-          this.store.dispatch(
-            new MoviesLoaded({
-              movieList: movies,
-              from: "MoviesLoadedFromLocalStorageSP"
-            })
-          );
-        }
-      } else {
-        console.log("Fetching Favorites from the server");
-        this.getFavorites();
-      }
-    } catch (err) {}
   }
 
   // API Calls and Populate the Store
@@ -90,6 +70,9 @@ export class MoviesSearchComponent implements OnInit {
     this.store
       .pipe(
         select(selectFavorites),
+        tap(favorites => {
+          // throw new Error();
+        }),
         filter((favorites: MovieDetails[]) => {
           // console.log("Movie SP filter:", favorites);
           if (!favorites) {
@@ -103,20 +86,48 @@ export class MoviesSearchComponent implements OnInit {
           // console.log("Movie SP tap:", favorites)
         })
       )
-      .subscribe(
-        () => {},
-        err => {},
-        () => {
-          // console.log("STORE: selectFavorites - MoviesSearchComponent Complete")
+      .subscribe(() => {}, err => errMsg(this.store, this.fromMsg));
+  }
+
+  loadDataFromStorage() {
+    try {
+      const movies = JSON.parse(localStorage.getItem("movies"));
+      const favorites = JSON.parse(localStorage.getItem("favorites"));
+
+      if (favorites) {
+        this.store.dispatch(
+          new FavoritesLoaded({
+            favoritesList: favorites,
+            from: "FavoritesLoadedFromLocalStorageSP"
+          })
+        );
+        // If no favorites we do not want to load movies from local storage
+        // because an api call for favorites will take time and when the
+        // favorites arrive there will be a flash of movies disappearing as
+        // we filter out favorite movies from movie list
+        if (movies) {
+          this.store.dispatch(
+            new MoviesLoaded({
+              movieList: movies,
+              from: "MoviesLoadedFromLocalStorageSP"
+            })
+          );
         }
-      );
+      }
+      //Fetch Favorites from the server"
+      else {
+        this.getFavorites();
+      }
+    } catch (err) {
+      this.getFavorites();
+    }
   }
 
   // ---------------- CB Events ---------------------
 
   // Search Box
   onSearchChanged(searchTerm: string) {
-    this.store.dispatch(new MoviesRequested());
+    this.store.dispatch(new MoviesRequested({ from: this.moviesRequested }));
     this.movieDbService.getListOfMovies(searchTerm);
   }
 
@@ -126,26 +137,22 @@ export class MoviesSearchComponent implements OnInit {
   }
 
   addToFavorites(keys: MovieKeys) {
-    this.store.dispatch(
-      new ShowOverlay({ showOverlay: true, from: "ShowOverlaySP" })
-    );
-    this.store.dispatch(new MovieDetailsRequested("MovieDetailsRequestedSP"));
-    this.movieDbService
-      // pass false to skip hiding overlay between getting the details
-      // and saving the movie to the db
-      .getMovieDetails(keys.id, false)
-      .pipe(first())
-      .subscribe(
-        (details: MovieDetails) => {
-          const movieDetails: MovieDetails = createMovieDetails(details);
-          // console.log("movie details", movieDetails);
+    showOverlay(this.store, this.fromShowOverlay);
 
-          this.favoritesService.addToFavorites(movieDetails);
-        },
-        err => console.log("addToFavorites SP", err),
-        () => {
-          // console.log("addToFavorites Complete")
-        }
-      );
+    this.store.dispatch(
+      new MovieDetailsRequested({ from: this.movieDetailsRequested })
+    );
+
+    this.movieDbService.getMovieDetails(keys.id).subscribe(
+      (details: MovieDetails) => {
+        const movieDetails: MovieDetails = createMovieDetails(details);
+
+        this.favoritesService.addToFavorites(movieDetails);
+      },
+      err => {
+        const msg = "An error ocurred while trying to add the movie";
+        errMsg(this.store, this.fromMsg, msg);
+      }
+    );
   }
 }

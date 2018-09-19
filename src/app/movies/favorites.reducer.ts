@@ -16,7 +16,7 @@ export const favoritesReducer = (state = initialFavoritesState, action) => {
   const { type, payload } = action;
   switch (type) {
     case FavoritesActionTypes.FavoritesLoadedFS:
-    case FavoritesActionTypes.FavoritesLoadedFromLocalStorageSP:
+    case FavoritesActionTypes.FavoritesLoadedFromLocalStorageMSP:
     case FavoritesActionTypes.FavoritesLoadedFromLocalStorageFP:
       return {
         ...state,
@@ -24,10 +24,10 @@ export const favoritesReducer = (state = initialFavoritesState, action) => {
         favoriteDetails: null
       };
 
-    case FavoritesActionTypes.FavoritesAdded:
+    case FavoritesActionTypes.FavoritesAddedFS:
       return { ...state, favoritesList: payload.favoritesList };
 
-    case FavoritesActionTypes.FavoritesDeleted:
+    case FavoritesActionTypes.FavoritesDeletedFS:
       const favoritesCopy = [...state.favoritesList];
       const filteredCopy = favoritesCopy.filter(
         obj => obj.id !== payload.movieId
@@ -41,7 +41,7 @@ export const favoritesReducer = (state = initialFavoritesState, action) => {
 
       return { ...state, favoritesList: filteredCopy };
 
-    case FavoritesActionTypes.FavoriteDetailsCleared:
+    case FavoritesActionTypes.FavoriteDetailsClearedFDP:
       return { ...state, favoriteDetails: null };
 
     default:

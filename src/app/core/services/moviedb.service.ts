@@ -10,34 +10,23 @@ import { MoviesLoaded, MovieDetailsLoaded } from "../../movies/movie.actions";
 import { ShowMsg, ShowOverlay } from "../../shared/shared.actions";
 // Models
 import { MovieDetails } from "../../models/movie-details.model";
+// Utils
+import {
+  errMsg,
+  showOverlay,
+  hideOverlay
+} from "../../utils/ui.action.dispatchers";
 
 @Injectable()
 export class MovieDbService {
-  errMsg = "An error ocurred while fetching the data.";
   apiKey: string;
   baseUrl = "https://api.themoviedb.org/3/";
+  fromMsg = "ShowMsgMS";
+  fromOverlay = "ShowOverlayMS";
+  MovieDetailsLoadedMS: "MovieDetailsLoadedMS";
 
   constructor(private http: HttpClient, private store: Store<AppState>) {
     this.apiKey = "c79f0a4b4f8b9c843e385c5cdb521ae1";
-  }
-
-  handleSuccess() {
-    this.store.dispatch(
-      new ShowOverlay({ showOverlay: false, from: "ShowOverlayMS" })
-    );
-  }
-
-  handleError(msg = this.errMsg) {
-    this.store.dispatch(
-      new ShowMsg({
-        msg: {
-          title: "Error",
-          msg,
-          color: "red"
-        },
-        from: ""
-      })
-    );
   }
 
   getListOfMovies(term: string) {
@@ -58,27 +47,27 @@ export class MovieDbService {
       .subscribe(() => {});
   }
 
-  getMovieDetails(movieId: number, showSuccess = true) {
+  // movie details needs to return the observable because when saving to favorites
+  // the component most get all of the detail and then call favorite service with
+  // the entire movie
+  getMovieDetails(movieId: number) {
     const url = `${this.baseUrl}movie/${movieId}?api_key=${this.apiKey}`;
     return this.http.jsonp(url, "callback").pipe(
       tap(details => {
-        // throw new Error();
+        throw new Error();
       }),
       catchError(err => {
-        this.handleError();
+        errMsg(this.store, this.fromMsg);
         return of(null);
       }),
       first(),
       tap((movieDetails: MovieDetails) => {
-        this.store.dispatch(new MovieDetailsLoaded({ movieDetails }));
-
-        // when getting the details to save to to Favorites we do not
-        // want to stop the overlay yet. so showSuccess value will be passed
-        // as false
-        if (showSuccess) {
-          console.log("showing overlay");
-          this.handleSuccess();
-        }
+        this.store.dispatch(
+          new MovieDetailsLoaded({
+            movieDetails,
+            from: this.MovieDetailsLoadedMS
+          })
+        );
       })
     );
   }

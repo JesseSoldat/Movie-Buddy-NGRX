@@ -7,13 +7,14 @@ export enum SharedActionTypes {
   ShowOverlayAS = "[Auth Service] ShowOverlay",
   ShowOverlayFS = "[Favorites Service] ShowOverlay",
   ShowOverlayMS = "[Movie Service] ShowOverlay",
-  ShowOverlaySP = "[Movie Search Page] ShowOverlay Add Favorite",
+  ShowOverlayMSP = "[Movie Search Page] ShowOverlay Add Favorite",
   // MSG
   ShowMsgAS = "[Auth Service] ShowMsg",
   ShowMsgFS = "[Favorites Service] ShowMsg",
   ShowMsgMS = "[Movie Service] ShowMsg",
   ShowMsgMC = "[Message Component] ShowMsg",
-  ShowMsgMDP = "[Movie Details Page] ShowMsg"
+  ShowMsgMDP = "[Movie Details Page] ShowMsg",
+  ShowMsgMSP = "[ Movie Search Page ] Show Msg"
 }
 
 export class ShowOverlay implements Action {
@@ -28,8 +29,6 @@ export class ShowMsg implements Action {
   type: string;
 
   constructor(public payload: { msg: Msg; from: string }) {
-    console.log(payload.from);
-
     this.type = SharedActionTypes[payload.from];
   }
 }

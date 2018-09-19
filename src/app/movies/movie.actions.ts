@@ -4,17 +4,23 @@ import { Movie } from "../models/movie.model";
 import { MovieDetails } from "../models/movie-details.model";
 
 export enum MovieActionTypes {
-  MoviesRequested = "[Movie Search Page] MoviesRequested",
+  // Movie List
+  MoviesRequestedMSP = "[Movie Search Page] MoviesRequested",
   MoviesLoadedMS = "[Movies Service] MoviesLoaded",
-  MoviesLoadedFromLocalStorageSP = "[Movies Search Page - Local Storage ] MoviesLoaded",
-  MovieDetailsRequestedSP = "[Movie Search Page] MovieDetailsRequested",
-  MovieDetailsLoaded = "[Movies Service] MovieDetailsLoaded",
-  MovieDetailsCleared = "[Movie Details Page] MovieDetailsCleared"
+  MoviesLoadedFromLocalStorageMSP = "[Movies Search Page - Local Storage ] MoviesLoaded",
+  // Details
+  MovieDetailsRequestedMSP = "[Movie Search Page] MovieDetailsRequested",
+  MovieDetailsRequestedMDP = "[Movie Details Page] MovieDetailsRequested",
+  MovieDetailsLoadedMS = "[Movies Service] MovieDetailsLoaded",
+  MovieDetailsClearedMDP = "[Movie Details Page] MovieDetailsCleared"
 }
-
 // Movie List
 export class MoviesRequested implements Action {
-  readonly type = MovieActionTypes.MoviesRequested;
+  type: string;
+
+  constructor(public payload: { from: string }) {
+    this.type = MovieActionTypes[payload.from];
+  }
 }
 
 export class MoviesLoaded implements Action {
@@ -29,19 +35,25 @@ export class MoviesLoaded implements Action {
 export class MovieDetailsRequested implements Action {
   type: string;
 
-  constructor(public payload: string) {
-    this.type = MovieActionTypes[payload];
+  constructor(public payload: { from: string }) {
+    this.type = MovieActionTypes[payload.from];
   }
 }
 
 export class MovieDetailsLoaded implements Action {
-  readonly type = MovieActionTypes.MovieDetailsLoaded;
+  type: string;
 
-  constructor(public payload: { movieDetails: MovieDetails }) {}
+  constructor(public payload: { movieDetails: MovieDetails; from: string }) {
+    this.type = MovieActionTypes[payload.from];
+  }
 }
 
 export class MovieDetailsCleared implements Action {
-  readonly type = MovieActionTypes.MovieDetailsCleared;
+  type: string;
+
+  constructor(public payload: { from: string }) {
+    this.type = MovieActionTypes[payload.from];
+  }
 }
 
 export type MovieActions =

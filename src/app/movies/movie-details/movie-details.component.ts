@@ -10,11 +10,16 @@ import { IconBtn } from "../../models/icon-btn.model";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
 import { selectMovieDetails } from "../movies.selector";
-import { ShowMsg } from "../../shared/shared.actions";
-import { MovieDetailsCleared } from "../movie.actions";
+import { MovieDetailsRequested, MovieDetailsCleared } from "../movie.actions";
 // Services
 import { MovieDbService } from "../../core/services/moviedb.service";
 import { FavoritesService } from "../../core/services/favorites.service";
+// Utils
+import {
+  errMsg,
+  showOverlay,
+  hideOverlay
+} from "../../utils/ui.action.dispatchers";
 
 @Component({
   selector: "app-movie-details",
@@ -22,8 +27,10 @@ import { FavoritesService } from "../../core/services/favorites.service";
   styleUrls: ["./movie-details.component.css"]
 })
 export class MovieDetailsComponent implements OnInit, OnDestroy {
-  errMsg = "An error ocurred while fetching the data.";
   movieDetails$: Observable<MovieDetails>;
+  fromMsg: "ShowMsgMDP";
+  MovieDetailsRequestedMDP: "MovieDetailsRequestedMDP";
+  MovieDetailsClearedMDP: "MovieDetailsClearedMDP";
 
   // Card Inputs
   leftBtn: IconBtn = { text: "Go Back", icon: "fas fa-chevron-left" };
@@ -39,40 +46,26 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.route.params.pipe(first()).subscribe(params => {
-      this.movieDbService
-        .getMovieDetails(params.id)
-        .pipe(first())
-        .subscribe(
-          details => this.handleSuccess(),
-          err => this.handleError(),
-          () => this.handleSuccess("complete")
-        );
+      this.getMovieDetails(params.id);
     });
 
     this.movieDetails$ = this.store.pipe(select(selectMovieDetails));
   }
 
   ngOnDestroy() {
-    this.store.dispatch(new MovieDetailsCleared());
-  }
-
-  handleSuccess(type = "success") {
-    if (type === "complete") {
-      console.log("Complete: Movie Details - getMovieDetails");
-    }
-  }
-
-  handleError(msg = this.errMsg) {
     this.store.dispatch(
-      new ShowMsg({
-        msg: {
-          title: "Error",
-          msg,
-          color: "red"
-        },
-        from: "ShowMsgMDP"
-      })
+      new MovieDetailsCleared({ from: this.MovieDetailsClearedMDP })
     );
+  }
+
+  // API Calls and Populate the Store
+  getMovieDetails(id: number) {
+    this.store.dispatch(
+      new MovieDetailsRequested({ from: this.MovieDetailsRequestedMDP })
+    );
+    this.movieDbService
+      .getMovieDetails(id)
+      .subscribe(details => {}, err => errMsg(this.store, this.fromMsg));
   }
 
   // ------------------- CB Events ---------------------------

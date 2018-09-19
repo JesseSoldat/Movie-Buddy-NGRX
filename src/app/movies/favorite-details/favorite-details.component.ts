@@ -21,6 +21,7 @@ import { FavoritesService } from "../../core/services/favorites.service";
 })
 export class FavoriteDetailsComponent implements OnInit, OnDestroy {
   favoriteDetails$: Observable<MovieDetails>;
+  FavoriteDetailsClearedFDP: "FavoriteDetailsClearedFDP";
 
   // Card Inputs
   leftBtn: IconBtn = { text: "Go Back", icon: "fas fa-chevron-left" };
@@ -40,7 +41,9 @@ export class FavoriteDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.store.dispatch(new FavoriteDetailsCleared());
+    this.store.dispatch(
+      new FavoriteDetailsCleared({ from: this.FavoriteDetailsClearedFDP })
+    );
   }
 
   // -------------- API / STORE Calls --------------------
@@ -48,7 +51,7 @@ export class FavoriteDetailsComponent implements OnInit, OnDestroy {
     this.favoriteDetails$ = this.store.pipe(
       select(selectFavoriteDetailsFromFavorites(id)),
       filter((details: MovieDetails) => {
-        console.log("Filter - Favorite Details:", details);
+        // console.log("Filter - Favorite Details:", details);
         if (!details) {
           this.favoritesService.getFavorites();
         }
@@ -56,7 +59,7 @@ export class FavoriteDetailsComponent implements OnInit, OnDestroy {
       }),
       first(),
       tap((details: MovieDetails) => {
-        console.log("Tap - Favorite Details:", details);
+        // console.log("Tap - Favorite Details:", details);
       })
     );
   }

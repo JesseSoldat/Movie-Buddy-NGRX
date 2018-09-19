@@ -32,6 +32,11 @@ export interface OtherUser {
 export class FavoritesService {
   userId: string;
   favorites: AngularFireList<MovieDetails>;
+  fromMsg = "ShowMsgFS";
+  fromOverlay = "ShowOverlayFS";
+  FavoritesLoadedFS = "FavoritesLoadedFS";
+  FavoritesDeletedFS = "FavoritesDeletedFS";
+  FavoritesAddedFS = "FavoritesAddedFS";
 
   constructor(
     private store: Store<AppState>,
@@ -52,33 +57,36 @@ export class FavoritesService {
       );
   }
 
-  handleStart() {
-    const from = "ShowOverlayFS";
-    this.store.dispatch(createShowOverlay(from, true));
+  showOverlay() {
+    this.store.dispatch(createShowOverlay(this.fromOverlay, true));
   }
 
-  handleSuccess(showOverlay = true) {
-    if (showOverlay) {
-      const from = "ShowOverlayFS";
-      this.store.dispatch(createShowOverlay(from, false));
-    }
+  hideOverlay() {
+    this.store.dispatch(createShowOverlay(this.fromOverlay, false));
   }
 
-  handleError(msg?) {
-    const from = "ShowMsgFS";
-    this.store.dispatch(createErrorMsg(msg, from));
+  showErrMsg(msg = null) {
+    this.store.dispatch(createErrorMsg(this.fromMsg, msg));
   }
 
   handleComplete(source) {
     // console.log(`${source} Observable has completed`);
   }
 
-  // firebase the Observable send the complete msg
-  // but the observable get recreated
-  // if using first() the observable is TRULY completed
+  mapActionsToList(actions) {
+    return actions
+      ? actions.map(action => ({
+          key: action.key,
+          ...action.payload.val()
+        }))
+      : actions;
+  }
+
+  // user first() to get the data once and
+  // not listen to changes from firebase
   getFavorites() {
-    const url = `moviedb/users/${this.userId}/favorites`;
-    this.favorites = this.afDb.list(url);
+    this.favorites = this.afDb.list(`moviedb/users/${this.userId}/favorites`);
+
     this.favorites
       .snapshotChanges()
       .pipe(
@@ -87,72 +95,62 @@ export class FavoritesService {
           // throw new Error();
         }),
         catchError(actions => {
-          this.handleError();
+          this.showErrMsg();
           return of([]);
         }),
-        map(
-          actions =>
-            actions
-              ? actions.map(action => ({
-                  key: action.key,
-                  ...action.payload.val()
-                }))
-              : actions
-        ),
+        map(actions => this.mapActionsToList(actions)),
         tap((favoritesList: MovieDetails[]) => {
           this.store.dispatch(
-            new FavoritesLoaded({ favoritesList, from: "FavoritesLoadedFS" })
+            new FavoritesLoaded({ favoritesList, from: this.FavoritesLoadedFS })
           );
         })
       )
-      .subscribe(() => {
-        this.handleSuccess(false),
-          () => {},
-          this.handleComplete("getFavorites");
-      });
+      .subscribe(
+        favoritesList => {},
+        err => {},
+        () => this.handleComplete("getFavorites")
+      );
   }
 
-  extractList() {}
+  addToFavorites(movie: MovieDetails, route = null) {
+    this.favorites = this.afDb.list(`moviedb/users/${this.userId}/favorites`);
+    this.favorites.push(movie);
 
-  async addToFavorites(movie: MovieDetails, route = null) {
-    const url = `moviedb/users/${this.userId}/favorites`;
-    this.favorites = this.afDb.list(url);
-    await this.favorites.push(movie);
-    this.store.dispatch;
     if (route) {
       this.router.navigateByUrl(route);
     }
+
     this.favorites
       .snapshotChanges()
       .pipe(
         first(),
-        map(
-          actions =>
-            actions
-              ? actions.map(action => ({
-                  key: action.key,
-                  ...action.payload.val()
-                }))
-              : actions
-        ),
+        map(actions => this.mapActionsToList(actions)),
         tap((favoritesList: MovieDetails[]) => {
-          this.store.dispatch(new FavoritesAdded({ favoritesList }));
-          this.handleSuccess();
+          this.store.dispatch(
+            new FavoritesAdded({ favoritesList, from: this.FavoritesAddedFS })
+          );
         })
       )
-      .subscribe();
+      .subscribe(
+        () => this.hideOverlay(),
+        err =>
+          this.showErrMsg(
+            "An error ocurred while adding the movie to your favorites"
+          )
+      );
   }
 
-  async removeFromFavorites(key: string, movieId: number, page = null) {
-    this.handleStart();
-    const url = `moviedb/users/${this.userId}/favorites`;
-    this.favorites = this.afDb.list(url);
-    await this.favorites.remove(key);
+  removeFromFavorites(key: string, movieId: number, page = null) {
+    this.showOverlay();
+    this.favorites = this.afDb.list(`moviedb/users/${this.userId}/favorites`);
+    this.favorites.remove(key);
 
     if (page === "details") {
       this.router.navigateByUrl("/movies/favorites");
     }
-    this.store.dispatch(new FavoritesDeleted({ movieId }));
-    this.handleSuccess();
+    this.store.dispatch(
+      new FavoritesDeleted({ movieId, from: this.FavoritesDeletedFS })
+    );
+    this.hideOverlay();
   }
 }
