@@ -22,7 +22,7 @@ import { FavoritesService } from "../../core/services/favorites.service";
 export class FavoriteDetailsComponent implements OnInit, OnDestroy {
   favoriteDetails$: Observable<MovieDetails>;
   // From Actions
-  favoriteDetailsClearedFDP: "FavoriteDetailsClearedFDP";
+  favoriteDetailsClearedFDP = "FavoriteDetailsClearedFDP";
 
   // Card Inputs
   leftBtn: IconBtn = { text: "Go Back", icon: "fas fa-chevron-left" };

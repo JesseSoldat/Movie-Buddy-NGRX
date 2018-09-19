@@ -103,10 +103,6 @@ export class FavoritesService {
     this.favorites = this.afDb.list(`moviedb/users/${this.userId}/favorites`);
     this.favorites.push(movie);
 
-    if (route) {
-      this.router.navigateByUrl(route);
-    }
-
     this.favorites
       .snapshotChanges()
       .pipe(
@@ -119,7 +115,12 @@ export class FavoritesService {
         })
       )
       .subscribe(
-        () => hideOverlay(this.store, this.fromOverlay),
+        () => {
+          if (route) {
+            this.router.navigateByUrl(route);
+          }
+          hideOverlay(this.store, this.fromOverlay);
+        },
         err =>
           errMsg(
             this.store,

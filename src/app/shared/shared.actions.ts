@@ -8,13 +8,14 @@ export enum SharedActionTypes {
   ShowOverlayFS = "[Favorites Service] ShowOverlay",
   ShowOverlayMS = "[Movie Service] ShowOverlay",
   ShowOverlayMSP = "[Movie Search Page] ShowOverlay Add Favorite",
+  ShowOverlayMDP = "[Movie Details Page] ShowOverlay Add Favorite",
   // MSG
   ShowMsgAS = "[Auth Service] ShowMsg",
   ShowMsgFS = "[Favorites Service] ShowMsg",
   ShowMsgMS = "[Movie Service] ShowMsg",
   ShowMsgMC = "[Message Component] ShowMsg",
   ShowMsgMDP = "[Movie Details Page] ShowMsg",
-  ShowMsgMSP = "[ Movie Search Page ] Show Msg"
+  ShowMsgMSP = "[Movie Search Page] Show Msg"
 }
 
 export class ShowOverlay implements Action {

@@ -10,7 +10,8 @@ import { AppState } from "../../reducers";
 import {
   MoviesRequested,
   MoviesLoaded,
-  MovieDetailsRequested
+  MovieDetailsRequested,
+  MovieDetailsCleared
 } from "../movie.actions";
 import { FavoritesRequested, FavoritesLoaded } from "../favorites.actions";
 // Selectors
@@ -49,6 +50,7 @@ export class MoviesSearchComponent implements OnInit {
   favoritesRequestedMSP = "FavoritesRequestedMSP";
   favoritesLoadedFromLocalStorageMSP = "FavoritesLoadedFromLocalStorageMSP";
   moviesLoadedFromLocalStorageMSP = "MoviesLoadedFromLocalStorageMSP";
+  movieDetailsClearedMSP = "movieDetailsClearedMSP";
 
   // Card Inputs
   leftBtn: IconBtn = { text: "View", icon: "fa fa-eye" };
@@ -150,6 +152,9 @@ export class MoviesSearchComponent implements OnInit {
     this.movieDbService.getMovieDetails(keys.id).subscribe(
       (details: MovieDetails) => {
         const movieDetails: MovieDetails = createMovieDetails(details);
+        this.store.dispatch(
+          new MovieDetailsCleared({ from: this.movieDetailsClearedMSP })
+        );
 
         this.favoritesService.addToFavorites(movieDetails);
       },

@@ -30,6 +30,7 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
   movieDetails$: Observable<MovieDetails>;
   // From Action Types
   fromMsg = "ShowMsgMDP";
+  fromShowOverlay = "ShowOverlayMDP";
   movieDetailsRequestedMDP = "MovieDetailsRequestedMDP";
   movieDetailsClearedMDP = "MovieDetailsClearedMDP";
 
@@ -76,6 +77,7 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
   }
 
   addToFavorites(movie) {
+    showOverlay(this.store, this.fromShowOverlay);
     this.favoritesService.addToFavorites(movie, "/movies/favorites");
   }
 }

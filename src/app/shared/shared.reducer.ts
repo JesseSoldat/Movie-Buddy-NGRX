@@ -16,15 +16,18 @@ export const sharedReducer = (state = initialSharedState, action) => {
   const { type, payload } = action;
 
   switch (type) {
+    // Overlay
     case SharedActionTypes.ShowOverlayAS:
     case SharedActionTypes.ShowOverlayFS:
     case SharedActionTypes.ShowOverlayMS:
     case SharedActionTypes.ShowOverlayMSP:
+    case SharedActionTypes.ShowOverlayMDP:
       return { ...state, showOverlay: payload.showOverlay };
 
+    // Msg
+    case SharedActionTypes.ShowMsgAS:
     case SharedActionTypes.ShowMsgFS:
     case SharedActionTypes.ShowMsgMS:
-    case SharedActionTypes.ShowMsgAS:
     case SharedActionTypes.ShowMsgMC:
     case SharedActionTypes.ShowMsgMDP:
     case SharedActionTypes.ShowMsgMSP:

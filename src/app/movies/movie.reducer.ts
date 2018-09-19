@@ -24,6 +24,7 @@ export const movieReducer = (state = initialMovieState, action) => {
       return { ...state, movieDetails: payload.movieDetails };
 
     case MovieActionTypes.MovieDetailsClearedMDP:
+    case MovieActionTypes.movieDetailsClearedMSP:
       return { ...state, movieDetails: null };
 
     default:

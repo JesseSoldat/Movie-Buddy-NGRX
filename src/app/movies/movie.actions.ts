@@ -12,6 +12,7 @@ export enum MovieActionTypes {
   MovieDetailsRequestedMSP = "[Movie Search Page] MovieDetailsRequested",
   MovieDetailsRequestedMDP = "[Movie Details Page] MovieDetailsRequested",
   MovieDetailsLoadedMS = "[Movies Service] MovieDetailsLoaded",
+  movieDetailsClearedMSP = "[Movie Search Page] movieDetailsClearedMSP",
   MovieDetailsClearedMDP = "[Movie Details Page] MovieDetailsCleared"
 }
 // Movie List

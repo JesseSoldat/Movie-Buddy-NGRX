@@ -4,8 +4,6 @@ import { ShowMsg } from "../shared/shared.actions";
 const defaultMsg = "An error ocurred while fetching the data.";
 
 export const errMsg = (store, from, msgText = defaultMsg) => {
-  console.log("FROM: errMsg:", from);
-
   store.dispatch(
     new ShowMsg({
       msg: {
