@@ -1,7 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 // Rxjs
-import { first } from "rxjs/operators";
+import { first, map, switchMap } from "rxjs/operators";
+import { of, empty } from "rxjs";
 // NGRX
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
@@ -24,9 +25,11 @@ export class MatchedUserFavoriteDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // this.route.params.pipe(first()).subscribe(param => {
-    //   this.matchesService.getOtherUserMovies(param.id);
-    // });
+    this.route.params.pipe(first()).subscribe(params => {
+      const userId = params.userId;
+      const movieId = params.movieId;
+    });
+
     // this.store
     //   .pipe(
     //     select(selectNonMatchedUserMovies),
@@ -38,3 +41,27 @@ export class MatchedUserFavoriteDetailsComponent implements OnInit {
     //   });
   }
 }
+
+// initialize() {
+//   this.appParameters
+//     .map(params => params['id'])
+//     .switchMap(id => {
+//       if(id !== null && id !== undefined) {
+//         return this.getUser(id)
+//       }
+//     })
+//     .subscribe(user => this.user = user);
+// }
+
+// this.route.params.pipe(
+//   map((params: any) => ({userId: params.userId, movieId: params.movieId}),
+//   switchMap((ids: any) => {
+//     console.log(ids);
+
+//     if(ids.movieId) {
+//       return of['hello']
+//     } else {
+//       return empty()
+//     }
+//   })
+//   )

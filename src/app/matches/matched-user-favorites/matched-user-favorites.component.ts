@@ -30,6 +30,7 @@ import { showOverlay } from "../../utils/ui.action.dispatchers";
 export class MatchedUserFavoritesComponent implements OnInit {
   matches$: Observable<any>;
   favorites;
+  matchedUserId: string;
   // Action From Types
   fromShowOverlay = "ShowOverlayMUFP";
   getMatchedUserRequestMUFP = "GetMatchedUserRequestMUFP";
@@ -65,17 +66,21 @@ export class MatchedUserFavoritesComponent implements OnInit {
     );
 
     this.route.params.pipe(first()).subscribe(param => {
+      this.matchedUserId = param.userId;
+
       this.store.dispatch(
         new GetMatchedUserRequest({ from: this.getMatchedUserRequestMUFP })
       );
 
-      this.matchesService.getOtherUserMovies(param.id);
+      this.matchesService.getOtherUserMovies(this.matchedUserId);
     });
   }
 
   // Card
   handleView(keys: MovieKeys) {
-    this.router.navigateByUrl(`/matches/details/${keys.id}`);
+    this.router.navigateByUrl(
+      `/matches/details/${this.matchedUserId}/${keys.id}`
+    );
   }
 
   addToFavorites(keys: MovieKeys) {

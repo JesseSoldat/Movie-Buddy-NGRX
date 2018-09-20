@@ -7,8 +7,11 @@ import { MatchedUserFavoriteDetailsComponent } from "./matched-user-favorite-det
 
 const routes: Routes = [
   { path: "", component: MatchedUsersComponent },
-  { path: "user/:id", component: MatchedUserFavoritesComponent },
-  { path: "details/:id", component: MatchedUserFavoriteDetailsComponent }
+  { path: "user/:userId", component: MatchedUserFavoritesComponent },
+  {
+    path: "details/:userId/:movieId",
+    component: MatchedUserFavoriteDetailsComponent
+  }
 ];
 
 @NgModule({

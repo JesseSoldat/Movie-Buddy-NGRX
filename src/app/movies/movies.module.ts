@@ -12,7 +12,6 @@ import { MovieEffects } from "./movies.effects";
 import { FavoritesEffects } from "./favorites.effects";
 // Components
 import { MovieDetailsComponent } from "./movie-details/movie-details.component";
-import { DetailsCardComponent } from "./details-card/details-card.component";
 import { MoviesSearchComponent } from "./movies-search/movies-search.component";
 import { FavoritesComponent } from "./favorites/favorites.component";
 import { FavoriteDetailsComponent } from "./favorite-details/favorite-details.component";
@@ -30,7 +29,6 @@ import { FavoriteDetailsComponent } from "./favorite-details/favorite-details.co
   exports: [MoviesRoutingModule],
   declarations: [
     MovieDetailsComponent,
-    DetailsCardComponent,
     MoviesSearchComponent,
     FavoritesComponent,
     FavoriteDetailsComponent

@@ -18,6 +18,12 @@ export const selectUser = createSelector(
   authState => authState.user
 );
 
-export const selectUserUid = createSelector(selectUser, user => user.uid);
+export const selectUserUid = createSelector(
+  selectUser,
+  user => (user ? user.uid : null)
+);
 
-export const selectUsername = createSelector(selectUser, user => user.username);
+export const selectUsername = createSelector(
+  selectUser,
+  user => (user ? user.username : null)
+);
