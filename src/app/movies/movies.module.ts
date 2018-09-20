@@ -15,7 +15,6 @@ import { MovieDetailsComponent } from "./movie-details/movie-details.component";
 import { DetailsCardComponent } from "./details-card/details-card.component";
 import { MoviesSearchComponent } from "./movies-search/movies-search.component";
 import { FavoritesComponent } from "./favorites/favorites.component";
-import { CardComponent } from "./card/card.component";
 import { FavoriteDetailsComponent } from "./favorite-details/favorite-details.component";
 
 @NgModule({
@@ -34,7 +33,6 @@ import { FavoriteDetailsComponent } from "./favorite-details/favorite-details.co
     DetailsCardComponent,
     MoviesSearchComponent,
     FavoritesComponent,
-    CardComponent,
     FavoriteDetailsComponent
   ]
 })

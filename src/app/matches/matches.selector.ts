@@ -29,22 +29,23 @@ export const selectMatch = createSelector(
 export const selectNonMatchedUserMovies = createSelector(
   selectUserFavoriteIds,
   selectMatch,
-  (ids, user) => {
-    // console.log(ids);
-    // console.log(user);
-    if (ids && user) {
-      const favorites = Object.values(user.favorites);
+  (currentUserIds, matchedUser) => {
+    // console.log("MyListIds:", currentUserIds);
+
+    if (currentUserIds && matchedUser) {
+      const favorites = Object.values(matchedUser.favorites);
       const newMovies = favorites.filter(
-        favorite => !ids.find(id => id === favorite.id)
+        favorite => !currentUserIds.find(id => id === favorite.id)
       );
-      console.log("ALL:", favorites);
-      console.log("FILTERED:", newMovies);
+      // console.log("ALL of Matched User Favorites:", favorites);
+      // console.log("FILTERED:", newMovies);
       return {
-        favorites: favorites,
-        key: user.key,
-        user: user.user
+        favorites: newMovies,
+        key: matchedUser.key,
+        user: matchedUser.user
       };
+    } else {
+      return null;
     }
-    return null;
   }
 );

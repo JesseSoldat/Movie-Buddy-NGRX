@@ -1,14 +1,15 @@
 <app-overlay></app-overlay>
 <app-heading heading="Search Others' Movies"></app-heading>
-<app-spinner *ngIf="!(matches$ | async)"></app-spinner>
+
 <div class="container">
-  <div class="row" *ngIf="matches$ | async as matches">
+  <div class="row" *ngIf="(matches$ | async) as matches; else showSpinner">
     <div class="col-12 mx-auto mt-3">
-      <ul class="list-group list-group-flush" *ngFor="let match of matches">
+      <ul class="list-group list-group-flush" *ngFor="let match of matches; let i = index">
         <li class="list-group-item py-5">
           <div class="row">
             <div class="col-xs-12 col-md-8">
-              <span class="matchedUser mr-2">{{match.username | titlecase }} has matched <b>{{match.matched}}</b>
+              <span class="matchedUser mr-2"><b>#{{i + 1}}:</b>&nbsp;&nbsp; {{match.username | titlecase }} has matched
+                <b>{{match.matched}}</b>
                 movies with
                 you. They have <b>{{match.unmatched}}</b> other movies?
               </span>
@@ -25,3 +26,7 @@
     </div>
   </div>
 </div>
+
+<ng-template #showSpinner>
+  <app-spinner></app-spinner>
+</ng-template>

@@ -3,8 +3,8 @@
 <app-search-box (searchChanged)="onSearchChanged($event)"></app-search-box>
 
 <div class="row">
-  <div class="col-xs-12 col-sm-10 mx-auto">
-    <div class="col-12 d-flex justify-content-around flex-wrap">
+  <div class="col-xs-12 col-sm-11 mx-auto">
+    <div class="d-flex justify-content-around flex-wrap">
       <app-card *ngFor="let movie of movieList$ | async" (handleLeftBtnClick)="handleView($event)"
         (handleRightBtnClick)="addToFavorites($event)" [data]="movie" [leftBtn]="leftBtn" [rightBtn]="rightBtn">
       </app-card>

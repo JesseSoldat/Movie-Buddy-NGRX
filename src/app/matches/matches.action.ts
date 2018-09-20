@@ -4,27 +4,62 @@ import { MatchedUser } from "../models/matched-user.model";
 import { FbUser } from "../models/fb-user.model";
 
 export enum MatchesActionTypes {
-  GetUserFavoriteIds = "GetUserFavoriteIds",
-  GetMatches = "GetMatches",
-  GetMatch = "GetMatch"
+  // Current Users Favorite Ids to compare to other users
+  GetUserFavoriteIdsMS = "[Matches Service] GetUserFavoriteIds",
+  // Get All Matched Users
+  GetMatchedUsersRequestMUP = "[Matched Users Page] GetMatchedUsersRequest",
+  GetMatchedUsersLoadedMS = "[Matches Service] GetMatchedUsersLoaded",
+  // Get A Single Matched User's List of Unmatched Movies
+  GetMatchedUserRequestMP = "[Matches Page] GetMatchedUserRequest",
+  GetMatchedUserLoadedMS = "[Matches Service] GetMatchedUserLoaded"
 }
 
+// Get All Matched Users
+export class GetMatchedUsersRequest implements Action {
+  type: string;
+
+  constructor(public payload: { from: string }) {
+    this.type = MatchesActionTypes[payload.from];
+  }
+}
+
+export class GetMatchedUsersLoaded implements Action {
+  type: string;
+
+  constructor(public payload: { matches: MatchedUser[]; from: string }) {
+    this.type = MatchesActionTypes[payload.from];
+  }
+}
+
+// Current Users Favorite Ids to compare to other users
 export class GetUserFavoriteIds implements Action {
-  readonly type = MatchesActionTypes.GetUserFavoriteIds;
+  type: string;
 
-  constructor(public payload: { userFavoriteIds: string[] }) {}
+  constructor(public payload: { userFavoriteIds: string[]; from: string }) {
+    this.type = MatchesActionTypes[payload.from];
+  }
 }
 
-export class GetMatches implements Action {
-  readonly type = MatchesActionTypes.GetMatches;
+// Get A Single Matched User's List of Unmatched Movies
+export class GetMatchedUserRequest implements Action {
+  type: string;
 
-  constructor(public payload: { matches: MatchedUser[] }) {}
+  constructor(public payload: { from: string }) {
+    this.type = MatchesActionTypes[payload.from];
+  }
 }
 
-export class GetMatch implements Action {
-  readonly type = MatchesActionTypes.GetMatch;
+export class GetMatchedUserLoaded implements Action {
+  type: string;
 
-  constructor(public payload: { match: FbUser }) {}
+  constructor(public payload: { match: FbUser; from: string }) {
+    this.type = MatchesActionTypes[payload.from];
+  }
 }
 
-export type MatchesActions = GetMatches | GetMatch;
+export type MatchesActions =
+  | GetMatchedUsersRequest
+  | GetMatchedUsersLoaded
+  | GetUserFavoriteIds
+  | GetMatchedUserRequest
+  | GetMatchedUserLoaded;

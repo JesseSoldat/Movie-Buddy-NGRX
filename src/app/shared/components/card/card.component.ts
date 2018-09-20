@@ -1,9 +1,9 @@
 import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
 // Models
-import { Movie } from "../../models/movie.model";
-import { MovieDetails } from "../../models/movie-details.model";
-import { MovieKeys } from "../../models/movie-keys.model";
-import { IconBtn } from "../../models/icon-btn.model";
+import { Movie } from "../../../models/movie.model";
+import { MovieDetails } from "../../../models/movie-details.model";
+import { MovieKeys } from "../../../models/movie-keys.model";
+import { IconBtn } from "../../../models/icon-btn.model";
 
 @Component({
   selector: "app-card",

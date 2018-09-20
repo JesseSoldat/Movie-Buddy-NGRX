@@ -6,9 +6,9 @@ import { StoreModule } from "@ngrx/store";
 import { matchesReducer } from "./matches.reducer";
 import { MatchesRoutingModule } from "./matches-routing.module";
 import { SharedModule } from "../shared/shared.module";
-import { MatchesComponent } from "./matches/matches.component";
-import { MatchDetailsComponent } from './match-details/match-details.component';
-import { MatchedUsersComponent } from './matched-users/matched-users.component';
+import { MatchedUsersComponent } from "./matched-users/matched-users.component";
+import { MatchedUserFavoritesComponent } from "./matched-user-favorites/matched-user-favorites.component";
+import { MatchedUserFavoriteDetailsComponent } from "./matched-user-favorite-details/matched-user-favorite-details.component";
 
 @NgModule({
   imports: [
@@ -17,6 +17,10 @@ import { MatchedUsersComponent } from './matched-users/matched-users.component';
     MatchesRoutingModule,
     StoreModule.forFeature("matches", matchesReducer)
   ],
-  declarations: [MatchesComponent, MatchDetailsComponent, MatchedUsersComponent]
+  declarations: [
+    MatchedUsersComponent,
+    MatchedUserFavoritesComponent,
+    MatchedUserFavoriteDetailsComponent
+  ]
 })
 export class MatchesModule {}

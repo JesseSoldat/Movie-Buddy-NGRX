@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 // Rxjs
-import { map } from "rxjs/operators";
+import { map, first } from "rxjs/operators";
 // Lodash
 import { intersection, difference, orderBy } from "lodash";
 // Firebase
@@ -14,8 +14,8 @@ import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
 import { selectUserUid } from "../../auth/auth.selectors";
 import {
-  GetMatches,
-  GetMatch,
+  GetMatchedUsersLoaded,
+  GetMatchedUserLoaded,
   GetUserFavoriteIds
 } from "../../matches/matches.action";
 // Models
@@ -31,11 +31,19 @@ export interface OtherUser {
 @Injectable()
 export class MatchesService {
   userId: string;
-  myList: string[]; // current users favorites
-  otherUser: AngularFireObject<FbUser>; // single matched user
-  otherUsersList: AngularFireList<FbUser>; // all users
-  otherUsersIds: OtherUser[]; // others users movie ids
-  matchedUserList: MatchedUser[]; // all user data formatted
+  currentUser: AngularFireObject<FbUser>; // currently logged in user
+  matchedUser: AngularFireObject<FbUser>; // single matched user
+  allUsersAndFavoritesList: AngularFireList<FbUser>; // all users
+  // Ids of favorites only
+  myListIds: string[]; // current users favorites ids
+  matchedUsersIds: OtherUser[]; // matched users favorites ids
+
+  matchedUserList: MatchedUser[]; // all matched users with data formatted
+
+  // From Action Types
+  getUserFavoriteIdsMS = "GetUserFavoriteIdsMS";
+  getMatchedUsersLoadedMS = "GetMatchedUsersLoadedMS";
+  getMatchedUserLoadedMS = "GetMatchedUserLoadedMS";
 
   constructor(
     private store: Store<AppState>,
@@ -46,46 +54,72 @@ export class MatchesService {
       .subscribe(uid => (this.userId = uid));
   }
 
-  // Single user and their movies
-  getOtherUserMovies(uid: string) {
-    const url = `moviedb/users/${uid}`;
-    this.otherUser = this.afDb.object(url);
+  // Helpers
+  mapActionsToList(actions) {
+    return actions
+      ? actions.map(action => ({
+          key: action.key,
+          ...action.payload.val()
+        }))
+      : actions;
+  }
 
-    this.otherUser.snapshotChanges().subscribe(action => {
-      const match: FbUser = action.payload.val();
-      match["key"] = action.key;
-      this.store.dispatch(new GetMatch({ match }));
+  // Get the current users favorite movie ids
+  getCurrentUserFavoriteIds() {
+    this.currentUser = this.afDb.object(`moviedb/users/${this.userId}`);
+
+    this.currentUser.snapshotChanges().subscribe(action => {
+      const user: FbUser = action.payload.val();
+
+      this.myListIds = this.getFavoriteIds(user.favorites);
+
+      this.store.dispatch(
+        new GetUserFavoriteIds({
+          userFavoriteIds: this.myListIds,
+          from: this.getUserFavoriteIdsMS
+        })
+      );
     });
   }
 
-  // List of other Users and their movies
-  getOtherUsersLists() {
-    const url = "moviedb/users";
-    this.otherUsersList = this.afDb.list(url);
-    this.otherUsersList
+  // Single user and their movies
+  getOtherUserMovies(uid: string): void {
+    this.matchedUser = this.afDb.object(`moviedb/users/${uid}`);
+
+    this.matchedUser.snapshotChanges().subscribe(action => {
+      const match: FbUser = action.payload.val();
+      match["key"] = action.key;
+      this.store.dispatch(
+        new GetMatchedUserLoaded({ match, from: this.getMatchedUserLoadedMS })
+      );
+    });
+  }
+
+  // List All Users including current user and their movies
+  getOtherUsersLists(): void {
+    this.allUsersAndFavoritesList = this.afDb.list("moviedb/users");
+
+    this.allUsersAndFavoritesList
       .snapshotChanges()
       .pipe(
-        map(actions => {
-          const usersList: FbUser[] = actions.map(action => ({
-            key: action.key,
-            ...action.payload.val()
-          }));
-
-          return usersList;
-        })
+        first(),
+        map(actions => this.mapActionsToList(actions))
       )
       .subscribe(usersList => {
         // Clear previous state
-        this.otherUsersIds = [];
+        this.myListIds = [];
+        this.matchedUsersIds = [];
+
         usersList.forEach((user: FbUser) => {
           // My List
           if (user.key === this.userId) {
-            // console.log(user);
-            this.myList = this.getFavoriteIds(user.favorites);
+            this.myListIds = this.getFavoriteIds(user.favorites);
             this.store.dispatch(
-              new GetUserFavoriteIds({ userFavoriteIds: this.myList })
+              new GetUserFavoriteIds({
+                userFavoriteIds: this.myListIds,
+                from: this.getUserFavoriteIdsMS
+              })
             );
-            // console.log(this.myList);
           }
           // Others List
           else {
@@ -94,7 +128,7 @@ export class MatchesService {
               favoriteIds: []
             };
             otherUser.favoriteIds = this.getFavoriteIds(user.favorites);
-            this.otherUsersIds.push(otherUser);
+            this.matchedUsersIds.push(otherUser);
           }
         });
         // console.log("others", this.otherUsersIds);
@@ -102,7 +136,7 @@ export class MatchesService {
       });
   }
 
-  getFavoriteIds(favorites) {
+  getFavoriteIds(favorites): string[] {
     const temp = [];
     for (let key in favorites) {
       if (favorites.hasOwnProperty(key)) {
@@ -112,14 +146,14 @@ export class MatchesService {
     return temp;
   }
 
-  createUserMatches() {
+  createUserMatches(): void {
     this.matchedUserList = [];
-    this.otherUsersIds.forEach(otherUser => {
+    this.matchedUsersIds.forEach(otherUser => {
       const matched: MatchedUser = {
         username: otherUser.user.username,
         uid: otherUser.user.uid,
-        isMatch: intersection(otherUser.favoriteIds, this.myList),
-        noMatch: difference(otherUser.favoriteIds, this.myList),
+        isMatch: intersection(otherUser.favoriteIds, this.myListIds),
+        noMatch: difference(otherUser.favoriteIds, this.myListIds),
         matched: 0,
         unmatched: 0
       };
@@ -132,6 +166,8 @@ export class MatchesService {
 
     const matches = orderBy(this.matchedUserList, ["matched"], ["desc"]);
 
-    this.store.dispatch(new GetMatches({ matches }));
+    this.store.dispatch(
+      new GetMatchedUsersLoaded({ matches, from: this.getMatchedUsersLoadedMS })
+    );
   }
 }

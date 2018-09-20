@@ -7,7 +7,7 @@ export enum MovieActionTypes {
   // Movie List
   MoviesRequestedMSP = "[Movie Search Page] MoviesRequested",
   MoviesLoadedMS = "[Movies Service] MoviesLoaded",
-  MoviesLoadedFromLocalStorageMSP = "[Movies Search Page - Local Storage ] MoviesLoaded",
+  MoviesLoadedFromLocalStorageMSP = "[Movies Search Page - Local Storage] MoviesLoaded",
   // Details
   MovieDetailsRequestedMSP = "[Movie Search Page] MovieDetailsRequested",
   MovieDetailsRequestedMDP = "[Movie Details Page] MovieDetailsRequested",

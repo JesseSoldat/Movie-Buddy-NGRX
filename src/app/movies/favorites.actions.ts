@@ -8,8 +8,8 @@ export enum FavoritesActionTypes {
   FavoritesRequestedFP = "[Favorites Page] FavoritesRequested",
   // Loaded
   FavoritesLoadedFS = "[Favorites Service] FavoritesLoaded",
-  FavoritesLoadedFromLocalStorageMSP = "[ Movies Search Page - Local Storage ] FavoritesLoaded",
-  FavoritesLoadedFromLocalStorageFP = "[ Favorites Page - Local Storage ] FavoritesLoaded",
+  FavoritesLoadedFromLocalStorageMSP = "[Movies Search Page - Local Storage] FavoritesLoaded",
+  FavoritesLoadedFromLocalStorageFP = "[Favorites Page - Local Storage] FavoritesLoaded",
   // Updates
   FavoritesDeletedFS = "[Favorites Service] FavoritesDeleted",
   FavoritesAddedFS = "[Favorites Service] FavoritesAdded",

@@ -1,0 +1,18 @@
+<app-overlay></app-overlay>
+<app-heading heading="Matches"></app-heading>
+
+<div class="row" *ngIf="(matches$ | async) as matches; else showSpinner ">
+
+  <div class="col-xs-12 col-sm-11 mx-auto">
+    <div class="d-flex justify-content-around flex-wrap">
+
+      <app-card *ngFor="let match of matches.favorites" (handleLeftBtnClick)="leftBtnClick($event)"
+        (handleRightBtnClick)="rightBtnClick($event)" [data]="match" [leftBtn]="leftBtn" [rightBtn]="rightBtn">
+      </app-card>
+    </div>
+  </div>
+</div>
+
+<ng-template #showSpinner>
+  <app-spinner></app-spinner>
+</ng-template>

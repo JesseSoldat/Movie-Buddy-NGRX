@@ -17,13 +17,13 @@ export const initialMatchesState = {
 export const matchesReducer = (state = initialMatchesState, action) => {
   const { type, payload } = action;
   switch (type) {
-    case MatchesActionTypes.GetMatches:
+    case MatchesActionTypes.GetMatchedUsersLoadedMS:
       return { ...state, matches: payload.matches, match: null };
 
-    case MatchesActionTypes.GetMatch:
+    case MatchesActionTypes.GetMatchedUserLoadedMS:
       return { ...state, match: payload.match };
 
-    case MatchesActionTypes.GetUserFavoriteIds:
+    case MatchesActionTypes.GetUserFavoriteIdsMS:
       return { ...state, userFavoriteIds: payload.userFavoriteIds };
 
     default:
