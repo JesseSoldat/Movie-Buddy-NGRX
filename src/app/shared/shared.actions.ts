@@ -9,6 +9,7 @@ export enum SharedActionTypes {
   ShowOverlayMS = "[Movie Service] ShowOverlay",
   ShowOverlayMSP = "[Movie Search Page] ShowOverlay Add Favorite",
   ShowOverlayMDP = "[Movie Details Page] ShowOverlay Add Favorite",
+  ShowOverlayMUFP = "[Match User Favorites Page] ShowOverlay Add Favorite",
   // MSG
   ShowMsgAS = "[Auth Service] ShowMsg",
   ShowMsgFS = "[Favorites Service] ShowMsg",

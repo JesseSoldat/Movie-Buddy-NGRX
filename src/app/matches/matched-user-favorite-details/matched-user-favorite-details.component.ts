@@ -24,17 +24,17 @@ export class MatchedUserFavoriteDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.params.pipe(first()).subscribe(param => {
-      this.matchesService.getOtherUserMovies(param.id);
-    });
-    this.store
-      .pipe(
-        select(selectNonMatchedUserMovies),
-        first()
-      )
-      .subscribe(matches => {
-        this.matches = matches;
-        console.log(matches);
-      });
+    // this.route.params.pipe(first()).subscribe(param => {
+    //   this.matchesService.getOtherUserMovies(param.id);
+    // });
+    // this.store
+    //   .pipe(
+    //     select(selectNonMatchedUserMovies),
+    //     first()
+    //   )
+    //   .subscribe(matches => {
+    //     this.matches = matches;
+    //     console.log(matches);
+    //   });
   }
 }

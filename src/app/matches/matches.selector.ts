@@ -29,7 +29,7 @@ export const selectMatch = createSelector(
 export const selectNonMatchedUserMovies = createSelector(
   selectUserFavoriteIds,
   selectMatch,
-  (currentUserIds, matchedUser) => {
+  (currentUserIds, matchedUser: FbUser) => {
     // console.log("MyListIds:", currentUserIds);
 
     if (currentUserIds && matchedUser) {

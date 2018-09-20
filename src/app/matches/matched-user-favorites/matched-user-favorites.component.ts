@@ -1,12 +1,11 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 // Rxjs
 import { first, tap } from "rxjs/operators";
 import { Observable } from "rxjs";
 // NGRX
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
-import { MatchesService } from "../../core/services/matches.service";
 import {
   GetUserFavoriteIdsRequest,
   GetMatchedUserRequest
@@ -14,6 +13,14 @@ import {
 import { selectNonMatchedUserMovies } from "../matches.selector";
 // Models
 import { IconBtn } from "../../models/icon-btn.model";
+import { MovieKeys } from "../../models/movie-keys.model";
+import { MatchedUser } from "../../models/matched-user.model";
+import { FbUser } from "../../models/fb-user.model";
+// Services
+import { MatchesService } from "../../core/services/matches.service";
+import { FavoritesService } from "../../core/services/favorites.service";
+// Utils
+import { showOverlay } from "../../utils/ui.action.dispatchers";
 
 @Component({
   selector: "app-matched-user-favorites",
@@ -22,7 +29,9 @@ import { IconBtn } from "../../models/icon-btn.model";
 })
 export class MatchedUserFavoritesComponent implements OnInit {
   matches$: Observable<any>;
+  favorites;
   // Action From Types
+  fromShowOverlay = "ShowOverlayMUFP";
   getMatchedUserRequestMUFP = "GetMatchedUserRequestMUFP";
   getUserFavoriteIdsRequestMUFP = "GetUserFavoriteIdsRequestMUFP";
 
@@ -33,14 +42,15 @@ export class MatchedUserFavoritesComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
     private matchesService: MatchesService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
+    private favoritesService: FavoritesService
   ) {}
 
   ngOnInit() {
     this.matches$ = this.store.pipe(
       select(selectNonMatchedUserMovies),
       tap(matches => {
-        // console.log("tap:", matches);
         if (!matches) {
           this.store.dispatch(
             new GetUserFavoriteIdsRequest({
@@ -48,6 +58,8 @@ export class MatchedUserFavoritesComponent implements OnInit {
             })
           );
           this.matchesService.getCurrentUserFavoriteIds();
+        } else {
+          this.favorites = matches.favorites;
         }
       })
     );
@@ -61,36 +73,16 @@ export class MatchedUserFavoritesComponent implements OnInit {
     });
   }
 
-  leftBtnClick(e) {}
-
-  rightBtnClick(e) {}
-
-  // TEMP COPIED FROM MOVIE SEARCH PAGE
   // Card
-  // handleView(keys: MovieKeys) {
-  //   this.router.navigateByUrl(`/movies/${keys.id}`);
-  // }
+  handleView(keys: MovieKeys) {
+    this.router.navigateByUrl(`/matches/details/${keys.id}`);
+  }
 
-  // addToFavorites(keys: MovieKeys) {
-  //   showOverlay(this.store, this.fromShowOverlay);
+  addToFavorites(keys: MovieKeys) {
+    showOverlay(this.store, this.fromShowOverlay);
 
-  //   this.store.dispatch(
-  //     new MovieDetailsRequested({ from: this.movieDetailsRequested })
-  //   );
+    const movie = this.favorites.find(obj => obj.id === keys.id);
 
-  //   this.movieDbService.getMovieDetails(keys.id).subscribe(
-  //     (details: MovieDetails) => {
-  //       const movieDetails: MovieDetails = createMovieDetails(details);
-  //       this.store.dispatch(
-  //         new MovieDetailsCleared({ from: this.movieDetailsClearedMSP })
-  //       );
-
-  //       this.favoritesService.addToFavorites(movieDetails);
-  //     },
-  //     err => {
-  //       const msg = "An error ocurred while trying to add the movie";
-  //       errMsg(this.store, this.fromMsg, msg);
-  //     }
-  //   );
-  // }
+    this.favoritesService.addToFavorites(movie);
+  }
 }

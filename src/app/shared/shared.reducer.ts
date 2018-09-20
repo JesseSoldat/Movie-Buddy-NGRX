@@ -22,6 +22,7 @@ export const sharedReducer = (state = initialSharedState, action) => {
     case SharedActionTypes.ShowOverlayMS:
     case SharedActionTypes.ShowOverlayMSP:
     case SharedActionTypes.ShowOverlayMDP:
+    case SharedActionTypes.ShowOverlayMUFP:
       return { ...state, showOverlay: payload.showOverlay };
 
     // Msg
