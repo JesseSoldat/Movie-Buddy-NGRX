@@ -7,11 +7,11 @@ import { Observable } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
 import { MatchesService } from "../../core/services/matches.service";
-import { GetMatchedUserRequest } from "../matches.action";
 import {
-  selectUserFavoriteIds,
-  selectNonMatchedUserMovies
-} from "../matches.selector";
+  GetUserFavoriteIdsRequest,
+  GetMatchedUserRequest
+} from "../matches.action";
+import { selectNonMatchedUserMovies } from "../matches.selector";
 // Models
 import { IconBtn } from "../../models/icon-btn.model";
 
@@ -23,7 +23,8 @@ import { IconBtn } from "../../models/icon-btn.model";
 export class MatchedUserFavoritesComponent implements OnInit {
   matches$: Observable<any>;
   // Action From Types
-  getMatchedUserRequestMP = "GetMatchedUserRequestMP";
+  getMatchedUserRequestMUFP = "GetMatchedUserRequestMUFP";
+  getUserFavoriteIdsRequestMUFP = "GetUserFavoriteIdsRequestMUFP";
 
   // Card Inputs
   leftBtn: IconBtn = { text: "View", icon: "fa fa-eye" };
@@ -41,14 +42,19 @@ export class MatchedUserFavoritesComponent implements OnInit {
       tap(matches => {
         // console.log("tap:", matches);
         if (!matches) {
+          this.store.dispatch(
+            new GetUserFavoriteIdsRequest({
+              from: this.getUserFavoriteIdsRequestMUFP
+            })
+          );
           this.matchesService.getCurrentUserFavoriteIds();
         }
       })
     );
 
-    this.route.params.subscribe(param => {
+    this.route.params.pipe(first()).subscribe(param => {
       this.store.dispatch(
-        new GetMatchedUserRequest({ from: this.getMatchedUserRequestMP })
+        new GetMatchedUserRequest({ from: this.getMatchedUserRequestMUFP })
       );
 
       this.matchesService.getOtherUserMovies(param.id);

@@ -6,7 +6,10 @@ import { MatchedUser } from "../../models/matched-user.model";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
 import { selectMatches } from "../matches.selector";
-import { GetMatchedUsersRequest } from "../matches.action";
+import {
+  GetMatchedUsersRequest,
+  GetUserFavoriteIdsRequest
+} from "../matches.action";
 // Services
 import { MatchesService } from "../../core/services/matches.service";
 
@@ -19,6 +22,7 @@ export class MatchedUsersComponent implements OnInit {
   matches$: Observable<MatchedUser[]>;
   // From Action Types
   getMatchedUsersRequestMUP = "GetMatchedUsersRequestMUP";
+  getUserFavoriteIdsRequestMUP = "GetUserFavoriteIdsRequestMUP";
 
   constructor(
     private store: Store<AppState>,
@@ -28,6 +32,9 @@ export class MatchedUsersComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(
       new GetMatchedUsersRequest({ from: this.getMatchedUsersRequestMUP })
+    );
+    this.store.dispatch(
+      new GetUserFavoriteIdsRequest({ from: this.getUserFavoriteIdsRequestMUP })
     );
     this.matchesService.getOtherUsersLists();
     this.matches$ = this.store.pipe(select(selectMatches));

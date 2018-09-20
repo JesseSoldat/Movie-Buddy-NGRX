@@ -16,7 +16,7 @@ import { selectUserUid } from "../../auth/auth.selectors";
 import {
   GetMatchedUsersLoaded,
   GetMatchedUserLoaded,
-  GetUserFavoriteIds
+  GetUserFavoriteIdsLoaded
 } from "../../matches/matches.action";
 // Models
 import { User } from "../../models/user.model";
@@ -41,9 +41,9 @@ export class MatchesService {
   matchedUserList: MatchedUser[]; // all matched users with data formatted
 
   // From Action Types
-  getUserFavoriteIdsMS = "GetUserFavoriteIdsMS";
   getMatchedUsersLoadedMS = "GetMatchedUsersLoadedMS";
   getMatchedUserLoadedMS = "GetMatchedUserLoadedMS";
+  getUserFavoriteIdsLoadedMS = "GetUserFavoriteIdsLoadedMS";
 
   constructor(
     private store: Store<AppState>,
@@ -74,9 +74,9 @@ export class MatchesService {
       this.myListIds = this.getFavoriteIds(user.favorites);
 
       this.store.dispatch(
-        new GetUserFavoriteIds({
+        new GetUserFavoriteIdsLoaded({
           userFavoriteIds: this.myListIds,
-          from: this.getUserFavoriteIdsMS
+          from: this.getUserFavoriteIdsLoadedMS
         })
       );
     });
@@ -115,9 +115,9 @@ export class MatchesService {
           if (user.key === this.userId) {
             this.myListIds = this.getFavoriteIds(user.favorites);
             this.store.dispatch(
-              new GetUserFavoriteIds({
+              new GetUserFavoriteIdsLoaded({
                 userFavoriteIds: this.myListIds,
-                from: this.getUserFavoriteIdsMS
+                from: this.getUserFavoriteIdsLoadedMS
               })
             );
           }

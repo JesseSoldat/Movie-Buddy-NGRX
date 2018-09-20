@@ -23,7 +23,7 @@ export const matchesReducer = (state = initialMatchesState, action) => {
     case MatchesActionTypes.GetMatchedUserLoadedMS:
       return { ...state, match: payload.match };
 
-    case MatchesActionTypes.GetUserFavoriteIdsMS:
+    case MatchesActionTypes.GetUserFavoriteIdsLoadedMS:
       return { ...state, userFavoriteIds: payload.userFavoriteIds };
 
     default:

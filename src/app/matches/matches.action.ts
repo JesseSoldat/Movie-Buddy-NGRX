@@ -5,12 +5,16 @@ import { FbUser } from "../models/fb-user.model";
 
 export enum MatchesActionTypes {
   // Current Users Favorite Ids to compare to other users
-  GetUserFavoriteIdsMS = "[Matches Service] GetUserFavoriteIds",
+  GetUserFavoriteIdsRequestMUFP = "[Matched User Favorites Page] GetUserFavoriteIdsRequest",
+  GetUserFavoriteIdsRequestMUP = "[Matched User Page] GetUserFavoriteIdsRequest",
+  GetUserFavoriteIdsLoadedMS = "[Matches Service] GetUserFavoriteIdsLoaded",
+
   // Get All Matched Users
-  GetMatchedUsersRequestMUP = "[Matched Users Page] GetMatchedUsersRequest",
+  GetMatchedUsersRequestMUP = "[Matched User Page] GetMatchedUsersRequest",
   GetMatchedUsersLoadedMS = "[Matches Service] GetMatchedUsersLoaded",
+
   // Get A Single Matched User's List of Unmatched Movies
-  GetMatchedUserRequestMP = "[Matches Page] GetMatchedUserRequest",
+  GetMatchedUserRequestMUFP = "[Matched User Favorites Page] GetMatchedUserRequest",
   GetMatchedUserLoadedMS = "[Matches Service] GetMatchedUserLoaded"
 }
 
@@ -32,7 +36,15 @@ export class GetMatchedUsersLoaded implements Action {
 }
 
 // Current Users Favorite Ids to compare to other users
-export class GetUserFavoriteIds implements Action {
+export class GetUserFavoriteIdsRequest implements Action {
+  type: string;
+
+  constructor(public payload: { from: string }) {
+    this.type = MatchesActionTypes[payload.from];
+  }
+}
+
+export class GetUserFavoriteIdsLoaded implements Action {
   type: string;
 
   constructor(public payload: { userFavoriteIds: string[]; from: string }) {
@@ -60,6 +72,7 @@ export class GetMatchedUserLoaded implements Action {
 export type MatchesActions =
   | GetMatchedUsersRequest
   | GetMatchedUsersLoaded
-  | GetUserFavoriteIds
+  | GetUserFavoriteIdsRequest
+  | GetUserFavoriteIdsLoaded
   | GetMatchedUserRequest
   | GetMatchedUserLoaded;
