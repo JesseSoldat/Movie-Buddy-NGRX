@@ -1,5 +1,7 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { MatchesState } from "./matches.reducer";
+// Models
+import { MovieDetails } from "../models/movie-details.model";
 import { MatchedUser } from "../models/matched-user.model";
 import { FbUser } from "../models/fb-user.model";
 
@@ -22,7 +24,7 @@ export const selectMatches = createSelector(
 // Single matched user
 export const selectMatch = createSelector(
   selectMatchesState,
-  matchesState => <FbUser>matchesState.match
+  matchesState => <FbUser>matchesState.matchedUser
 );
 
 // Single Matched user with Non-Matched Movies
@@ -48,4 +50,10 @@ export const selectNonMatchedUserMovies = createSelector(
       return null;
     }
   }
+);
+
+// Single Matched User's Single Matched Movie
+export const selectMatchedMovie = createSelector(
+  selectMatchesState,
+  matchesState => <MovieDetails>matchesState.matchedMovie
 );

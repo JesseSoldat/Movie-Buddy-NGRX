@@ -16,7 +16,8 @@ import { selectUserUid } from "../../auth/auth.selectors";
 import {
   GetMatchedUsersLoaded,
   GetMatchedUserLoaded,
-  GetUserFavoriteIdsLoaded
+  GetUserFavoriteIdsLoaded,
+  GetMatchedUserDetailsLoaded
 } from "../../matches/matches.action";
 // Models
 import { User } from "../../models/user.model";
@@ -40,10 +41,13 @@ export class MatchesService {
 
   matchedUserList: MatchedUser[]; // all matched users with data formatted
 
+  matchedUserFavorites: AngularFireList<any>; // all of a single matched users favorites
+
   // From Action Types
   getMatchedUsersLoadedMS = "GetMatchedUsersLoadedMS";
   getMatchedUserLoadedMS = "GetMatchedUserLoadedMS";
   getUserFavoriteIdsLoadedMS = "GetUserFavoriteIdsLoadedMS";
+  getMatchedUserDetailsLoadedMS = "GetMatchedUserDetailsLoadedMS";
 
   constructor(
     private store: Store<AppState>,
@@ -82,17 +86,44 @@ export class MatchesService {
     });
   }
 
-  // Single user and their movies
+  // Get a single user and their movies
   getOtherUserMovies(uid: string): void {
     this.matchedUser = this.afDb.object(`moviedb/users/${uid}`);
 
     this.matchedUser.snapshotChanges().subscribe(action => {
-      const match: FbUser = action.payload.val();
-      match["key"] = action.key;
+      const matchedUser: FbUser = action.payload.val();
+      matchedUser["key"] = action.key;
       this.store.dispatch(
-        new GetMatchedUserLoaded({ match, from: this.getMatchedUserLoadedMS })
+        new GetMatchedUserLoaded({
+          matchedUser,
+          from: this.getMatchedUserLoadedMS
+        })
       );
     });
+  }
+
+  // Get a single user and the detail view of a movie
+  getOtherUserMovieDetails(uid: string, movieId: number) {
+    this.matchedUserFavorites = this.afDb.list(
+      `moviedb/users/${uid}/favorites`
+    );
+
+    this.matchedUserFavorites
+      .snapshotChanges()
+      .pipe(
+        first(),
+        map(actions => this.mapActionsToList(actions))
+      )
+      .subscribe(favorites => {
+        const matchedMovie = favorites.find(obj => obj.id === movieId);
+
+        this.store.dispatch(
+          new GetMatchedUserDetailsLoaded({
+            matchedMovie,
+            from: this.getMatchedUserDetailsLoadedMS
+          })
+        );
+      });
   }
 
   // List All Users including current user and their movies

@@ -15,7 +15,15 @@ export enum MatchesActionTypes {
 
   // Get A Single Matched User's List of Unmatched Movies
   GetMatchedUserRequestMUFP = "[Matched User Favorites Page] GetMatchedUserRequest",
-  GetMatchedUserLoadedMS = "[Matches Service] GetMatchedUserLoaded"
+  GetMatchedUserLoadedMS = "[Matches Service] GetMatchedUserLoaded",
+
+  // Get a Single Matched Users Detail view of an Unmatched Movie
+  GetMatchedUserDetailsRequestMUFDP = "[Matched User Favorites Details Page] GetMatchedUserDetailsRequest",
+
+  GetMatchedUserDetailsLoadedMS = "[Matches Service] GetMatchedUserDetailsLoaded",
+
+  // Clear match details view when the component un-mounts
+  MatchDetailsClearedMDP = "[Match Details Page] MatchDetailsCleared"
 }
 
 // Get All Matched Users
@@ -64,7 +72,33 @@ export class GetMatchedUserRequest implements Action {
 export class GetMatchedUserLoaded implements Action {
   type: string;
 
-  constructor(public payload: { match: FbUser; from: string }) {
+  constructor(public payload: { matchedUser: FbUser; from: string }) {
+    this.type = MatchesActionTypes[payload.from];
+  }
+}
+
+// Get a Single Matched Users Detail view of an Unmatched Movie
+
+export class GetMatchedUserDetailsRequest implements Action {
+  type: string;
+
+  constructor(public payload: { from: string }) {
+    this.type = MatchesActionTypes[payload.from];
+  }
+}
+
+export class GetMatchedUserDetailsLoaded implements Action {
+  type: string;
+
+  constructor(public payload: { matchedMovie: FbUser; from: string }) {
+    this.type = MatchesActionTypes[payload.from];
+  }
+}
+
+export class MatchDetailsCleared implements Action {
+  type: string;
+
+  constructor(public payload: { from: string }) {
     this.type = MatchesActionTypes[payload.from];
   }
 }
@@ -75,4 +109,6 @@ export type MatchesActions =
   | GetUserFavoriteIdsRequest
   | GetUserFavoriteIdsLoaded
   | GetMatchedUserRequest
-  | GetMatchedUserLoaded;
+  | GetMatchedUserLoaded
+  | GetMatchedUserDetailsRequest
+  | GetMatchedUserDetailsLoaded;

@@ -29,11 +29,7 @@ import { IconBtn } from "../../models/icon-btn.model";
 import { FavoritesService } from "../../core/services/favorites.service";
 import { MovieDbService } from "../../core/services/moviedb.service";
 // Utils
-import {
-  errMsg,
-  showOverlay,
-  hideOverlay
-} from "../../utils/ui.action.dispatchers";
+import { errMsg, showOverlay } from "../../utils/ui.action.dispatchers";
 
 @Component({
   selector: "app-movies-search",
@@ -50,7 +46,7 @@ export class MoviesSearchComponent implements OnInit {
   favoritesRequestedMSP = "FavoritesRequestedMSP";
   favoritesLoadedFromLocalStorageMSP = "FavoritesLoadedFromLocalStorageMSP";
   moviesLoadedFromLocalStorageMSP = "MoviesLoadedFromLocalStorageMSP";
-  movieDetailsClearedMSP = "movieDetailsClearedMSP";
+  movieDetailsClearedMSP = "MovieDetailsClearedMSP";
 
   // Card Inputs
   leftBtn: IconBtn = { text: "View", icon: "fa fa-eye" };

@@ -1,3 +1,13 @@
-<p>
-  matched-user-favorite-details works!
-</p>
+<app-overlay></app-overlay>
+
+<div class="container-fluid">
+  <app-heading heading="Movie Details"></app-heading>
+
+  <app-details-card *ngIf="(movieDetails$ | async) as movieDetails; else showSpinner" (handleLeftBtnClick)="goBack($event)"
+    (handleRightBtnClick)="addToFavorites($event)" [movieDetails]="movieDetails" [leftBtn]="leftBtn" [rightBtn]="rightBtn"></app-details-card>
+
+  <ng-template #showSpinner>
+    <app-spinner></app-spinner>
+  </ng-template>
+
+</div>
