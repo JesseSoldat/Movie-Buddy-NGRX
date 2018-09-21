@@ -5,6 +5,13 @@ import { MovieDetails } from "../models/movie-details.model";
 import { MatchedUser } from "../models/matched-user.model";
 import { FbUser } from "../models/fb-user.model";
 
+const isEmpty = obj => {
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) return false;
+  }
+  return true;
+};
+
 export const selectMatchesState = createFeatureSelector<MatchesState>(
   "matches"
 );
@@ -35,17 +42,27 @@ export const selectNonMatchedUserMovies = createSelector(
     // console.log("MyListIds:", currentUserIds);
 
     if (currentUserIds && matchedUser) {
-      const favorites = Object.values(matchedUser.favorites);
-      const newMovies = favorites.filter(
-        favorite => !currentUserIds.find(id => id === favorite.id)
-      );
-      // console.log("ALL of Matched User Favorites:", favorites);
-      // console.log("FILTERED:", newMovies);
-      return {
-        favorites: newMovies,
-        key: matchedUser.key,
-        user: matchedUser.user
-      };
+      if (isEmpty(matchedUser.favorites)) {
+        console.log("No Favorites", matchedUser);
+        return {
+          favorites: [],
+          key: matchedUser.key,
+          user: matchedUser.user
+        };
+      } else {
+        const favorites = Object.values(matchedUser.favorites);
+
+        const newMovies = favorites.filter(
+          favorite => !currentUserIds.find(id => id === favorite.id)
+        );
+        // console.log("ALL of Matched User Favorites:", favorites);
+        // console.log("FILTERED:", newMovies);
+        return {
+          favorites: newMovies,
+          key: matchedUser.key,
+          user: matchedUser.user
+        };
+      }
     } else {
       return null;
     }

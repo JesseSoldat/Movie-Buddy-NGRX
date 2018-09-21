@@ -30,12 +30,16 @@ import { showOverlay } from "../../utils/ui.action.dispatchers";
 export class MatchedUserFavoritesComponent implements OnInit {
   matches$: Observable<any>;
   favorites;
+  username: string;
+
   matchedUserId: string;
   // Action From Types
   fromShowOverlay = "ShowOverlayMUFP";
   getMatchedUserRequestMUFP = "GetMatchedUserRequestMUFP";
   getUserFavoriteIdsRequestMUFP = "GetUserFavoriteIdsRequestMUFP";
 
+  // Top Row Btns
+  backBtnLink = "/matches";
   // Card Inputs
   leftBtn: IconBtn = { text: "View", icon: "fa fa-eye" };
   rightBtn: IconBtn = { text: "Favorite", icon: "fas fa-heart" };
@@ -60,6 +64,7 @@ export class MatchedUserFavoritesComponent implements OnInit {
           );
           this.matchesService.getCurrentUserFavoriteIds();
         } else {
+          this.username = matches.user.username;
           this.favorites = matches.favorites;
         }
       })

@@ -33,7 +33,8 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
   fromShowOverlay = "ShowOverlayMDP";
   movieDetailsRequestedMDP = "MovieDetailsRequestedMDP";
   movieDetailsClearedMDP = "MovieDetailsClearedMDP";
-
+  // Top Row Btns
+  backBtnLink = "movies";
   // Card Inputs
   leftBtn: IconBtn = { text: "Go Back", icon: "fas fa-chevron-left" };
   rightBtn: IconBtn = { text: "Favorite", icon: "fas fa-heart" };

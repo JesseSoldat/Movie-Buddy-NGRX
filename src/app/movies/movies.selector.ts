@@ -12,11 +12,14 @@ export const selectFavoritesState = createFeatureSelector<FavoritesState>(
   "favorites"
 );
 
-// helper
+// helpers
 export const convertFromHttpToHttps = url => {
-  let newPath = url.split("http:")[1];
-  newPath = "https:" + newPath;
-  return newPath;
+  if (!url) {
+    return url;
+  }
+  let newUrl = url.split("http:")[1];
+  newUrl = "https:" + newUrl;
+  return newUrl;
 };
 
 // ----------------- Movie List ------------------
@@ -62,23 +65,25 @@ export const selectFavoriteDetailsFromFavorites = (key: string) =>
   });
 
 // ------------ convert urls from http to https ----------------
-export const selectConvertHttpToHttps = createSelector(
-  selectMovieList,
-  movieList =>
-    movieList
-      ? movieList.map(obj => {
-          const newObj = { ...obj };
-          const newPath = convertFromHttpToHttps(obj.poster_path);
-          newObj.poster_path = newPath;
-          return newObj;
-        })
-      : null
-);
+// export const selectConvertHttpToHttps = createSelector(
+//   selectMovieList,
+//   movieList =>
+//     movieList
+//       ? movieList.map(obj => {
+//           const newObj = { ...obj };
+//           const newPath = convertFromHttpToHttps(obj.poster_path);
+//           console.log("after", newPath);
+
+//           newObj.poster_path = newPath;
+//           return newObj;
+//         })
+//       : null
+// );
 
 // --------- Select Filtered Movie Search List ---------------
 export const selectFilteredMovieList = createSelector(
   selectFavorites,
-  selectConvertHttpToHttps,
+  selectMovieList,
   (favorites, movies) => {
     if (!movies) {
       return null;
@@ -116,8 +121,6 @@ export const selectMovieDetails = createSelector(
   selectMovieState,
   (movieState: MovieState) => {
     const { movieDetails } = movieState;
-    console.log("createMovieDetails", movieDetails);
-
     return movieDetails ? createMovieDetails(movieDetails) : null;
   }
 );

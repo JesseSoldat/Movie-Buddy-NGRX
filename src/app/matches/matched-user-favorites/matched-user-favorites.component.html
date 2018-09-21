@@ -1,17 +1,29 @@
 <app-overlay></app-overlay>
+<app-top-row-btns [link]="backBtnLink"></app-top-row-btns>
 <app-heading heading="Matches"></app-heading>
 
 <div class="row" *ngIf="(matches$ | async) as matches; else showSpinner ">
 
-  <div class="col-xs-12 col-sm-11 mx-auto">
-    <div class="d-flex justify-content-around flex-wrap">
 
+
+  <div class="col-xs-12 col-sm-11 mx-auto">
+
+
+    <div *ngIf="matches.favorites.length >= 1; else showMsg" class="d-flex justify-content-around flex-wrap">
       <app-card *ngFor="let match of matches.favorites" (handleLeftBtnClick)="handleView($event)" (handleRightBtnClick)="addToFavorites($event)"
         [data]="match" [leftBtn]="leftBtn" [rightBtn]="rightBtn">
       </app-card>
     </div>
   </div>
 </div>
+
+<ng-template #showMsg>
+  <div class="row">
+    <div class="col-12">
+      <h3 class="text-center mt-4">{{username | titlecase}} does not have any other un-matched movies</h3>
+    </div>
+  </div>
+</ng-template>
 
 <ng-template #showSpinner>
   <app-spinner></app-spinner>

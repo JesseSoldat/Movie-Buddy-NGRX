@@ -23,6 +23,7 @@ import { SpinnerComponent } from "./components/spinner/spinner.component";
 import { FilterBoxComponent } from "./components/filter-box/filter-box.component";
 import { CardComponent } from "./components/card/card.component";
 import { DetailsCardComponent } from "./components/details-card/details-card.component";
+import { TopRowBtnsComponent } from "./components/top-row-btns/top-row-btns.component";
 
 @NgModule({
   imports: [
@@ -47,6 +48,7 @@ import { DetailsCardComponent } from "./components/details-card/details-card.com
     FilterBoxComponent,
     CardComponent,
     DetailsCardComponent,
+    TopRowBtnsComponent,
     // Directives
     OnBlurDirective,
     // Pipes
@@ -64,7 +66,8 @@ import { DetailsCardComponent } from "./components/details-card/details-card.com
     FilterListPipe,
     FilterBoxComponent,
     CardComponent,
-    DetailsCardComponent
+    DetailsCardComponent,
+    TopRowBtnsComponent
   ]
 })
 export class SharedModule {}

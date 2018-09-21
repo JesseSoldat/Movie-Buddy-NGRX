@@ -18,7 +18,7 @@ import { IconBtn } from "../../models/icon-btn.model";
 import { FavoritesService } from "../../core/services/favorites.service";
 import { MatchesService } from "../../core/services/matches.service";
 // Utils
-import { errMsg, showOverlay } from "../../utils/ui.action.dispatchers";
+import { showOverlay } from "../../utils/ui.action.dispatchers";
 
 @Component({
   selector: "app-matched-user-favorite-details",
@@ -35,6 +35,8 @@ export class MatchedUserFavoriteDetailsComponent implements OnInit {
   getMatchedUserDetailsRequestMUFDP = "GetMatchedUserDetailsRequestMUFDP";
   matchDetailsClearedMDP = "MatchDetailsClearedMDP";
 
+  // Top Row Btns
+  backBtnLink: string;
   // Card Inputs
   leftBtn: IconBtn = { text: "Go Back", icon: "fas fa-chevron-left" };
   rightBtn: IconBtn = { text: "Favorite", icon: "fas fa-heart" };
@@ -53,6 +55,7 @@ export class MatchedUserFavoriteDetailsComponent implements OnInit {
     this.route.params.pipe(first()).subscribe(params => {
       this.userId = params.userId;
       this.movieId = Number(params.movieId);
+      this.backBtnLink = `/matches/user/${this.userId}`;
       this.getMovieDetails();
     });
   }

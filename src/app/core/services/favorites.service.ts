@@ -46,10 +46,7 @@ export class FavoritesService {
     private router: Router
   ) {
     this.store
-      .pipe(
-        select(selectUserUid),
-        first()
-      )
+      .pipe(select(selectUserUid))
       .subscribe(uid => (this.userId = uid), err => {});
   }
 

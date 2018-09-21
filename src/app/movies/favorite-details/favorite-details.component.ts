@@ -23,7 +23,8 @@ export class FavoriteDetailsComponent implements OnInit, OnDestroy {
   favoriteDetails$: Observable<MovieDetails>;
   // From Actions
   favoriteDetailsClearedFDP = "FavoriteDetailsClearedFDP";
-
+  // Top Row Btns
+  backBtnLink = "movies/favorites";
   // Card Inputs
   leftBtn: IconBtn = { text: "Go Back", icon: "fas fa-chevron-left" };
   rightBtn: IconBtn = { text: "Delete", icon: "fa fa-trash" };
