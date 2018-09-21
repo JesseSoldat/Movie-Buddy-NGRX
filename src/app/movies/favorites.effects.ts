@@ -18,7 +18,9 @@ export class FavoritesEffects {
     tap(action => {
       const favorites = action.payload.favoritesList;
       try {
-        localStorage.setItem("favorites", JSON.stringify(favorites));
+        if (favorites.length > 0) {
+          localStorage.setItem("favorites", JSON.stringify(favorites));
+        }
       } catch (err) {
         console.log("Could not save Favorites to local storage");
       }

@@ -1,4 +1,5 @@
 import { MatchesActionTypes } from "./matches.action";
+import { AuthActionTypes } from "../auth/auth.actions";
 import { MatchedUser } from "../models/matched-user.model";
 import { FbUser } from "../models/fb-user.model";
 import { MovieDetails } from "../models/movie-details.model";
@@ -17,7 +18,7 @@ export const initialMatchesState = {
   matchedMovie: null // A single movie of one user
 };
 
-export const matchesReducer = (state = initialMatchesState, action) => {
+export function matchesReducer(state = initialMatchesState, action) {
   const { type, payload } = action;
   switch (type) {
     // The current user's favorite movie ids
@@ -39,7 +40,12 @@ export const matchesReducer = (state = initialMatchesState, action) => {
     case MatchesActionTypes.MatchDetailsClearedMDP:
       return { ...state, matchedMovie: null };
 
+    case AuthActionTypes.LogoutAction:
+      return {
+        state: initialMatchesState
+      };
+
     default:
       return { ...state };
   }
-};
+}

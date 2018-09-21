@@ -1,4 +1,5 @@
 import { SharedActionTypes } from "./shared.actions";
+import { AuthActionTypes } from "../auth/auth.actions";
 
 import { Msg } from "../models/msg.model";
 
@@ -12,7 +13,7 @@ export const initialSharedState: SharedState = {
   msg: null
 };
 
-export const sharedReducer = (state = initialSharedState, action) => {
+export function sharedReducer(state = initialSharedState, action) {
   const { type, payload } = action;
 
   switch (type) {
@@ -38,7 +39,12 @@ export const sharedReducer = (state = initialSharedState, action) => {
         msg: payload.msg
       };
 
+    case AuthActionTypes.LogoutAction:
+      return {
+        state: initialSharedState
+      };
+
     default:
       return { ...state };
   }
-};
+}

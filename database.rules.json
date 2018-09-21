@@ -1,0 +1,16 @@
+{
+  "rules": {
+    ".read": true,
+    ".write": false,
+    "moviedb": {
+      ".read": true,
+      ".write": false,
+      "users": {
+        "$uid": {
+          ".write": "$uid === auth.uid",
+          ".read": "auth != null"
+        }
+      }
+    }
+  }
+}

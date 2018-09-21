@@ -1,4 +1,5 @@
 import { FavoritesActionTypes } from "./favorites.actions";
+import { AuthActionTypes } from "../auth/auth.actions";
 
 import { MovieDetails } from "../models/movie-details.model";
 
@@ -12,7 +13,7 @@ export const initialFavoritesState = {
   favoriteDetails: null
 };
 
-export const favoritesReducer = (state = initialFavoritesState, action) => {
+export function favoritesReducer(state = initialFavoritesState, action) {
   const { type, payload } = action;
   switch (type) {
     case FavoritesActionTypes.FavoritesLoadedFS:
@@ -44,7 +45,12 @@ export const favoritesReducer = (state = initialFavoritesState, action) => {
     case FavoritesActionTypes.FavoriteDetailsClearedFDP:
       return { ...state, favoriteDetails: null };
 
+    case AuthActionTypes.LogoutAction:
+      return {
+        state: initialFavoritesState
+      };
+
     default:
       return { ...state };
   }
-};
+}

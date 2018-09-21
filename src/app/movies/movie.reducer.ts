@@ -1,4 +1,5 @@
 import { MovieActionTypes } from "./movie.actions";
+import { AuthActionTypes } from "../auth/auth.actions";
 
 import { Movie } from "../models/movie.model";
 import { MovieDetails } from "../models/movie-details.model";
@@ -13,7 +14,7 @@ export const initialMovieState = {
   movieDetails: null
 };
 
-export const movieReducer = (state = initialMovieState, action) => {
+export function movieReducer(state = initialMovieState, action) {
   const { type, payload } = action;
   switch (type) {
     case MovieActionTypes.MoviesLoadedMS:
@@ -27,7 +28,12 @@ export const movieReducer = (state = initialMovieState, action) => {
     case MovieActionTypes.MovieDetailsClearedMSP:
       return { ...state, movieDetails: null };
 
+    case AuthActionTypes.LogoutAction:
+      return {
+        state: initialMovieState
+      };
+
     default:
       return { ...state };
   }
-};
+}

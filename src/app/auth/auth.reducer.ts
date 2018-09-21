@@ -11,7 +11,7 @@ export const initialAuthState: AuthState = {
   user: undefined
 };
 
-export const authReducer = (state = initialAuthState, action: AuthActions) => {
+export function authReducer(state = initialAuthState, action: AuthActions) {
   switch (action.type) {
     case AuthActionTypes.RegisterAction:
       return {
@@ -34,4 +34,4 @@ export const authReducer = (state = initialAuthState, action: AuthActions) => {
     default:
       return { ...state };
   }
-};
+}

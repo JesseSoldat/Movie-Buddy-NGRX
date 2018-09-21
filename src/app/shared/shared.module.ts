@@ -20,7 +20,6 @@ import { SearchBoxComponent } from "./components/search-box/search-box.component
 import { HeadingComponent } from "./components/heading/heading.component";
 import { OverlayComponent } from "./components/overlay/overlay.component";
 import { SpinnerComponent } from "./components/spinner/spinner.component";
-import { IconBtnComponent } from "./components/icon-btn/icon-btn.component";
 import { FilterBoxComponent } from "./components/filter-box/filter-box.component";
 import { CardComponent } from "./components/card/card.component";
 import { DetailsCardComponent } from "./components/details-card/details-card.component";
@@ -45,7 +44,6 @@ import { DetailsCardComponent } from "./components/details-card/details-card.com
     HeadingComponent,
     OverlayComponent,
     SpinnerComponent,
-    IconBtnComponent,
     FilterBoxComponent,
     CardComponent,
     DetailsCardComponent,
@@ -62,7 +60,6 @@ import { DetailsCardComponent } from "./components/details-card/details-card.com
     HeadingComponent,
     OverlayComponent,
     SpinnerComponent,
-    IconBtnComponent,
     TruncateTextPipe,
     FilterListPipe,
     FilterBoxComponent,

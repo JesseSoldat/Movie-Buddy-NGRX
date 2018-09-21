@@ -75,14 +75,16 @@ export class MatchesService {
     this.currentUser.snapshotChanges().subscribe(action => {
       const user: FbUser = action.payload.val();
 
-      this.myListIds = this.getFavoriteIds(user.favorites);
+      if (user && user.favorites) {
+        this.myListIds = this.getFavoriteIds(user.favorites);
 
-      this.store.dispatch(
-        new GetUserFavoriteIdsLoaded({
-          userFavoriteIds: this.myListIds,
-          from: this.getUserFavoriteIdsLoadedMS
-        })
-      );
+        this.store.dispatch(
+          new GetUserFavoriteIdsLoaded({
+            userFavoriteIds: this.myListIds,
+            from: this.getUserFavoriteIdsLoadedMS
+          })
+        );
+      }
     });
   }
 

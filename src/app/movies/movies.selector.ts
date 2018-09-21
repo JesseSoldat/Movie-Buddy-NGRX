@@ -4,13 +4,20 @@ import { FavoritesState } from "./favorites.reducer";
 import { Movie } from "../models/movie.model";
 import { MovieDetails } from "../models/movie-details.model";
 
-const posterUrl = "http://image.tmdb.org/t/p/w500/";
+const posterUrl = "https://image.tmdb.org/t/p/w500/";
 
 export const selectMovieState = createFeatureSelector<MovieState>("movie");
 
 export const selectFavoritesState = createFeatureSelector<FavoritesState>(
   "favorites"
 );
+
+// helper
+export const convertFromHttpToHttps = url => {
+  let newPath = url.split("http:")[1];
+  newPath = "https:" + newPath;
+  return newPath;
+};
 
 // ----------------- Movie List ------------------
 export const selectMovieList = createSelector(
@@ -54,10 +61,24 @@ export const selectFavoriteDetailsFromFavorites = (key: string) =>
     return null;
   });
 
+// ------------ convert urls from http to https ----------------
+export const selectConvertHttpToHttps = createSelector(
+  selectMovieList,
+  movieList =>
+    movieList
+      ? movieList.map(obj => {
+          const newObj = { ...obj };
+          const newPath = convertFromHttpToHttps(obj.poster_path);
+          newObj.poster_path = newPath;
+          return newObj;
+        })
+      : null
+);
+
 // --------- Select Filtered Movie Search List ---------------
 export const selectFilteredMovieList = createSelector(
   selectFavorites,
-  selectMovieList,
+  selectConvertHttpToHttps,
   (favorites, movies) => {
     if (!movies) {
       return null;
@@ -79,7 +100,9 @@ export const createMovieDetails = (obj: MovieDetails): MovieDetails => ({
     : "The movie genres are not available.",
   budget: obj.budget || "The movie budget is not available.",
   revenue: obj.revenue || "The movie revenue is not available.",
-  homepage: obj.homepage || "The movie homepage is not available.",
+  homepage:
+    convertFromHttpToHttps(obj.homepage) ||
+    "The movie homepage is not available.",
   overview: obj.overview || "The movie overview is not available.",
   poster_path: obj.poster_path
     ? `${posterUrl}${obj.poster_path}`
@@ -93,6 +116,8 @@ export const selectMovieDetails = createSelector(
   selectMovieState,
   (movieState: MovieState) => {
     const { movieDetails } = movieState;
+    console.log("createMovieDetails", movieDetails);
+
     return movieDetails ? createMovieDetails(movieDetails) : null;
   }
 );
