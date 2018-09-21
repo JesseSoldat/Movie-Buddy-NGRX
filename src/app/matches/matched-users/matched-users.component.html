@@ -15,7 +15,12 @@
               </span>
             </div>
             <div class="col-xs-12 col-md-4">
-              <button class="btn btn-primary btn-lg" [routerLink]="[ '/matches/user', match.uid ]">Check out their
+              <button class="btn btn-primary btn-lg d-none d-md-block" [routerLink]="[ '/matches/user', match.uid ]">Check
+                out their
+                other
+                movies</button>
+              <button class="btn btn-primary btn-lg btn-block mt-3 d-block d-md-none" [routerLink]="[ '/matches/user', match.uid ]">Check
+                out their
                 other
                 movies</button>
             </div>

@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 // Rxjs
-import { first, map, switchMap, tap } from "rxjs/operators";
-import { of, empty, Observable } from "rxjs";
+import { first, tap } from "rxjs/operators";
+import { Observable } from "rxjs";
 // NGRX
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../reducers";
@@ -18,11 +18,7 @@ import { IconBtn } from "../../models/icon-btn.model";
 import { FavoritesService } from "../../core/services/favorites.service";
 import { MatchesService } from "../../core/services/matches.service";
 // Utils
-import {
-  errMsg,
-  showOverlay,
-  hideOverlay
-} from "../../utils/ui.action.dispatchers";
+import { errMsg, showOverlay } from "../../utils/ui.action.dispatchers";
 
 @Component({
   selector: "app-matched-user-favorite-details",
@@ -52,12 +48,7 @@ export class MatchedUserFavoriteDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.movieDetails$ = this.store.pipe(
-      select(selectMatchedMovie),
-      tap(movie => {
-        // console.log("Tap:", movie));
-      })
-    );
+    this.movieDetails$ = this.store.pipe(select(selectMatchedMovie));
 
     this.route.params.pipe(first()).subscribe(params => {
       this.userId = params.userId;
@@ -93,37 +84,3 @@ export class MatchedUserFavoriteDetailsComponent implements OnInit {
     this.favoritesService.addToFavorites(movie, `matches/user/${this.userId}`);
   }
 }
-
-// this.store
-//   .pipe(
-//     select(selectNonMatchedUserMovies),
-//     first()
-//   )
-//   .subscribe(matches => {
-//     this.matches = matches;
-//     console.log(matches);
-//   });
-
-// initialize() {
-//   this.appParameters
-//     .map(params => params['id'])
-//     .switchMap(id => {
-//       if(id !== null && id !== undefined) {
-//         return this.getUser(id)
-//       }
-//     })
-//     .subscribe(user => this.user = user);
-// }
-
-// this.route.params.pipe(
-//   map((params: any) => ({userId: params.userId, movieId: params.movieId}),
-//   switchMap((ids: any) => {
-//     console.log(ids);
-
-//     if(ids.movieId) {
-//       return of['hello']
-//     } else {
-//       return empty()
-//     }
-//   })
-//   )

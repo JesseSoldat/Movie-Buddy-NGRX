@@ -21,8 +21,6 @@ export class CardComponent implements OnInit {
   leftBtn: IconBtn;
   @Input()
   rightBtn: IconBtn;
-  @Input()
-  cardSize = "250px";
 
   keys: MovieKeys;
 

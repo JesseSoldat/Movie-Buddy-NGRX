@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 // Rxjs
-import { map, tap, first, shareReplay, catchError } from "rxjs/operators";
+import { map, tap, first, catchError } from "rxjs/operators";
 import { of } from "rxjs";
 // Firebase
 import { AngularFireDatabase, AngularFireList } from "@angular/fire/database";

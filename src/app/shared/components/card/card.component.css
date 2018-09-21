@@ -1,3 +1,17 @@
+.card {
+  width: 250px;
+}
+
 .cardImg {
   height: 300px;
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 350px;
+  }
+
+  .cardImg {
+    height: 450px;
+  }
 }

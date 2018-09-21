@@ -2,3 +2,9 @@
   font-size: 1.4em;
   line-height: 50px;
 }
+
+@media (max-width: 768px) {
+  .matchedUser {
+    font-size: 1.2em;
+  }
+}
